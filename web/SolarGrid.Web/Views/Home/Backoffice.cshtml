@@ -1,0 +1,75 @@
+@*
+    File:        Backoffice.cshtml
+    Author:      Shermon H (IT22177964)
+    Description: Home page for Backoffice users after login, with shortcuts to
+                 the system administration functions.
+*@
+@{
+    ViewData["Title"] = "Backoffice Home";
+}
+
+<div class="welcome-banner mb-4">
+    <div>
+        <p class="text-uppercase small fw-semibold mb-1 opacity-75">Backoffice</p>
+        <h1 class="h3 fw-bold mb-1">Welcome, @User.Identity!.Name</h1>
+        <p class="mb-0 opacity-75">Manage users, prosumers, microgrid nodes and energy reservations.</p>
+    </div>
+    <i class="bi bi-building-gear display-4 d-none d-md-block"></i>
+</div>
+
+<div class="row g-4">
+    <div class="col-sm-6 col-lg-4">
+        <a class="card action-card h-100" asp-controller="Users" asp-action="Index">
+            <div class="card-body">
+                <div class="feature-icon bg-solar-soft"><i class="bi bi-person-badge"></i></div>
+                <h2 class="h6 fw-bold mt-3">Staff Users</h2>
+                <p class="small text-muted mb-0">Create and manage Backoffice and Grid Operator accounts.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <a class="card action-card h-100" asp-controller="Prosumers" asp-action="Index">
+            <div class="card-body">
+                <div class="feature-icon bg-green-soft"><i class="bi bi-people"></i></div>
+                <h2 class="h6 fw-bold mt-3">Prosumers</h2>
+                <p class="small text-muted mb-0">Create, update, deactivate and reactivate prosumer profiles.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <a class="card action-card h-100" asp-controller="Prosumers" asp-action="Pending">
+            <div class="card-body">
+                <div class="feature-icon bg-red-soft"><i class="bi bi-hourglass-split"></i></div>
+                <h2 class="h6 fw-bold mt-3">Pending Activations</h2>
+                <p class="small text-muted mb-0">Approve new mobile registrations and deactivation requests.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <a class="card action-card h-100" asp-controller="Stations" asp-action="Index">
+            <div class="card-body">
+                <div class="feature-icon bg-blue-soft"><i class="bi bi-geo-alt"></i></div>
+                <h2 class="h6 fw-bold mt-3">Solar Stations</h2>
+                <p class="small text-muted mb-0">Register microgrid nodes, update schedules and deactivate nodes.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <a class="card action-card h-100" asp-controller="Reservations" asp-action="Index">
+            <div class="card-body">
+                <div class="feature-icon bg-purple-soft"><i class="bi bi-calendar-check"></i></div>
+                <h2 class="h6 fw-bold mt-3">Reservations</h2>
+                <p class="small text-muted mb-0">Create, update, cancel and approve energy trading reservations.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <a class="card action-card h-100" asp-controller="Dashboard" asp-action="Index">
+            <div class="card-body">
+                <div class="feature-icon bg-dark-soft"><i class="bi bi-speedometer2"></i></div>
+                <h2 class="h6 fw-bold mt-3">Dashboard</h2>
+                <p class="small text-muted mb-0">Pending reservations and approved future reservations at a glance.</p>
+            </div>
+        </a>
+    </div>
+</div>
