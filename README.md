@@ -55,6 +55,14 @@ Sample logins (password `Password@123`):
 | Prosumer | `200045678912` |
 | Prosumer (pending activation) | `200167891234` |
 
+**Web app** (the API must be running)
+```
+cd web/SolarGrid.Web
+dotnet run
+```
+Open http://localhost:5090 and log in with a Backoffice or Grid Operator account. The API address is set in
+`web/SolarGrid.Web/appsettings.json` (`ApiSettings:BaseUrl`).
+
 See [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md) for the team plan, database design, API contract and coding standards.
 
 ## Team and individual contributions
