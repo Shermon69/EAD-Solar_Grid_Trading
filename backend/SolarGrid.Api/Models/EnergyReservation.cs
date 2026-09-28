@@ -1,6 +1,6 @@
 /*
  * File:        EnergyReservation.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: MongoDB document for the "EnergyReservations" collection.
  *              A prosumer's booking of an energy slot at a station, including
  *              its status and the QR token used by grid operators to verify it.

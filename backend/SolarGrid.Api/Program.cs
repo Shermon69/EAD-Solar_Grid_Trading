@@ -1,6 +1,6 @@
 /*
  * File:        Program.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Entry point of the Web API. Registers the database, services,
  *              JWT authentication and Swagger, then starts the server.
  *              When adding a new service, register it in the "Services" section.

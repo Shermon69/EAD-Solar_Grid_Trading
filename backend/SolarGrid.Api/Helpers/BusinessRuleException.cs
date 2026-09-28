@@ -1,6 +1,6 @@
 /*
  * File:        BusinessRuleException.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Exception thrown by services when a business rule is broken
  *              (e.g. booking more than 7 days ahead). The error handling
  *              middleware turns it into an HTTP response with a message.

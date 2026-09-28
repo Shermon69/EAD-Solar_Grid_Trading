@@ -1,6 +1,6 @@
 /*
  * File:        MongoDbSettings.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Holds the MongoDB connection settings read from appsettings.json.
  * Created:     28/09/2026
  */

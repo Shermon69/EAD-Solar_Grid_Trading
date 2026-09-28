@@ -1,6 +1,6 @@
 /*
  * File:        LoginResponse.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Data returned to the client after a successful login. The
  *              client stores the token and sends it with every later request.
  * Created:     28/09/2026

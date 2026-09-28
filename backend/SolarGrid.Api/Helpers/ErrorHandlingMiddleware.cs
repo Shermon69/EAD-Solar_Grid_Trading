@@ -1,6 +1,6 @@
 /*
  * File:        ErrorHandlingMiddleware.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Catches exceptions from any controller or service and returns
  *              them as JSON in the same format: { "message": "..." }.
  *              This way the web and mobile apps can always show the message.

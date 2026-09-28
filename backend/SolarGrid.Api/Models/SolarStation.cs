@@ -1,6 +1,6 @@
 /*
  * File:        SolarStation.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: MongoDB document for the "SolarStationInfo" collection.
  *              Represents a solar microgrid node (hub) with its GPS location,
  *              capacity, battery slots and weekly operating schedule.

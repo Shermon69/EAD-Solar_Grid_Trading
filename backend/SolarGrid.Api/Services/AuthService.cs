@@ -1,6 +1,6 @@
 /*
  * File:        AuthService.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Business logic for logging in. Checks the NIC and password,
  *              makes sure the account is active, and creates a JWT token.
  * Created:     28/09/2026

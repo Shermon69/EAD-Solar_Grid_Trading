@@ -1,6 +1,6 @@
 /*
  * File:        User.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: MongoDB document for the "Users" collection. Stores all three
  *              user types (Backoffice, GridOperator, Prosumer). The NIC is the
  *              primary key (_id).

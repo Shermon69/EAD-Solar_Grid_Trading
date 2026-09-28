@@ -1,6 +1,6 @@
 /*
  * File:        DataSeeder.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Adds sample data to an empty database when the API starts:
  *              users of every role, solar stations around Colombo, booking
  *              slots and a few reservations in different statuses.

@@ -1,6 +1,6 @@
 /*
  * File:        EnergySlot.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: MongoDB document for the "EnergyBookingSlots" collection.
  *              A time block at a station with a number of battery slots
  *              that prosumers can reserve.

@@ -1,6 +1,6 @@
 /*
  * File:        JwtTokenGenerator.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Creates a signed JWT token after a successful login. The token
  *              contains the user's NIC, name and role, so the API knows who is
  *              calling and what they are allowed to do.

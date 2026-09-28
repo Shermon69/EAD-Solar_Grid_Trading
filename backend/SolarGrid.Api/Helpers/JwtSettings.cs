@@ -1,6 +1,6 @@
 /*
  * File:        JwtSettings.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Holds the JWT (login token) settings read from appsettings.json.
  * Created:     28/09/2026
  */

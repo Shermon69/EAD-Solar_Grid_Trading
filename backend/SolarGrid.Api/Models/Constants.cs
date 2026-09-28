@@ -1,6 +1,6 @@
 /*
  * File:        Constants.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Fixed values used across the system for user roles,
  *              account statuses, reservation statuses and reservation types.
  *              Using constants avoids spelling mistakes in strings.

@@ -1,6 +1,6 @@
 /*
  * File:        MongoDbContext.cs
- * Author:      [Your Name] ([IT Number])
+ * Author:      Shermon H (IT22177964)
  * Description: Connects to MongoDB and gives access to the four collections
  *              used by the system. Services get this class through
  *              dependency injection instead of creating their own connection.
