@@ -8,13 +8,9 @@ obj/
 publish/
 appsettings.Development.json
 
-# ===== Node / React =====
-node_modules/
-dist/
+# ===== Misc =====
 .env
 .env.local
-.env.*.local
-npm-debug.log*
 
 # ===== Android =====
 .gradle/

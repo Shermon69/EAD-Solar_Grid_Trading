@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{C970
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarGrid.Api", "backend\SolarGrid.Api\SolarGrid.Api.csproj", "{0C0F191A-9F67-439C-924A-8A9D83312BCA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{BA38FA30-2385-43FF-80F3-0907F2BFEE50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarGrid.Web", "web\SolarGrid.Web\SolarGrid.Web.csproj", "{EEA97D25-827F-4997-A9B2-503584E4A89C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +24,13 @@ Global
 		{0C0F191A-9F67-439C-924A-8A9D83312BCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C0F191A-9F67-439C-924A-8A9D83312BCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C0F191A-9F67-439C-924A-8A9D83312BCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEA97D25-827F-4997-A9B2-503584E4A89C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEA97D25-827F-4997-A9B2-503584E4A89C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEA97D25-827F-4997-A9B2-503584E4A89C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEA97D25-827F-4997-A9B2-503584E4A89C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0C0F191A-9F67-439C-924A-8A9D83312BCA} = {C9705DB5-40BD-4651-BD13-3BAAC4CEE9FD}
+		{EEA97D25-827F-4997-A9B2-503584E4A89C} = {BA38FA30-2385-43FF-80F3-0907F2BFEE50}
 	EndGlobalSection
 EndGlobal
