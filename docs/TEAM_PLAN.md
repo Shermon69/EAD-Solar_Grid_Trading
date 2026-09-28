@@ -15,15 +15,15 @@ change, tell the team lead first and we update this file so it stays the single 
 Three parts that talk to each other **only through REST API calls**:
 
 ```
-  Android app (Java + SQLite)  ──┐
-                                 ├──►  C# Web API on IIS  ──►  MongoDB
-  Web app (React + Bootstrap 5) ─┘
+  Android app (Java + SQLite)          ──┐
+                                         ├──►  C# Web API on IIS  ──►  MongoDB
+  Web app (ASP.NET MVC + Bootstrap 5)  ──┘
 ```
 
 | Part | Who uses it | Tech |
 |------|-------------|------|
 | **Web API** (`backend/`) | Both clients | ASP.NET Core Web API (.NET 8), MongoDB.Driver, JWT, hosted on IIS |
-| **Web app** (`web/`) | Backoffice + Grid Operator | React (Vite) + Bootstrap 5, Axios |
+| **Web app** (`web/`) | Backoffice + Grid Operator | ASP.NET Core MVC (.NET 8) + Bootstrap 5. UI only: it calls the API with `HttpClient` |
 | **Mobile app** (`mobile/`) | Prosumer + Grid Operator | Pure native Android (Java), SQLite, Google Maps, ZXing QR |
 
 ### The golden rule: FAT service
@@ -60,8 +60,8 @@ which unblocks everyone else.
 ### Member 1 – Team Lead: Project Setup, Login & Staff User Management
 **Setup (done first, pushed to `main` so everyone can start):**
 - API skeleton: `SolarGrid.Api` project, folder structure, MongoDB connection (`MongoDbContext`), the 4 model classes,
-  JWT authentication, CORS, Swagger, global error handler (`BusinessRuleException` → `{ message }`)
-- Web skeleton: Vite + React + Bootstrap 5, routing, axios client that adds the token, layout + navbar, `ProtectedRoute` by role
+  JWT authentication, Swagger, global error handler (`BusinessRuleException` → `{ message }`)
+- Web skeleton: ASP.NET Core MVC + Bootstrap 5, layout + navbar (menu items by role), `ApiClient` that adds the token, cookie login that remembers the role
 - Android skeleton: project, package structure, `ApiClient` (Retrofit), `DatabaseHelper` (SQLite), `SessionManager`, manifest permissions
 - MongoDB Atlas cluster + seed data (Section 5)
 
@@ -128,12 +128,14 @@ EAD-Solar_Grid_Trading/
 │       ├── Data/               # MongoDbContext, settings, seed data
 │       ├── Helpers/            # JWT, password hashing, exceptions
 │       └── Program.cs
-├── web/                        # React (Vite) + Bootstrap 5
-│   └── src/
-│       ├── api/                # axios client + one file per resource (usersApi.js, stationsApi.js…)
-│       ├── components/         # Navbar, ProtectedRoute, shared UI
-│       ├── pages/              # One folder per feature: auth/, users/, prosumers/, stations/, reservations/, dashboard/
-│       └── App.jsx
+├── web/
+│   └── SolarGrid.Web/          # ASP.NET Core MVC + Bootstrap 5 (UI only, no database access)
+│       ├── Controllers/        # One per feature: Account, Home, Users, Prosumers, Stations, Slots, Reservations, Dashboard
+│       ├── Models/             # View models / DTOs that match the API's JSON
+│       ├── Services/           # ApiClient.cs: calls the Web API and adds the JWT token
+│       ├── Views/              # One folder per controller (.cshtml pages) + Shared/_Layout.cshtml
+│       ├── wwwroot/            # Bootstrap 5, site.css, images
+│       └── Program.cs
 ├── mobile/                     # Android Studio project (Java)
 │   └── app/src/main/java/com/solargrid/app/
 │       ├── activities/         # One Activity per screen
@@ -148,8 +150,8 @@ EAD-Solar_Grid_Trading/
 └── README.md
 ```
 
-**Do not put files outside your area without telling the owner.** Shared files like `Program.cs`, `App.jsx`
-(routes), `ApiService.java` and `AndroidManifest.xml` will get merge conflicts, so keep changes to them small and pull often.
+**Do not put files outside your area without telling the owner.** Shared files like both `Program.cs` files,
+`_Layout.cshtml` (navbar), `ApiService.java` and `AndroidManifest.xml` will get merge conflicts, so keep changes to them small and pull often.
 
 ---
 
@@ -158,8 +160,7 @@ EAD-Solar_Grid_Trading/
 | Tool | Who | Notes |
 |------|-----|-------|
 | Git + a GitHub account | All | Commit from **your own account**. Contributions are marked from git history |
-| .NET 8 SDK + Visual Studio 2022 (or VS Code) | All (API work) | `dotnet --version` should show 8.x |
-| Node.js 20+ | All | For the React app |
+| .NET 8 SDK + VS Code (C# Dev Kit) or Visual Studio 2022 | All | For the API and the web app. `dotnet --list-sdks` should show 8.x |
 | Android Studio (latest) + an emulator (API 30+) | All | Pick an emulator image **with Google Play** so Maps works |
 | MongoDB Compass | All | To view data. We use one shared **MongoDB Atlas** free cluster |
 | IIS + ASP.NET Core Hosting Bundle | M1 | Windows Features → Internet Information Services |
@@ -320,7 +321,7 @@ Base URL: `http://<server>/api`. All endpoints except login/register need the he
 
 ## 8. Coding standards (MANDATORY: code without these is not marked)
 
-### 8.1 Header block on **every** `.cs` file (use the same style in `.java` and `.jsx` files)
+### 8.1 Header block on **every** `.cs` file (use the same style in `.java` files)
 ```csharp
 /*
  * File:        ReservationService.cs
@@ -339,7 +340,9 @@ Base URL: `http://<server>/api`. All endpoints except login/register need the he
 /// </summary>
 public async Task CancelAsync(string id, string userNic) { ... }
 ```
-Java: use `/** ... */` Javadoc. JS: a `//` line above each function or component.
+Java: use `/** ... */` Javadoc. In `.cshtml` views, add a `@* ... *@` comment at the top saying what the page is.
+
+Files created during setup have `[Your Name] ([IT Number])` in the header. Put **your own** name in every file you create.
 
 ### 8.3 Referencing code you didn't write
 If you copy or adapt code from a tutorial, Stack Overflow or docs, **comment the source right above it**:
@@ -375,7 +378,7 @@ Our commit history is **marked** ("meaningful, descriptive commits"), so please 
    - ❌ `update`, `fix`, `asdf`, `final final 2`
 4. **Push and open a Pull Request** to `main`. Tell the team in the chat. Merge once it builds.
    Pull main into your branch often (`git pull origin main`) to avoid big conflicts.
-5. **Never commit:** `bin/`, `obj/`, `node_modules/`, `build/`, `.env`, connection strings, API keys (the `.gitignore` handles most of this).
+5. **Never commit:** `bin/`, `obj/`, `build/`, `appsettings.Development.json`, connection strings, API keys (the `.gitignore` handles most of this).
 6. **Use your own GitHub account.** Check with `git config user.name` / `git config user.email`.
 
 ---
@@ -437,7 +440,7 @@ Screenshots → `docs/screenshots/`, ≤ 5 min video, report sections (Section 1
 ## 12. Deliverables checklist
 
 ### Submission zip (named with IT number, e.g. `IT21XXXXXX.zip`)
-- [ ] All project folders (`backend/`, `web/`, `mobile/`) with **no** `bin/`, `obj/`, `node_modules/`, `build/`
+- [ ] All project folders (`backend/`, `web/`, `mobile/`) with **no** `bin/`, `obj/`, `build/`, `.gradle/`
 - [ ] The report (PDF + DOCX)
 - [ ] A screenshot of the main opening screen of the app
 - [ ] README.md with repo link, individual contributions and video link
@@ -471,7 +474,9 @@ Follow the scenario in Section 11. Each member narrates their own part (~1 min e
 - **Android emulator → local API:** use `http://10.0.2.2:<port>/api/`, not `localhost`. For a real phone, use the PC's LAN IP.
 - **Android HTTP (not HTTPS):** add `android:usesCleartextTraffic="true"` in the manifest for local testing.
 - **"No frameworks" on Android** means no Flutter/React Native/Xamarin. Normal libraries (Retrofit, Google Maps SDK, ZXing) are fine. Use plain `SQLiteOpenHelper` for SQLite so it's clearly "SQLite".
-- **CORS:** the API must allow the React dev server origin (`http://localhost:5173`), or the web app can't call it.
+- **Ports:** API → `http://localhost:5080` (Swagger at `/swagger`), web app → `http://localhost:5090`.
+- **Local settings:** copy `backend/SolarGrid.Api/appsettings.Development.example.json` to `appsettings.Development.json` (same folder) and paste the connection string. This file is gitignored.
+- **Sample logins** (password `Password@123` for all): Backoffice `199012345678`, Grid Operator `199234567891`, Prosumer `200045678912`, Pending prosumer `200167891234`.
 - **Swagger** (`/swagger`) is the fastest way to test your endpoints before building UI.
 - **Dates:** send ISO strings (`2026-09-30T10:00:00Z`) between clients and API.
-- **Suggested libraries:** API: `MongoDB.Driver`, `BCrypt.Net-Next`, `Microsoft.AspNetCore.Authentication.JwtBearer`. Web: `react-router-dom`, `axios`, `bootstrap`. Android: `retrofit2` + `converter-gson`, `play-services-maps`, `play-services-location`, `com.journeyapps:zxing-android-embedded`.
+- **Suggested libraries:** API: `MongoDB.Driver`, `BCrypt.Net-Next`, `Microsoft.AspNetCore.Authentication.JwtBearer`. Web: Bootstrap 5 is already included in the MVC project. Android: `retrofit2` + `converter-gson`, `play-services-maps`, `play-services-location`, `com.journeyapps:zxing-android-embedded`.

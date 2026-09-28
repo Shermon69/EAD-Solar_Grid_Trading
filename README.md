@@ -7,9 +7,9 @@ web application, solar prosumers and grid operators use a native Android app, an
 central C# Web API (hosted on IIS) backed by MongoDB.
 
 ```
-  Android app (Java + SQLite)  ──┐
-                                 ├──►  C# Web API on IIS  ──►  MongoDB
-  Web app (React + Bootstrap 5) ─┘
+  Android app (Java + SQLite)          ──┐
+                                         ├──►  C# Web API on IIS  ──►  MongoDB
+  Web app (ASP.NET MVC + Bootstrap 5)  ──┘
 ```
 
 ## Repository
@@ -22,7 +22,7 @@ central C# Web API (hosted on IIS) backed by MongoDB.
 | Folder | Description |
 |--------|-------------|
 | [backend/](backend/) | ASP.NET Core Web API (.NET 8), MongoDB, JWT authentication. All business logic lives here |
-| [web/](web/) | React + Bootstrap 5 web application for Backoffice and Grid Operator users |
+| [web/](web/) | ASP.NET Core MVC + Bootstrap 5 web application for Backoffice and Grid Operator users |
 | [mobile/](mobile/) | Pure native Android app (Java) with SQLite, Google Maps and QR code scanning |
 | [docs/](docs/) | Team plan, diagrams and screenshots |
 
@@ -30,12 +30,31 @@ central C# Web API (hosted on IIS) backed by MongoDB.
 
 - **Web service:** C# ASP.NET Core Web API, MongoDB.Driver, JWT, hosted on Windows IIS
 - **Database:** MongoDB (collections: `Users`, `SolarStationInfo`, `EnergyBookingSlots`, `EnergyReservations`)
-- **Web app:** React (Vite), Bootstrap 5, Axios
+- **Web app:** ASP.NET Core MVC (.NET 8), Bootstrap 5
 - **Mobile app:** Android (Java), SQLite, Retrofit, Google Maps SDK, ZXing
 
 ## Getting started
 
-Setup steps for each part will be added to that part's folder as the project grows.
+**Web API**
+1. Install the .NET 8 SDK.
+2. Copy `backend/SolarGrid.Api/appsettings.Development.example.json` to `appsettings.Development.json` in the same folder,
+   then fill in the MongoDB connection string and a JWT key.
+3. Run:
+   ```
+   cd backend/SolarGrid.Api
+   dotnet run
+   ```
+4. Open http://localhost:5080/swagger. Sample data is added automatically the first time the API runs on an empty database.
+
+Sample logins (password `Password@123`):
+
+| Role | NIC |
+|------|-----|
+| Backoffice | `199012345678` |
+| Grid Operator | `199234567891` |
+| Prosumer | `200045678912` |
+| Prosumer (pending activation) | `200167891234` |
+
 See [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md) for the team plan, database design, API contract and coding standards.
 
 ## Team and individual contributions
