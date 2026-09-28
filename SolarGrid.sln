@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{C9705DB5-40BD-4651-BD13-3BAAC4CEE9FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarGrid.Api", "backend\SolarGrid.Api\SolarGrid.Api.csproj", "{0C0F191A-9F67-439C-924A-8A9D83312BCA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C0F191A-9F67-439C-924A-8A9D83312BCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0F191A-9F67-439C-924A-8A9D83312BCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0F191A-9F67-439C-924A-8A9D83312BCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0F191A-9F67-439C-924A-8A9D83312BCA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0C0F191A-9F67-439C-924A-8A9D83312BCA} = {C9705DB5-40BD-4651-BD13-3BAAC4CEE9FD}
+	EndGlobalSection
+EndGlobal
