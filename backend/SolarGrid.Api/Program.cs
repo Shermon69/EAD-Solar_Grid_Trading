@@ -42,6 +42,7 @@ builder.Services.AddSingleton<JwtTokenGenerator>();
 // ---------- Services (business logic) ----------
 // Each member registers their own service here, e.g. builder.Services.AddScoped<StationService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ReservationService>();
 
 // ---------- Controllers ----------
 builder.Services.AddControllers()
