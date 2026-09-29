@@ -50,37 +50,37 @@ public class ProsumerApiService
     /// <summary>Gets prosumers with optional search text and status filter.</summary>
     public async Task<List<ProsumerVm>> GetProsumersAsync(string? search, string? status)
     {
-        var url = $"api/prosumers?search={Uri.EscapeDataString(search ?? "")}&status={Uri.EscapeDataString(status ?? "")}";
+        var url = $"prosumers?search={Uri.EscapeDataString(search ?? "")}&status={Uri.EscapeDataString(status ?? "")}";
         return await CreateClient().GetFromJsonAsync<List<ProsumerVm>>(url) ?? new();
     }
 
     /// <summary>Gets prosumers waiting for Backoffice activation.</summary>
     public async Task<List<ProsumerVm>> GetPendingAsync()
-        => await CreateClient().GetFromJsonAsync<List<ProsumerVm>>("api/prosumers/pending") ?? new();
+        => await CreateClient().GetFromJsonAsync<List<ProsumerVm>>("prosumers/pending") ?? new();
 
     /// <summary>Gets one prosumer by NIC, or null if not found.</summary>
     public async Task<ProsumerVm?> GetByNicAsync(string nic)
     {
-        var res = await CreateClient().GetAsync($"api/prosumers/{nic}");
+        var res = await CreateClient().GetAsync($"prosumers/{nic}");
         return res.IsSuccessStatusCode ? await res.Content.ReadFromJsonAsync<ProsumerVm>() : null;
     }
 
     /// <summary>Updates a prosumer's details through the API.</summary>
     public async Task<bool> UpdateAsync(ProsumerEditVm vm)
     {
-        var res = await CreateClient().PutAsJsonAsync($"api/prosumers/{vm.Nic}", vm);
+        var res = await CreateClient().PutAsJsonAsync($"prosumers/{vm.Nic}", vm);
         return res.IsSuccessStatusCode;
     }
 
     /// <summary>Activates (approves pending or reactivates deactivated) a prosumer.</summary>
     public async Task<bool> ActivateAsync(string nic)
-        => (await CreateClient().PutAsync($"api/prosumers/{nic}/activate", null)).IsSuccessStatusCode;
+        => (await CreateClient().PutAsync($"prosumers/{nic}/activate", null)).IsSuccessStatusCode;
 
     /// <summary>Deactivates a prosumer account.</summary>
     public async Task<bool> DeactivateAsync(string nic)
-        => (await CreateClient().PutAsync($"api/prosumers/{nic}/deactivate", null)).IsSuccessStatusCode;
+        => (await CreateClient().PutAsync($"prosumers/{nic}/deactivate", null)).IsSuccessStatusCode;
 
     /// <summary>Gets the Backoffice dashboard counts from the API.</summary>
     public async Task<DashboardVm> GetDashboardAsync()
-        => await CreateClient().GetFromJsonAsync<DashboardVm>("api/prosumers/dashboard") ?? new();
+        => await CreateClient().GetFromJsonAsync<DashboardVm>("prosumers/dashboard") ?? new();
 }
