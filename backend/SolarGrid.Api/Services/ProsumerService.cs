@@ -158,7 +158,8 @@ public class ProsumerService
     /// <summary>
     /// Gets a prosumer's bookings. type = "current" (Pending/Approved and
     /// in the future) or "history" (Completed, Cancelled or in the past).
-    /// Optional search on station name or status.
+    /// Optional search on station name or status. Looks up the station name
+    /// from SolarStationInfo because the reservation only stores StationId.
     /// </summary>
     public async Task<List<BookingResponse>> GetMyBookingsAsync(string nic, string type, string? search)
     {
@@ -175,27 +176,38 @@ public class ProsumerService
             filter &= fb.In(b => b.Status, new[] { "Pending", "Approved" }) &
                       fb.Gte(b => b.ReservationDate, now);
 
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            var rx = new BsonRegularExpression(Regex.Escape(search.Trim()), "i");
-            filter &= fb.Or(
-                fb.Regex(b => b.StationName, rx),
-                fb.Regex(b => b.Status, rx));
-        }
-
         var find = _bookings.Find(filter);
         var list = history
             ? await find.SortByDescending(b => b.ReservationDate).ToListAsync()
             : await find.SortBy(b => b.ReservationDate).ToListAsync();
 
-        return list.Select(b => new BookingResponse
+        // Look up station names in one query (avoid N+1)
+        var stationIds = list.Select(b => b.StationId).Distinct().ToList();
+        var stationCollection = _bookings.Database.GetCollection<SolarStation>("SolarStationInfo");
+        var stations = await stationCollection
+            .Find(Builders<SolarStation>.Filter.In(s => s.Id, stationIds))
+            .ToListAsync();
+        var stationLookup = stations.ToDictionary(s => s.Id, s => s.Name);
+
+        // Fill in the display fields and apply the search filter
+        var results = list.Select(b => new BookingResponse
         {
             Id = b.Id,
-            StationName = b.StationName,
+            StationName = stationLookup.GetValueOrDefault(b.StationId, "Unknown Station"),
             ReservationDate = b.ReservationDate,
             Status = b.Status,
             QrToken = b.QrToken
         }).ToList();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim();
+            results = results.Where(r =>
+                r.StationName.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                r.Status.Contains(term, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return results;
     }
 
     /// <summary>
