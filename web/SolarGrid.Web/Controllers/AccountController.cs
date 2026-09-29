@@ -26,6 +26,9 @@ namespace SolarGrid.Web.Controllers
     {
         private readonly ApiClient _api;
 
+        // Session key used by ProsumerApiService
+        private const string SessionTokenKey = "JWT";
+
         /// <summary>
         /// Receives the ApiClient through dependency injection.
         /// </summary>
@@ -88,6 +91,10 @@ namespace SolarGrid.Web.Controllers
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+            // Save the token in the session as well, so ProsumerApiService
+            // (which reads from session under the key "JWT") can use it.
+            HttpContext.Session.SetString(SessionTokenKey, result.Token);
+
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity),
                 new AuthenticationProperties { IsPersistent = false });
@@ -101,13 +108,18 @@ namespace SolarGrid.Web.Controllers
         }
 
         /// <summary>
-        /// POST /Account/Logout - removes the login cookie and goes back to the landing page.
+        /// POST /Account/Logout - removes the login cookie and the session token,
+        /// then goes back to the landing page.
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Clear the session so the JWT is not left behind after logout
+            HttpContext.Session.Clear();
+
             TempData["Success"] = "You have been logged out.";
             return RedirectToAction("Index", "Home");
         }

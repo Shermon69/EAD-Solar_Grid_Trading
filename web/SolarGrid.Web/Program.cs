@@ -16,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 // ---------- MVC ----------
 builder.Services.AddControllersWithViews(options =>
 {
-    // Sends the user back to login if the API says the token has expired
     options.Filters.Add<SessionExpiredFilter>();
 });
 
@@ -33,18 +32,19 @@ builder.Services.AddAuthorization();
 
 // ---------- Web API client ----------
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddHttpClient<ApiClient>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
 });
 
-// Named client "Api" (ProsumerApiService uses this)
+// Named client "Api" (ProsumerApiService)
 builder.Services.AddHttpClient("Api", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
 });
 
-// ---------- Session (used by ProsumerApiService to read the JWT) ----------
+// ---------- Session ----------
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(8);
@@ -66,7 +66,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseSession();
+app.UseSession();           
 app.UseAuthentication();
 app.UseAuthorization();
 
