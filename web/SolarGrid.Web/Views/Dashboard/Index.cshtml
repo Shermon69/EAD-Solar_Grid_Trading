@@ -1,0 +1,39 @@
+@*
+    File:        Index.cshtml
+    Author:      Premaratne R.A.N.C (IT22050908)
+    Description: Backoffice dashboard — shows the pending prosumer activation
+                 count and the approved future reservation count, both read
+                 live from the Web API.
+*@
+@model SolarGrid.Web.Models.DashboardVm
+@{ ViewData["Title"] = "Dashboard"; }
+
+<h2 class="mb-4">Dashboard</h2>
+
+@* Two summary cards: pending activations and approved future reservations. *@
+<div class="row g-3">
+
+    @* Card 1: Pending prosumer activations (links to the Pending page). *@
+    <div class="col-md-6">
+        <div class="card border-warning h-100">
+            <div class="card-body">
+                <h5 class="card-title">Pending prosumer activations</h5>
+                <p class="display-5 mb-2">@Model.PendingCount</p>
+                <a asp-controller="ProsumerManagement"
+                   asp-action="Pending"
+                   class="btn btn-warning">Review</a>
+            </div>
+        </div>
+    </div>
+
+    @* Card 2: Approved future reservations (display only). *@
+    <div class="col-md-6">
+        <div class="card border-success h-100">
+            <div class="card-body">
+                <h5 class="card-title">Approved future reservations</h5>
+                <p class="display-5 mb-0">@Model.ApprovedFutureCount</p>
+            </div>
+        </div>
+    </div>
+
+</div>
