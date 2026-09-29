@@ -1,9 +1,10 @@
 /*
- * File: ProsumerService.cs
+ * File:        ProsumerService.cs
  * Author:      Premaratne R.A.N.C (IT22050908)
- * Description: All business logic for prosumer accounts, pending activations, bookings and dashboard counts.
- *              Business rules live here (API only). Web and mobile apps just call the endpoints.
- * Created:     29/09/2026             
+ * Description: All business logic for prosumer accounts, pending activations,
+ *              bookings and dashboard counts. Business rules live here (API only).
+ *              Web and mobile apps just call the endpoints.
+ * Created:     29/09/2026
  */
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
@@ -13,22 +14,30 @@ using SolarGrid.Api.Models;
 
 namespace SolarGrid.Api.Services;
 
+/// <summary>
+/// Service that handles all prosumer-related business logic. All data
+/// access for the Users and EnergyReservations collections happens here.
+/// </summary>
 public class ProsumerService
 {
     private readonly IMongoCollection<User> _users;
     private readonly IMongoCollection<BookingRecord> _bookings;
 
-    // Gets the two MongoDB collections this feature needs
+    // Injects the MongoDB database and resolves the two collections needed.
     public ProsumerService(IMongoDatabase db)
     {
         _users = db.GetCollection<User>("Users");
         _bookings = db.GetCollection<BookingRecord>("EnergyReservations");
     }
 
-    // Registers a new prosumer. RULE: every new prosumer starts as "Pending" until Backoffice activates
+    /// <summary>
+    /// Registers a new prosumer. Rule: every new prosumer starts as
+    /// "Pending" until Backoffice activates the account.
+    /// </summary>
     public async Task<bool> RegisterAsync(RegisterRequest r)
     {
-        if (await _users.Find(u => u.Nic == r.Nic).AnyAsync()) return false;   // NIC already used
+        // Reject if the NIC is already used.
+        if (await _users.Find(u => u.Nic == r.Nic).AnyAsync()) return false;
 
         var user = new User
         {
@@ -42,12 +51,17 @@ public class ProsumerService
             Status = "Pending",
             CreatedAt = DateTime.UtcNow
         };
+
         try { await _users.InsertOneAsync(user); }
         catch (MongoWriteException ex) when (ex.WriteError.Category == ServerErrorCategory.DuplicateKey) { return false; }
+
         return true;
     }
 
-    // Lists prosumers with an optional status filter and an optional search on name, NIC or email
+    /// <summary>
+    /// Lists prosumers with an optional status filter and an optional
+    /// search on name, NIC or email.
+    /// </summary>
     public async Task<List<ProsumerResponse>> GetProsumersAsync(string? search, string? status)
     {
         var fb = Builders<User>.Filter;
@@ -59,21 +73,29 @@ public class ProsumerService
         if (!string.IsNullOrWhiteSpace(search))
         {
             var rx = new BsonRegularExpression(Regex.Escape(search.Trim()), "i");
-            filter &= fb.Or(fb.Regex(u => u.FullName, rx), fb.Regex(u => u.Email, rx), fb.Regex(u => u.Nic, rx));
+            filter &= fb.Or(
+                fb.Regex(u => u.FullName, rx),
+                fb.Regex(u => u.Email, rx),
+                fb.Regex(u => u.Nic, rx));
         }
 
         var list = await _users.Find(filter).SortByDescending(u => u.CreatedAt).ToListAsync();
         return list.Select(ToResponse).ToList();
     }
 
-    // Gets one prosumer by NIC (null if not found or not a prosumer)
+    /// <summary>
+    /// Gets one prosumer by NIC. Returns null if not found or not a prosumer.
+    /// </summary>
     public async Task<ProsumerResponse?> GetByNicAsync(string nic)
     {
         var u = await _users.Find(x => x.Nic == nic && x.Role == "Prosumer").FirstOrDefaultAsync();
         return u == null ? null : ToResponse(u);
     }
 
-    // Updates profile details (and optionally the password). Returns false if the prosumer does not exist
+    /// <summary>
+    /// Updates profile details and optionally the password. Returns false
+    /// if the prosumer does not exist.
+    /// </summary>
     public async Task<bool> UpdateProfileAsync(string nic, UpdateProfileRequest r)
     {
         var update = Builders<User>.Update
@@ -89,37 +111,55 @@ public class ProsumerService
         return res.MatchedCount > 0;
     }
 
-    // Activates a Pending or Deactivated prosumer. RULE: only called from a Backoffice-only endpoint,
-    // so only Backoffice can approve new accounts and reactivate deactivated accounts
+    /// <summary>
+    /// Activates a Pending or Deactivated prosumer. Rule: only Backoffice
+    /// can approve new accounts and reactivate deactivated ones.
+    /// </summary>
     public async Task<bool> ActivateAsync(string nic)
     {
         var update = Builders<User>.Update
             .Set(u => u.Status, "Active")
             .Set(u => u.DeactivationRequested, false);
-        var res = await _users.UpdateOneAsync(u => u.Nic == nic && u.Role == "Prosumer" && u.Status != "Active", update);
+
+        var res = await _users.UpdateOneAsync(
+            u => u.Nic == nic && u.Role == "Prosumer" && u.Status != "Active",
+            update);
         return res.MatchedCount > 0;
     }
 
-    // Deactivates a prosumer account (Backoffice only)
+    /// <summary>
+    /// Deactivates a prosumer account. Rule: Backoffice only.
+    /// </summary>
     public async Task<bool> DeactivateAsync(string nic)
     {
         var update = Builders<User>.Update
             .Set(u => u.Status, "Deactivated")
             .Set(u => u.DeactivationRequested, false);
-        var res = await _users.UpdateOneAsync(u => u.Nic == nic && u.Role == "Prosumer" && u.Status != "Deactivated", update);
+
+        var res = await _users.UpdateOneAsync(
+            u => u.Nic == nic && u.Role == "Prosumer" && u.Status != "Deactivated",
+            update);
         return res.MatchedCount > 0;
     }
 
-    // A prosumer asks Backoffice to deactivate their account. Only Active accounts can ask
+    /// <summary>
+    /// Prosumer requests account deactivation. Rule: only Active accounts
+    /// can request. Backoffice must approve before the account is disabled.
+    /// </summary>
     public async Task<bool> RequestDeactivationAsync(string nic)
     {
         var update = Builders<User>.Update.Set(u => u.DeactivationRequested, true);
-        var res = await _users.UpdateOneAsync(u => u.Nic == nic && u.Role == "Prosumer" && u.Status == "Active", update);
+        var res = await _users.UpdateOneAsync(
+            u => u.Nic == nic && u.Role == "Prosumer" && u.Status == "Active",
+            update);
         return res.MatchedCount > 0;
     }
 
-    // Gets a prosumer's bookings. type = "current" (Pending/Approved and in the future) or "history"
-    // (Completed, Cancelled or in the past). Optional search on station name or status
+    /// <summary>
+    /// Gets a prosumer's bookings. type = "current" (Pending/Approved and
+    /// in the future) or "history" (Completed, Cancelled or in the past).
+    /// Optional search on station name or status.
+    /// </summary>
     public async Task<List<BookingResponse>> GetMyBookingsAsync(string nic, string type, string? search)
     {
         var fb = Builders<BookingRecord>.Filter;
@@ -128,14 +168,19 @@ public class ProsumerService
         bool history = string.Equals(type, "history", StringComparison.OrdinalIgnoreCase);
 
         if (history)
-            filter &= fb.Or(fb.In(b => b.Status, new[] { "Completed", "Cancelled" }), fb.Lt(b => b.ReservationDate, now));
+            filter &= fb.Or(
+                fb.In(b => b.Status, new[] { "Completed", "Cancelled" }),
+                fb.Lt(b => b.ReservationDate, now));
         else
-            filter &= fb.In(b => b.Status, new[] { "Pending", "Approved" }) & fb.Gte(b => b.ReservationDate, now);
+            filter &= fb.In(b => b.Status, new[] { "Pending", "Approved" }) &
+                      fb.Gte(b => b.ReservationDate, now);
 
         if (!string.IsNullOrWhiteSpace(search))
         {
             var rx = new BsonRegularExpression(Regex.Escape(search.Trim()), "i");
-            filter &= fb.Or(fb.Regex(b => b.StationName, rx), fb.Regex(b => b.Status, rx));
+            filter &= fb.Or(
+                fb.Regex(b => b.StationName, rx),
+                fb.Regex(b => b.Status, rx));
         }
 
         var find = _bookings.Find(filter);
@@ -153,29 +198,42 @@ public class ProsumerService
         }).ToList();
     }
 
-    // Dashboard for one prosumer: their own pending bookings and approved future bookings
+    /// <summary>
+    /// Dashboard for one prosumer: their own pending bookings and approved
+    /// future bookings, read live from the API.
+    /// </summary>
     public async Task<DashboardResponse> GetMyDashboardAsync(string nic)
     {
         var now = DateTime.UtcNow;
         return new DashboardResponse
         {
-            PendingCount = await _bookings.CountDocumentsAsync(b => b.ProsumerNic == nic && b.Status == "Pending"),
-            ApprovedFutureCount = await _bookings.CountDocumentsAsync(b => b.ProsumerNic == nic && b.Status == "Approved" && b.ReservationDate >= now)
+            PendingCount = await _bookings.CountDocumentsAsync(
+                b => b.ProsumerNic == nic && b.Status == "Pending"),
+            ApprovedFutureCount = await _bookings.CountDocumentsAsync(
+                b => b.ProsumerNic == nic && b.Status == "Approved" && b.ReservationDate >= now)
         };
     }
 
-    // Dashboard for Backoffice: prosumers waiting for activation and all approved future reservations
+    /// <summary>
+    /// Dashboard for Backoffice: prosumers waiting for activation and all
+    /// approved future reservations across the system.
+    /// </summary>
     public async Task<DashboardResponse> GetBackofficeDashboardAsync()
     {
         var now = DateTime.UtcNow;
         return new DashboardResponse
         {
-            PendingCount = await _users.CountDocumentsAsync(u => u.Role == "Prosumer" && u.Status == "Pending"),
-            ApprovedFutureCount = await _bookings.CountDocumentsAsync(b => b.Status == "Approved" && b.ReservationDate >= now)
+            PendingCount = await _users.CountDocumentsAsync(
+                u => u.Role == "Prosumer" && u.Status == "Pending"),
+            ApprovedFutureCount = await _bookings.CountDocumentsAsync(
+                b => b.Status == "Approved" && b.ReservationDate >= now)
         };
     }
 
-    // Converts a User to a response object (never exposes the password hash)
+    /// <summary>
+    /// Converts a User document to a ProsumerResponse. Never exposes the
+    /// password hash.
+    /// </summary>
     private static ProsumerResponse ToResponse(User u) => new()
     {
         Nic = u.Nic,

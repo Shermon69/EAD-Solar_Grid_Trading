@@ -18,23 +18,23 @@ namespace SolarGrid.Api.Models;
 [BsonIgnoreExtraElements]
 public class BookingRecord
 {
-    /// <summary>Booking reference (the reservation's _id).</summary>
+    // Booking reference (the reservation's _id).
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
 
-    /// <summary>NIC of the prosumer who made the booking.</summary>
+    // NIC of the prosumer who made the booking.
     public string ProsumerNic { get; set; } = string.Empty;
 
-    /// <summary>Name of the station where the booking was made.</summary>
+    // Name of the station where the booking was made.
     public string StationName { get; set; } = string.Empty;
 
-    /// <summary>Start time of the booked slot (UTC).</summary>
+    // Start time of the booked slot (UTC).
     public DateTime ReservationDate { get; set; }
 
-    /// <summary>One of: Pending, Approved, Completed, Cancelled.</summary>
+    // One of: Pending, Approved, Completed, Cancelled.
     public string Status { get; set; } = "Pending";
 
-    /// <summary>QR token, only set when the booking is Approved.</summary>
+    // QR token, only set when the booking is Approved.
     public string? QrToken { get; set; }
 }
