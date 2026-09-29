@@ -1,5 +1,5 @@
 /*
- * File:        ProsumerManagementController.cs
+ * File:        ProsumerController.cs
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: MVC pages for Prosumer Management and Pending Activations
  *              (Backoffice only). UI layer only — all data comes from the API.
@@ -18,12 +18,12 @@ namespace SolarGrid.Web.Controllers;
 /// Delegates all data access to the central Web API.
 /// </summary>
 [Authorize(Roles = "Backoffice")]
-public class ProsumerManagementController : Controller
+public class ProsumersController : Controller
 {
     private readonly ProsumerApiService _api;
 
     // Injects the API service via DI.
-    public ProsumerManagementController(ProsumerApiService api) => _api = api;
+    public ProsumersController(ProsumerApiService api) => _api = api;
 
     /// <summary>Shows all prosumers with optional search and status filter.</summary>
     public async Task<IActionResult> Index(string? search, string? status)
