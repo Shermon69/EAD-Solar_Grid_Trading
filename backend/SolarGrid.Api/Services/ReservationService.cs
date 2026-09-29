@@ -65,7 +65,14 @@ namespace SolarGrid.Api.Services
                 .SortByDescending(r => r.ReservationTime)
                 .ToListAsync();
 
-            return reservations.Select(MapToResponse).ToList();
+            var responses = new List<ReservationResponse>();
+
+            foreach (var reservation in reservations)
+            {
+                responses.Add(await MapToResponseAsync(reservation));
+            }
+
+            return responses;
         }
 
         /// <summary>
@@ -83,7 +90,7 @@ namespace SolarGrid.Api.Services
                     "Reservation was not found.");
             }
 
-            return MapToResponse(reservation);
+            return await MapToResponseAsync(reservation);
         }
 
         /// <summary>
@@ -159,7 +166,7 @@ namespace SolarGrid.Api.Services
                 s => s.Id == slot.Id,
                 slotUpdate);
 
-            return MapToResponse(reservation);
+            return await MapToResponseAsync(reservation);
         }
 
         /// <summary>
@@ -279,7 +286,7 @@ namespace SolarGrid.Api.Services
                             newSlot.AvailableSlots - 1 > 0));
             }
 
-            return MapToResponse(reservation);
+            return await MapToResponseAsync(reservation);
         }
 
         /// <summary>
@@ -339,7 +346,7 @@ namespace SolarGrid.Api.Services
                     .Inc(s => s.AvailableSlots, 1)
                     .Set(s => s.IsAvailable, true));
 
-            return MapToResponse(reservation);
+            return await MapToResponseAsync(reservation);
         }
 
         /// <summary>
@@ -372,7 +379,7 @@ namespace SolarGrid.Api.Services
                 r => r.Id == reservation.Id,
                 reservation);
 
-            return MapToResponse(reservation);
+            return await MapToResponseAsync(reservation);
         }
 
         /// <summary>
@@ -413,16 +420,22 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Converts the MongoDB reservation document into an API response.
+        /// Converts the MongoDB reservation document into an API response
+        /// and looks up the station name using the reservation StationId.
         /// </summary>
-        private static ReservationResponse MapToResponse(
+        private async Task<ReservationResponse> MapToResponseAsync(
             EnergyReservation reservation)
         {
+            var station = await _db.Stations
+                .Find(s => s.Id == reservation.StationId)
+                .FirstOrDefaultAsync();
+
             return new ReservationResponse
             {
                 Id = reservation.Id ?? string.Empty,
                 ProsumerNic = reservation.ProsumerNic,
                 StationId = reservation.StationId,
+                StationName = station?.Name ?? "Unknown Station",
                 SlotId = reservation.SlotId,
                 ReservationTime = reservation.ReservationTime,
                 Type = reservation.Type,

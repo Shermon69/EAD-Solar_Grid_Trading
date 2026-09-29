@@ -1,14 +1,14 @@
 /*
  * File:        ReservationResponse.cs
  * Author:      Dissanayake D.M.S.N (IT22210692)
- * Description: Response data returned for an energy reservation.
+ * Description: Response model returned to clients for energy reservations.
  * Created:     29/09/2026
  */
 
 namespace SolarGrid.Api.DTOs
 {
     /// <summary>
-    /// Details returned to the client for an energy reservation.
+    /// Details returned to clients for an energy reservation.
     /// </summary>
     public class ReservationResponse
     {
@@ -17,6 +17,8 @@ namespace SolarGrid.Api.DTOs
         public string ProsumerNic { get; set; } = string.Empty;
 
         public string StationId { get; set; } = string.Empty;
+
+        public string StationName { get; set; } = string.Empty;
 
         public string SlotId { get; set; } = string.Empty;
 

@@ -72,14 +72,27 @@ namespace SolarGrid.Api.Controllers
         }
 
         /// <summary>
-        /// Creates a new energy reservation for the logged-in prosumer.
+        /// Creates a new energy reservation.
+        /// Prosumer users create reservations for themselves,
+        /// while staff users can create reservations for a selected prosumer.
         /// </summary>
         [HttpPost]
-        [Authorize(Roles = Roles.Prosumer)]
         public async Task<ActionResult<ReservationResponse>> CreateReservation(
             [FromBody] CreateReservationRequest request)
         {
-            var nic = GetCurrentNic();
+            var isStaff = IsStaff();
+
+            var nic = isStaff
+                ? request.ProsumerNic
+                : GetCurrentNic();
+
+            if (string.IsNullOrWhiteSpace(nic))
+            {
+                return BadRequest(new
+                {
+                    message = "Prosumer NIC is required."
+                });
+            }
 
             var reservation = await _reservationService
                 .CreateReservationAsync(request, nic);

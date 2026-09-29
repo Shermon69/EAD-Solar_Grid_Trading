@@ -14,6 +14,9 @@ namespace SolarGrid.Api.DTOs
     /// </summary>
     public class CreateReservationRequest
     {
+        [Required(ErrorMessage = "Prosumer NIC is required.")]
+        public string ProsumerNic { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Station ID is required.")]
         public string StationId { get; set; } = string.Empty;
 
@@ -26,7 +29,8 @@ namespace SolarGrid.Api.DTOs
         [Required(ErrorMessage = "Reservation type is required.")]
         public string Type { get; set; } = string.Empty;
 
-        [Range(0.01, double.MaxValue, ErrorMessage = "Energy must be greater than 0.")]
+        [Range(0.01, double.MaxValue,
+            ErrorMessage = "Energy must be greater than 0.")]
         public double EnergyKwh { get; set; }
     }
 }
