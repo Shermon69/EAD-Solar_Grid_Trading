@@ -9,6 +9,7 @@
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SolarGrid.Api.Data;   
 using SolarGrid.Api.Dtos;
 using SolarGrid.Api.Models;
 
@@ -22,12 +23,16 @@ public class ProsumerService
 {
     private readonly IMongoCollection<User> _users;
     private readonly IMongoCollection<BookingRecord> _bookings;
+    private readonly IMongoCollection<SolarStation> _stations;
 
     // Injects the MongoDB database and resolves the two collections needed.
-    public ProsumerService(IMongoDatabase db)
+    public ProsumerService(MongoDbContext dbContext)
     {
-        _users = db.GetCollection<User>("Users");
-        _bookings = db.GetCollection<BookingRecord>("EnergyReservations");
+        _users = dbContext.Users;
+        // Read EnergyReservations through the BookingRecord projection
+        _bookings = dbContext.Reservations.Database
+            .GetCollection<BookingRecord>("EnergyReservations");
+        _stations = dbContext.Stations;
     }
 
     /// <summary>
