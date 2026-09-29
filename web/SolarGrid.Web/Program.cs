@@ -16,44 +16,30 @@ var builder = WebApplication.CreateBuilder(args);
 // ---------- MVC ----------
 builder.Services.AddControllersWithViews(options =>
 {
+    // Sends the user back to login if the API says the token has expired
     options.Filters.Add<SessionExpiredFilter>();
 });
 
 // ---------- Cookie login ----------
+// After a successful API login, the user's role and API token are kept in this cookie
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
         options.AccessDeniedPath = "/Account/AccessDenied";
-        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.ExpireTimeSpan = TimeSpan.FromHours(8); // same as the API token
         options.SlidingExpiration = false;
     });
 builder.Services.AddAuthorization();
 
 // ---------- Web API client ----------
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddHttpClient("Api", c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!));
+builder.Services.AddScoped<SolarGrid.Web.Services.ProsumerApiService>();
 builder.Services.AddHttpClient<ApiClient>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
 });
-
-// Named client "Api" (ProsumerApiService)
-builder.Services.AddHttpClient("Api", client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
-});
-
-// ---------- Session ----------
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromHours(8);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-
-// ---------- Services ----------
-builder.Services.AddScoped<SolarGrid.Web.Services.ProsumerApiService>();
 
 var app = builder.Build();
 
@@ -66,7 +52,6 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseSession();           
 app.UseAuthentication();
 app.UseAuthorization();
 
