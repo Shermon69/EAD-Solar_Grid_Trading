@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    File:        activity_prosumer_home.xml
+    Author:      Shermon H (IT22177964)
+    Description: Home screen for solar prosumers with a menu of their features.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/layout_home_header" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:padding="12dp"
+            android:useDefaultMargins="false">
+
+            <include
+                android:id="@+id/cardDashboard"
+                layout="@layout/item_menu_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp" />
+
+            <include
+                android:id="@+id/cardNewBooking"
+                layout="@layout/item_menu_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp" />
+
+            <include
+                android:id="@+id/cardMyBookings"
+                layout="@layout/item_menu_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp" />
+
+            <include
+                android:id="@+id/cardNearby"
+                layout="@layout/item_menu_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp" />
+
+            <include
+                android:id="@+id/cardProfile"
+                layout="@layout/item_menu_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp" />
+        </GridLayout>
+    </ScrollView>
+</LinearLayout>
