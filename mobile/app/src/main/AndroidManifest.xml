@@ -43,6 +43,7 @@
         <activity android:name=".activities.OperatorHomeActivity" />
 
         <!-- Members: register your new activities below this line -->
+        <activity android:name=".activities.MapActivity" />
 
     </application>
 
