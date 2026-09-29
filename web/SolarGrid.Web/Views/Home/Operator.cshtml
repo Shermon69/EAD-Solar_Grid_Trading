@@ -1,0 +1,57 @@
+@*
+    File:        Operator.cshtml
+    Author:      Shermon H (IT22177964)
+    Description: Home page for Grid Operators after login, with shortcuts to
+                 their operational tools.
+*@
+@{
+    ViewData["Title"] = "Operator Home";
+}
+
+<div class="welcome-banner mb-4">
+    <div>
+        <p class="text-uppercase small fw-semibold mb-1 opacity-75">Grid Operator</p>
+        <h1 class="h3 fw-bold mb-1">Welcome, @User.Identity!.Name</h1>
+        <p class="mb-0 opacity-75">Update battery slot availability and monitor energy trading bookings.</p>
+    </div>
+    <i class="bi bi-lightning-charge display-4 d-none d-md-block"></i>
+</div>
+
+<div class="row g-4">
+    <div class="col-sm-6 col-lg-3">
+        <a class="card action-card h-100" asp-controller="Slots" asp-action="Index">
+            <div class="card-body">
+                <div class="feature-icon bg-solar-soft"><i class="bi bi-battery-charging"></i></div>
+                <h2 class="h6 fw-bold mt-3">Slot Availability</h2>
+                <p class="small text-muted mb-0">Add and update battery storage slots for each station.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <a class="card action-card h-100" asp-controller="Reservations" asp-action="Index">
+            <div class="card-body">
+                <div class="feature-icon bg-purple-soft"><i class="bi bi-calendar-check"></i></div>
+                <h2 class="h6 fw-bold mt-3">Reservations</h2>
+                <p class="small text-muted mb-0">Monitor, approve and cancel power trading bookings.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <a class="card action-card h-100" asp-controller="Stations" asp-action="Index">
+            <div class="card-body">
+                <div class="feature-icon bg-blue-soft"><i class="bi bi-geo-alt"></i></div>
+                <h2 class="h6 fw-bold mt-3">Solar Stations</h2>
+                <p class="small text-muted mb-0">View microgrid nodes, locations and schedules.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <a class="card action-card h-100" asp-controller="Dashboard" asp-action="Index">
+            <div class="card-body">
+                <div class="feature-icon bg-dark-soft"><i class="bi bi-speedometer2"></i></div>
+                <h2 class="h6 fw-bold mt-3">Dashboard</h2>
+                <p class="small text-muted mb-0">Pending and approved future reservations.</p>
+            </div>
+        </a>
+    </div>
+</div>

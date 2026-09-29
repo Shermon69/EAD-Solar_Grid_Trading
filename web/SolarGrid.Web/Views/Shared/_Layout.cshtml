@@ -1,0 +1,150 @@
+@*
+    File:        _Layout.cshtml
+    Author:      Shermon H (IT22177964)
+    Description: Main page layout used by every page. Contains the navbar
+                 (menu items change by role), alert messages and the footer.
+                 When you add a new page, add its menu link here for the right role.
+*@
+@{
+    var isLoggedIn = User.Identity?.IsAuthenticated == true;
+    var isBackoffice = User.IsInRole(Roles.Backoffice);
+    var isOperator = User.IsInRole(Roles.GridOperator);
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    // Highlights the menu item of the page that is open
+    string Active(string controller, string? action = null) =>
+        currentController == controller && (action == null || currentAction == action) ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SolarGrid</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-solar-dark shadow-sm">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-sun-fill text-solar"></i> SolarGrid
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
+                        @if (isLoggedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @Active("Home")" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @Active("Dashboard")" asp-controller="Dashboard" asp-action="Index">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+
+                            @* Backoffice only: user administration *@
+                            @if (isBackoffice)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @Active("Users")" asp-controller="Users" asp-action="Index">
+                                        <i class="bi bi-person-badge"></i> Staff Users
+                                    </a>
+                                </li>
+                            }
+
+                            @* Both roles: prosumers (Grid Operators can view, Backoffice can manage) *@
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle @Active("Prosumers")" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-people"></i> Prosumers
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Prosumers" asp-action="Index">All Prosumers</a></li>
+                                    @if (isBackoffice)
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Prosumers" asp-action="Pending">Pending Activations</a></li>
+                                    }
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle @(Active("Stations") + Active("Slots"))" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-lightning-charge"></i> Microgrid
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Stations" asp-action="Index">Solar Stations</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Slots" asp-action="Index">Slot Availability</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @Active("Reservations")" asp-controller="Reservations" asp-action="Index">
+                                    <i class="bi bi-calendar-check"></i> Reservations
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    @if (isLoggedIn)
+                    {
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="navbar-text small">
+                                <i class="bi bi-person-circle"></i> @User.Identity!.Name
+                                <span class="badge bg-solar text-dark ms-1">@(isBackoffice ? "Backoffice" : "Grid Operator")</span>
+                            </span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                <button type="submit" class="btn btn-sm btn-outline-light">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="btn btn-solar btn-sm" asp-controller="Account" asp-action="Login">
+                            <i class="bi bi-box-arrow-in-right"></i> Staff Login
+                        </a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow-1">
+        @* Pages with a full-width design (e.g. landing page) set ViewData["FullWidth"] = true *@
+        @if (ViewData["FullWidth"] is true)
+        {
+            <partial name="_Alerts" />
+            @RenderBody()
+        }
+        else
+        {
+            <div class="container py-4">
+                <partial name="_Alerts" />
+                @RenderBody()
+            </div>
+        }
+    </main>
+
+    <footer class="footer-solar py-3 mt-auto">
+        <div class="container d-flex flex-column flex-md-row justify-content-between small">
+            <span>&copy; 2026 Smart Solar Microgrid Trading System</span>
+            <span>SE4040 Enterprise Application Development</span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,106 @@
+@*
+    File:        Index.cshtml (Home)
+    Author:      Shermon H (IT22177964)
+    Description: Public landing page (the home / index page of the web app).
+                 Explains the system and links to the staff login.
+*@
+@{
+    ViewData["Title"] = "Welcome";
+    ViewData["FullWidth"] = true;
+}
+
+<section class="hero-solar text-white">
+    <div class="container py-5">
+        <div class="row align-items-center g-5 py-lg-4">
+            <div class="col-lg-7">
+                <span class="badge bg-solar text-dark mb-3"><i class="bi bi-lightning-charge-fill"></i> Clean energy, shared locally</span>
+                <h1 class="display-5 fw-bold">Smart Solar Microgrid Trading System</h1>
+                <p class="lead mt-3 text-white-50">
+                    Manage solar microgrid nodes, battery storage slots and energy trading reservations
+                    between solar prosumers and the grid, all in one place.
+                </p>
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <a class="btn btn-solar btn-lg" asp-controller="Account" asp-action="Login">
+                        <i class="bi bi-box-arrow-in-right"></i> Staff Login
+                    </a>
+                    <a class="btn btn-outline-light btn-lg" href="#features">Learn more</a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                <div class="hero-icon">
+                    <i class="bi bi-sun-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="features" class="container py-5">
+    <h2 class="h3 fw-bold text-center mb-4">What you can do</h2>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card h-100">
+                <div class="card-body">
+                    <div class="feature-icon bg-solar-soft"><i class="bi bi-person-badge"></i></div>
+                    <h3 class="h6 fw-bold mt-3">User Management</h3>
+                    <p class="small text-muted mb-0">Backoffice staff create staff accounts and manage prosumer profiles using their NIC.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card h-100">
+                <div class="card-body">
+                    <div class="feature-icon bg-green-soft"><i class="bi bi-geo-alt"></i></div>
+                    <h3 class="h6 fw-bold mt-3">Microgrid Nodes</h3>
+                    <p class="small text-muted mb-0">Register solar hubs with GPS location, capacity and battery storage slots.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card h-100">
+                <div class="card-body">
+                    <div class="feature-icon bg-blue-soft"><i class="bi bi-calendar-check"></i></div>
+                    <h3 class="h6 fw-bold mt-3">Energy Reservations</h3>
+                    <p class="small text-muted mb-0">Book charging and drop-off slots up to 7 days ahead, with changes allowed up to 12 hours before.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card h-100">
+                <div class="card-body">
+                    <div class="feature-icon bg-purple-soft"><i class="bi bi-qr-code-scan"></i></div>
+                    <h3 class="h6 fw-bold mt-3">QR Verification</h3>
+                    <p class="small text-muted mb-0">Grid operators scan the prosumer's QR code in the mobile app to complete each energy transfer.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="h3 fw-bold text-center mb-4">How it works</h2>
+        <div class="row g-4 text-center">
+            <div class="col-md-3">
+                <div class="step-number">1</div>
+                <p class="fw-semibold mt-2 mb-1">Register</p>
+                <p class="small text-muted">Prosumers sign up in the mobile app and Backoffice activates the account.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="step-number">2</div>
+                <p class="fw-semibold mt-2 mb-1">Reserve</p>
+                <p class="small text-muted">Prosumers find nearby solar stations on the map and reserve an energy slot.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="step-number">3</div>
+                <p class="fw-semibold mt-2 mb-1">Approve</p>
+                <p class="small text-muted">A grid operator approves the booking and the app creates a secure QR code.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="step-number">4</div>
+                <p class="fw-semibold mt-2 mb-1">Transfer</p>
+                <p class="small text-muted">At the station, the operator scans the QR code and completes the energy transfer.</p>
+            </div>
+        </div>
+    </div>
+</section>
