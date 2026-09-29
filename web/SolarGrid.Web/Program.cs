@@ -21,13 +21,12 @@ builder.Services.AddControllersWithViews(options =>
 });
 
 // ---------- Cookie login ----------
-// After a successful API login, the user's role and API token are kept in this cookie
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
         options.AccessDeniedPath = "/Account/AccessDenied";
-        options.ExpireTimeSpan = TimeSpan.FromHours(8); // same as the API token
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
         options.SlidingExpiration = false;
     });
 builder.Services.AddAuthorization();
@@ -39,6 +38,21 @@ builder.Services.AddHttpClient<ApiClient>(client =>
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
 });
 
+// Named client "Api" (ProsumerApiService uses this)
+builder.Services.AddHttpClient("Api", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
+});
+
+// ---------- Session (used by ProsumerApiService to read the JWT) ----------
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(8);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// ---------- Services ----------
 builder.Services.AddScoped<SolarGrid.Web.Services.ProsumerApiService>();
 
 var app = builder.Build();
@@ -52,6 +66,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
