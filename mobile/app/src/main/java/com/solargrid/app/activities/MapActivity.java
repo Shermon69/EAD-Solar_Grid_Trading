@@ -90,6 +90,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Move camera to the first station
         Station first = stations.get(0);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(first.latitude, first.longitude), 12));
+
+        mMap.setOnInfoWindowClickListener(marker -> {
+            for (Station s : stations) {
+                if (s.name.equals(marker.getTitle())) {
+                    android.content.Intent intent = new android.content.Intent(MapActivity.this, StationDetailsActivity.class);
+                    intent.putExtra("station", s);
+                    startActivity(intent);
+                    break;
+                }
+            }
+        });
     }
 
     @Override

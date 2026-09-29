@@ -44,6 +44,8 @@
 
         <!-- Members: register your new activities below this line -->
         <activity android:name=".activities.MapActivity" />
+        <activity android:name=".activities.StationDetailsActivity" />
+        <activity android:name=".activities.QrScanActivity" />
 
     </application>
 
