@@ -39,6 +39,8 @@ builder.Services.AddHttpClient<ApiClient>(client =>
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
 });
 
+builder.Services.AddScoped<SolarGrid.Web.Services.ProsumerApiService>();
+
 var app = builder.Build();
 
 // ---------- Request pipeline ----------
