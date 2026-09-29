@@ -1,0 +1,10 @@
+<!-- Navy gradient used behind the header of the login and home screens -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="315"
+        android:endColor="#1F3B6F"
+        android:startColor="@color/navy_dark" />
+    <corners
+        android:bottomLeftRadius="28dp"
+        android:bottomRightRadius="28dp" />
+</shape>
