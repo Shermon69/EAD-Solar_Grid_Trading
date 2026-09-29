@@ -31,6 +31,14 @@ public interface ApiService {
     // ---------- Member 2: Register, profile, my bookings, dashboard ----------
 
     // ---------- Member 3: Stations, slots, QR verification ----------
+    @retrofit2.http.GET("stations")
+    Call<java.util.List<com.solargrid.app.models.Station>> getStations(@retrofit2.http.Query("activeOnly") boolean activeOnly);
+
+    @retrofit2.http.POST("reservations/verify-qr")
+    Call<Object> verifyQr(@Body com.solargrid.app.models.QrVerifyRequest request);
+
+    @retrofit2.http.PATCH("reservations/{id}/complete")
+    Call<Object> completeReservation(@retrofit2.http.Path("id") String id);
 
     // ---------- Member 4: Reservations ----------
 }
