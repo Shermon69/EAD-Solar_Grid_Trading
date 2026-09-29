@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SolarGrid</string>
+    <string name="app_tagline">Smart Solar Microgrid Trading</string>
+
+    <!-- Login -->
+    <string name="login_title">Welcome back</string>
+    <string name="login_subtitle">Sign in with your NIC to continue</string>
+    <string name="hint_nic">NIC number</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">Login</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="register_link">Register as a prosumer</string>
+    <string name="error_nic_required">Please enter your NIC</string>
+    <string name="error_password_required">Please enter your password</string>
+    <string name="error_backoffice_mobile">Backoffice users please use the web portal.</string>
+
+    <!-- Home screens -->
+    <string name="prosumer_role">Solar Prosumer</string>
+    <string name="operator_role">Grid Operator</string>
+    <string name="logout">Logout</string>
+    <string name="coming_soon">This feature is coming soon</string>
+
+    <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_dashboard_desc">Counts and upcoming bookings</string>
+    <string name="menu_new_booking">New Booking</string>
+    <string name="menu_new_booking_desc">Reserve an energy slot</string>
+    <string name="menu_my_bookings">My Bookings</string>
+    <string name="menu_my_bookings_desc">Current, pending and history</string>
+    <string name="menu_nearby">Nearby Stations</string>
+    <string name="menu_nearby_desc">Solar hubs on the map</string>
+    <string name="menu_profile">My Profile</string>
+    <string name="menu_profile_desc">Edit details or deactivate</string>
+    <string name="menu_scan_qr">Scan QR Code</string>
+    <string name="menu_scan_qr_desc">Verify and complete an energy transfer</string>
+    <string name="menu_stations">Solar Stations</string>
+    <string name="menu_stations_desc">Stations and their locations</string>
+</resources>

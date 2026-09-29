@@ -140,9 +140,9 @@ EAD-Solar_Grid_Trading/
 │   └── app/src/main/java/com/solargrid/app/
 │       ├── activities/         # One Activity per screen
 │       ├── api/                # Retrofit ApiClient + ApiService interface
-│       ├── db/                 # SQLiteOpenHelper + DAO classes
+│       ├── db/                 # DatabaseHelper (SQLite), SessionManager, DAO classes (e.g. StationDao)
 │       ├── models/             # Plain Java model classes
-│       └── utils/              # SessionManager, DateUtils, QrUtils
+│       └── utils/              # Constants, ApiErrorUtils, MenuCardHelper, DateUtils, QrUtils
 ├── docs/
 │   ├── TEAM_PLAN.md            # This file
 │   ├── diagrams/               # High-level, use case, DFD (PNG + source)
