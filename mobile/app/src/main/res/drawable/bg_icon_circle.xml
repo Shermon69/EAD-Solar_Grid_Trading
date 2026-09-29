@@ -1,0 +1,5 @@
+<!-- Rounded square behind menu icons. Colour is changed per card with backgroundTint -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/solar_light" />
+    <corners android:radius="12dp" />
+</shape>

@@ -63,6 +63,13 @@ dotnet run
 Open http://localhost:5090 and log in with a Backoffice or Grid Operator account. The API address is set in
 `web/SolarGrid.Web/appsettings.json` (`ApiSettings:BaseUrl`).
 
+**Mobile app** (the API must be running)
+1. Open the `mobile` folder in Android Studio and wait for Gradle sync.
+2. Optional: add `MAPS_API_KEY=...` to `mobile/local.properties` (created by Android Studio, not committed).
+3. Run the app on an emulator. It connects to the API at `http://10.0.2.2:5080/api/`, which is the emulator's
+   address for your PC. For a real phone, add `API_BASE_URL=http://<your-PC-IP>:5080/api/` to `local.properties`.
+4. Log in as a Prosumer (`200045678912`) or Grid Operator (`199234567891`).
+
 See [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md) for the team plan, database design, API contract and coding standards.
 
 ## Team and individual contributions

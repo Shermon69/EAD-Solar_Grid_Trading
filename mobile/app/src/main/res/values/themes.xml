@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App theme (Material 3). Every screen uses this so the app looks consistent. -->
+<resources>
+    <style name="Theme.SolarGrid" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/navy</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/solar</item>
+        <item name="colorOnSecondary">@color/text_primary</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:statusBarColor">@color/navy</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <!-- Main action button (solar orange) -->
+    <style name="Widget.SolarGrid.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/solar</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
+    <!-- Card used for menu items on the home screens -->
+    <style name="Widget.SolarGrid.MenuCard" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+</resources>
