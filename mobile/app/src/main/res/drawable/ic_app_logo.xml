@@ -1,0 +1,15 @@
+<!-- App icon: solar sun on a navy circle -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/navy" />
+            <size android:width="48dp" android:height="48dp" />
+        </shape>
+    </item>
+    <item
+        android:bottom="10dp"
+        android:drawable="@drawable/ic_sun"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp" />
+</layer-list>
