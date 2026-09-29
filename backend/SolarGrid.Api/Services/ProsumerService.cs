@@ -1,8 +1,9 @@
 /*
  * File: ProsumerService.cs
- * Author: Nisula (ITXXXXXXXX)
+ * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: All business logic for prosumer accounts, pending activations, bookings and dashboard counts.
  *              Business rules live here (API only). Web and mobile apps just call the endpoints.
+ * Created:     29/09/2026             
  */
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
