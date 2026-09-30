@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    File:        item_booking.xml
+    Author:      Premaratne R.A.N.C (IT22050908)
+    Description: One booking row for the bookings RecyclerView. Shows the
+                 station name on top and the date + status below.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <!-- Station name (bold, larger). -->
+    <TextView
+        android:id="@+id/tvStation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Date and status, on a second line (smaller). -->
+    <TextView
+        android:id="@+id/tvDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp" />
+
+</LinearLayout>

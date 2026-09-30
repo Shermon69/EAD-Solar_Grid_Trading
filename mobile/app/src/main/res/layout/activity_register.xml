@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    File:        activity_register.xml
+    Author:      Premaratne R.A.N.C (IT22050908)
+    Description: Prosumer registration screen. Six validated fields
+                 (NIC, name, email, phone, address, password) and a
+                 Register button.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Screen title. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Create prosumer account"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Identity: NIC (primary key). inputType textCapCharacters for 'V' suffix. -->
+        <EditText
+            android:id="@+id/etNic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="NIC"
+            android:inputType="textCapCharacters" />
+
+        <!-- Full name. -->
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full name"
+            android:inputType="textPersonName" />
+
+        <!-- Email. -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
+
+        <!-- Phone number with example format in the hint. -->
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone (0771234567)"
+            android:inputType="phone" />
+
+        <!-- Address. -->
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address"
+            android:inputType="textPostalAddress" />
+
+        <!-- Password (minimum 8 characters, enforced client-side and server-side). -->
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password (min 8 characters)"
+            android:inputType="textPassword" />
+
+        <!-- Register button. -->
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Register" />
+
+    </LinearLayout>
+
+</ScrollView>

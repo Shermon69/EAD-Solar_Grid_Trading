@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    File:        activity_dashboard.xml
+    Author:      Premaratne R.A.N.C (IT22050908)
+    Description: Prosumer dashboard layout. Shows two live counts
+                 (pending bookings, approved upcoming bookings) and
+                 three shortcut buttons.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Screen title. -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dashboard"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <!-- Section 1: Pending bookings count. -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Pending bookings"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvPendingCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="40sp" />
+
+    <!-- Section 2: Approved upcoming bookings count. -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Approved upcoming bookings"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvApprovedCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="40sp" />
+
+    <!-- Section 3: Shortcut buttons. -->
+    <Button
+        android:id="@+id/btnCurrent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Current and pending bookings" />
+
+    <Button
+        android:id="@+id/btnHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Booking history" />
+
+    <Button
+        android:id="@+id/btnProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit profile" />
+
+</LinearLayout>
