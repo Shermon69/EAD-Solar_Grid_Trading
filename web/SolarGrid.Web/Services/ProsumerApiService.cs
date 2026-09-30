@@ -24,7 +24,9 @@ public class ProsumerApiService
     private readonly IHttpClientFactory _factory;
     private readonly IHttpContextAccessor _http;
 
-    // Injects the HttpClient factory and the current HTTP context.
+    /// <summary>
+    /// Injects the HttpClient factory and the current HTTP context.
+    /// </summary>
     public ProsumerApiService(IHttpClientFactory factory, IHttpContextAccessor http)
     {
         _factory = factory;
@@ -48,6 +50,16 @@ public class ProsumerApiService
                 new AuthenticationHeaderValue("Bearer", token);
 
         return client;
+    }
+
+    /// <summary>
+    /// Sends a PATCH request (used for activate, deactivate).
+    /// </summary>
+    private async Task<bool> PatchAsync(string url)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Patch, url);
+        var response = await CreateClient().SendAsync(request);
+        return response.IsSuccessStatusCode;
     }
 
     /// <summary>Gets prosumers with optional search text and status filter.</summary>
@@ -77,13 +89,13 @@ public class ProsumerApiService
 
     /// <summary>Activates (approves pending or reactivates deactivated) a prosumer.</summary>
     public async Task<bool> ActivateAsync(string nic)
-        => (await CreateClient().PutAsync($"prosumers/{nic}/activate", null)).IsSuccessStatusCode;
+        => await PatchAsync($"prosumers/{nic}/activate");
 
     /// <summary>Deactivates a prosumer account.</summary>
     public async Task<bool> DeactivateAsync(string nic)
-        => (await CreateClient().PutAsync($"prosumers/{nic}/deactivate", null)).IsSuccessStatusCode;
+        => await PatchAsync($"prosumers/{nic}/deactivate");
 
     /// <summary>Gets the Backoffice dashboard counts from the API.</summary>
     public async Task<DashboardVm> GetDashboardAsync()
-        => await CreateClient().GetFromJsonAsync<DashboardVm>("prosumers/dashboard") ?? new();
+        => await CreateClient().GetFromJsonAsync<DashboardVm>("dashboard/operator") ?? new();
 }

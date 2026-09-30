@@ -19,19 +19,15 @@ namespace SolarGrid.Api.Controllers;
 /// validates HTTP input and delegates all business logic to ProsumerService.
 /// </summary>
 [ApiController]
-[Route("api/prosumers")]
+[Route("api")] 
 public class ProsumersController : ControllerBase
 {
     private readonly ProsumerService _service;
-
-    // Injects the prosumer service via DI.
     public ProsumersController(ProsumerService service) => _service = service;
-
-    // NIC of the logged-in user, read from the JWT NameIdentifier claim.
     private string CurrentNic => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
     /// <summary>Registers a new prosumer (public). Account starts as Pending.</summary>
-    [HttpPost("register")]
+    [HttpPost("auth/register")]
     [AllowAnonymous]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
@@ -41,25 +37,25 @@ public class ProsumersController : ControllerBase
     }
 
     /// <summary>Backoffice: list/search prosumers by search text and status.</summary>
-    [HttpGet]
+    [HttpGet("prosumers")]
     [Authorize(Roles = "Backoffice")]
     public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? status)
         => Ok(await _service.GetProsumersAsync(search, status));
 
     /// <summary>Backoffice: prosumers waiting for activation.</summary>
-    [HttpGet("pending")]
+    [HttpGet("prosumers/pending")]
     [Authorize(Roles = "Backoffice")]
     public async Task<IActionResult> GetPending()
         => Ok(await _service.GetProsumersAsync(null, "Pending"));
 
     /// <summary>Backoffice: pending count + approved future reservations count.</summary>
-    [HttpGet("dashboard")]
+    [HttpGet("dashboard/operator")]
     [Authorize(Roles = "Backoffice")]
     public async Task<IActionResult> BackofficeDashboard()
         => Ok(await _service.GetBackofficeDashboardAsync());
 
     /// <summary>Backoffice: get one prosumer by NIC.</summary>
-    [HttpGet("{nic}")]
+    [HttpGet("prosumers/{nic}")]
     [Authorize(Roles = "Backoffice")]
     public async Task<IActionResult> GetOne(string nic)
     {
@@ -68,7 +64,7 @@ public class ProsumersController : ControllerBase
     }
 
     /// <summary>Backoffice: update a prosumer's profile details.</summary>
-    [HttpPut("{nic}")]
+    [HttpPut("prosumers/{nic}")]
     [Authorize(Roles = "Backoffice")]
     public async Task<IActionResult> Update(string nic, [FromBody] UpdateProfileRequest request)
     {
@@ -77,7 +73,7 @@ public class ProsumersController : ControllerBase
     }
 
     /// <summary>Backoffice: activate a pending or reactivate a deactivated account.</summary>
-    [HttpPut("{nic}/activate")]
+    [HttpPatch("prosumers/{nic}/activate")]
     [Authorize(Roles = "Backoffice")]
     public async Task<IActionResult> Activate(string nic)
     {
@@ -86,7 +82,7 @@ public class ProsumersController : ControllerBase
     }
 
     /// <summary>Backoffice: deactivate an active prosumer account.</summary>
-    [HttpPut("{nic}/deactivate")]
+    [HttpPatch("prosumers/{nic}/deactivate")]
     [Authorize(Roles = "Backoffice")]
     public async Task<IActionResult> Deactivate(string nic)
     {
@@ -95,7 +91,7 @@ public class ProsumersController : ControllerBase
     }
 
     /// <summary>Prosumer: get own profile.</summary>
-    [HttpGet("me/profile")]
+    [HttpGet("profile")]
     [Authorize(Roles = "Prosumer")]
     public async Task<IActionResult> MyProfile()
     {
@@ -104,7 +100,7 @@ public class ProsumersController : ControllerBase
     }
 
     /// <summary>Prosumer: update own profile.</summary>
-    [HttpPut("me/profile")]
+    [HttpPut("profile")]
     [Authorize(Roles = "Prosumer")]
     public async Task<IActionResult> UpdateMyProfile([FromBody] UpdateProfileRequest request)
     {
@@ -113,7 +109,7 @@ public class ProsumersController : ControllerBase
     }
 
     /// <summary>Prosumer: request account deactivation (Backoffice approval required).</summary>
-    [HttpPost("me/request-deactivation")]
+    [HttpPost("profile/deactivate-request")]
     [Authorize(Roles = "Prosumer")]
     public async Task<IActionResult> RequestDeactivation()
     {
@@ -123,13 +119,13 @@ public class ProsumersController : ControllerBase
     }
 
     /// <summary>Prosumer: own bookings (type = current | history, with optional search).</summary>
-    [HttpGet("me/bookings")]
+    [HttpGet("my/reservations")]
     [Authorize(Roles = "Prosumer")]
     public async Task<IActionResult> MyBookings([FromQuery] string type = "current", [FromQuery] string? search = null)
         => Ok(await _service.GetMyBookingsAsync(CurrentNic, type, search));
 
     /// <summary>Prosumer: own dashboard — pending + approved future counts.</summary>
-    [HttpGet("me/dashboard")]
+    [HttpGet("dashboard/prosumer")]
     [Authorize(Roles = "Prosumer")]
     public async Task<IActionResult> MyDashboard()
         => Ok(await _service.GetMyDashboardAsync(CurrentNic));
