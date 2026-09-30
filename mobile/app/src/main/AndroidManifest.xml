@@ -43,6 +43,21 @@
         <activity android:name=".activities.OperatorHomeActivity" />
 
         <!-- Members: register your new activities below this line -->
+        <activity
+            android:name=".activities.MyReservationsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.CreateBookingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.ReservationDetailsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.EditReservationActivity"
+            android:exported="false" />
 
     </application>
 
