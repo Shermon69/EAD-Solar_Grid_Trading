@@ -43,6 +43,12 @@
         <activity android:name=".activities.OperatorHomeActivity" />
 
         <!-- Members: register your new activities below this line -->
+        
+        <!-- Prosumer activities -->
+        <activity android:name=".activities.RegisterActivity" android:exported="false" />
+        <activity android:name=".activities.ProfileActivity" android:exported="false" />
+        <activity android:name=".activities.DashboardActivity" android:exported="false" />
+        <activity android:name=".activities.BookingsActivity" android:exported="false" />
 
     </application>
 
