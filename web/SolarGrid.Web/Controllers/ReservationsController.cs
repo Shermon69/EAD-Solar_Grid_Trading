@@ -13,7 +13,6 @@ using SolarGrid.Web.Models;
 using SolarGrid.Web.Services;
 using System.Globalization;
 
-
 namespace SolarGrid.Web.Controllers
 {
     [Authorize(Roles = Roles.Staff)]
@@ -415,24 +414,52 @@ namespace SolarGrid.Web.Controllers
         private async Task LoadEditFormData(
             UpdateReservationViewModel model)
         {
+            // Load active prosumers independently.
+            // A station API failure should not prevent the prosumer
+            // dropdown from being populated.
             try
             {
                 var prosumers =
                     await _apiClient.GetAsync<List<ProsumerOption>>(
                         "prosumers?status=Active");
 
+                model.Prosumers =
+                    prosumers ?? new List<ProsumerOption>();
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] =
+                    $"Prosumer API failed: {ex.Message}";
+
+                model.Prosumers =
+                    new List<ProsumerOption>();
+            }
+
+            // Load active stations independently.
+            try
+            {
                 var stations =
                     await _apiClient.GetAsync<List<StationOption>>(
                         "stations?activeOnly=true");
 
-                model.Prosumers =
-                    prosumers ?? new List<ProsumerOption>();
-
                 model.Stations =
                     stations ?? new List<StationOption>();
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] =
+                    $"Station API failed: {ex.Message}";
 
-                if (!string.IsNullOrWhiteSpace(model.StationId) &&
-                    model.ReservationDate != default)
+                model.Stations =
+                    new List<StationOption>();
+            }
+
+            // Load slots independently when a station and reservation
+            // date are available.
+            if (!string.IsNullOrWhiteSpace(model.StationId) &&
+                model.ReservationDate != default)
+            {
+                try
                 {
                     var slots =
                         await _apiClient.GetAsync<List<SlotOption>>(
@@ -441,21 +468,18 @@ namespace SolarGrid.Web.Controllers
                     model.Slots =
                         slots ?? new List<SlotOption>();
                 }
-                else
+                catch (Exception ex)
                 {
+                    TempData["Error"] =
+                        $"Slot API failed: {ex.Message}";
+
                     model.Slots =
                         new List<SlotOption>();
                 }
             }
-            catch
+            else
             {
-                model.Prosumers ??=
-                    new List<ProsumerOption>();
-
-                model.Stations ??=
-                    new List<StationOption>();
-
-                model.Slots ??=
+                model.Slots =
                     new List<SlotOption>();
             }
         }
