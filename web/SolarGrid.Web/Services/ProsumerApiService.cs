@@ -9,6 +9,7 @@
  */
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using SolarGrid.Web.Helpers;
 using SolarGrid.Web.Models;
 
 namespace SolarGrid.Web.Services;
@@ -20,7 +21,6 @@ namespace SolarGrid.Web.Services;
 /// </summary>
 public class ProsumerApiService
 {
-    private const string TokenKey = "JWT";
     private readonly IHttpClientFactory _factory;
     private readonly IHttpContextAccessor _http;
 
@@ -33,12 +33,15 @@ public class ProsumerApiService
 
     /// <summary>
     /// Creates an HttpClient that sends the logged-in user's JWT in the
-    /// Authorization header. Reads the token from session.
+    /// Authorization header. The token is read from the auth cookie claim
+    /// (AppClaims.AccessToken), which is set by AccountController at login.
     /// </summary>
     private HttpClient CreateClient()
     {
         var client = _factory.CreateClient("Api");
-        var token = _http.HttpContext?.Session.GetString(TokenKey);
+
+        // Token is stored as a claim in the login cookie, not in session
+        var token = _http.HttpContext?.User?.FindFirst(AppClaims.AccessToken)?.Value;
 
         if (!string.IsNullOrEmpty(token))
             client.DefaultRequestHeaders.Authorization =

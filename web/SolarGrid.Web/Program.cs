@@ -27,7 +27,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login";
         options.AccessDeniedPath = "/Account/AccessDenied";
-        options.ExpireTimeSpan = TimeSpan.FromHours(8); // same as the API token
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
         options.SlidingExpiration = false;
     });
 builder.Services.AddAuthorization();
@@ -41,6 +41,14 @@ builder.Services.AddHttpClient<ApiClient>(client =>
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
 });
 
+// ---------- Session (ProsumerApiService reads the JWT from here) ----------
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(8);   
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // ---------- Request pipeline ----------
@@ -52,6 +60,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseSession();           
 app.UseAuthentication();
 app.UseAuthorization();
 
