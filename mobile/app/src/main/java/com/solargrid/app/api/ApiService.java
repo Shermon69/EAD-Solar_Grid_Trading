@@ -15,6 +15,7 @@ import com.solargrid.app.models.DashboardResponse;
 import com.solargrid.app.models.LoginRequest;
 import com.solargrid.app.models.LoginResponse;
 import com.solargrid.app.models.Prosumer;
+import com.solargrid.app.models.QrVerifyRequest;
 import com.solargrid.app.models.RegisterRequest;
 import com.solargrid.app.models.Reservation;
 import com.solargrid.app.models.Slot;
@@ -140,6 +141,28 @@ public interface ApiService {
     Call<List<Slot>> getStationSlots(
             @Path("stationId") String stationId,
             @Query("date") String date
+    );
+
+    /**
+     * POST /api/reservations/verify-qr - verifies a reservation QR code.
+     *
+     * @param request QR verification request
+     * @return verification response
+     */
+    @POST("reservations/verify-qr")
+    Call<Object> verifyQr(
+            @Body QrVerifyRequest request
+    );
+
+    /**
+     * PATCH /api/reservations/{id}/complete - completes a reservation.
+     *
+     * @param id reservation ID
+     * @return completion response
+     */
+    @PATCH("reservations/{id}/complete")
+    Call<Object> completeReservation(
+            @Path("id") String id
     );
 
 

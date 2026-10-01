@@ -59,6 +59,11 @@ builder.Services.AddSingleton<JwtTokenGenerator>();
 builder.Services.AddScoped<AuthService>();
 
 // Member 2
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<StationService>();
+builder.Services.AddScoped<SlotService>();
+builder.Services.AddScoped<QrVerificationService>();
+
 builder.Services.AddScoped<ProsumerService>();
 
 // Member 4

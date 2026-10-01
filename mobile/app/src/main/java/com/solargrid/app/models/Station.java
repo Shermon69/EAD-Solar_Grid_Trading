@@ -10,10 +10,14 @@ package com.solargrid.app.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Represents a solar microgrid station.
  */
-public class Station {
+public class Station implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String id;
     private String name;

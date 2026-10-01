@@ -63,8 +63,9 @@ public class ProsumerHomeActivity extends AppCompatActivity {
                 R.string.menu_new_booking,
                 R.string.menu_new_booking_desc,
                 R.color.solar,
-                v -> startActivity(new Intent(this, CreateBookingActivity.class))
-
+                v -> startActivity(
+                        new Intent(this, CreateBookingActivity.class)
+                )
         );
 
         // Member 4: My Reservations
@@ -79,14 +80,16 @@ public class ProsumerHomeActivity extends AppCompatActivity {
                 )
         );
 
-        // Member 3: Nearby Stations
+        // Member 3: Nearby Stations (map)
         MenuCardHelper.setup(
                 findViewById(R.id.cardNearby),
                 R.drawable.ic_place,
                 R.string.menu_nearby,
                 R.string.menu_nearby_desc,
                 R.color.success,
-                v -> comingSoon()
+                v -> startActivity(
+                        new Intent(this, MapActivity.class)
+                )
         );
 
         // Member 2: Profile

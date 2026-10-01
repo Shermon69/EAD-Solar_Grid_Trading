@@ -47,11 +47,13 @@ public class OperatorHomeActivity extends AppCompatActivity {
 
         // Member 3: Scan QR -> startActivity(new Intent(this, ScanQrActivity.class))
         MenuCardHelper.setup(findViewById(R.id.cardScanQr), R.drawable.ic_qr_scan,
-                R.string.menu_scan_qr, R.string.menu_scan_qr_desc, R.color.solar, v -> comingSoon());
+                R.string.menu_scan_qr, R.string.menu_scan_qr_desc, R.color.solar, 
+                v -> startActivity(new Intent(this, QrScanActivity.class)));
 
         // Member 3: Stations -> startActivity(new Intent(this, StationsMapActivity.class))
         MenuCardHelper.setup(findViewById(R.id.cardStations), R.drawable.ic_place,
-                R.string.menu_stations, R.string.menu_stations_desc, R.color.success, v -> comingSoon());
+                R.string.menu_stations, R.string.menu_stations_desc, R.color.success, 
+                v -> startActivity(new Intent(this, MapActivity.class)));
     }
 
     /**

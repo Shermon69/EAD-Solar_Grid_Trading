@@ -11,7 +11,9 @@
 
     <!-- Scanning QR codes (Member 3) -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <!-- usesCleartextTraffic allows http:// for the local API during development -->
     <application
@@ -39,10 +41,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.ProsumerHomeActivity" />
-        <activity android:name=".activities.OperatorHomeActivity" />
+        <activity
+            android:name=".activities.ProsumerHomeActivity"
+            android:exported="false" />
 
-        <!-- Members: register your new activities below this line -->
+        <activity
+            android:name=".activities.OperatorHomeActivity"
+            android:exported="false" />
+
+        <!-- M4 Reservation activities -->
         <activity
             android:name=".activities.MyReservationsActivity"
             android:exported="false" />
@@ -57,6 +64,36 @@
 
         <activity
             android:name=".activities.EditReservationActivity"
+            android:exported="false" />
+
+        <!-- M3 Station, Map and QR activities -->
+        <activity
+            android:name=".activities.MapActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.StationDetailsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.QrScanActivity"
+            android:exported="false" />
+
+        <!-- Prosumer activities -->
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.DashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.BookingsActivity"
             android:exported="false" />
 
     </application>
