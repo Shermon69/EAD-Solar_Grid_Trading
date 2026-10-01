@@ -19,18 +19,18 @@ public class Station implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;
-    private String name;
-    private String address;
+    public String id;
+    public String name;
+    public String address;
 
-    private double latitude;
-    private double longitude;
+    public double latitude;
+    public double longitude;
 
     @SerializedName("capacityKw")
-    private double capacityKw;
+    public double capacityKw;
 
-    private int batterySlots;
-    private boolean isActive;
+    public int batterySlots;
+    public boolean isActive;
 
     public Station() {
     }
