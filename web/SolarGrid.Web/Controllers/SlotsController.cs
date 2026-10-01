@@ -25,19 +25,19 @@ namespace SolarGrid.Web.Controllers
 
         public async Task<IActionResult> Index(string stationId)
         {
+            // No station chosen yet (e.g. opened from the navbar): show a station picker (added by Shermon H)
             if (string.IsNullOrEmpty(stationId))
             {
-                TempData["Error"] = "Please select a station first.";
-                return RedirectToAction("Index", "Stations");
+                return await SelectStation();
             }
 
             try
             {
-                var station = await _api.GetAsync<StationViewModel>($"api/stations/{stationId}");
+                var station = await _api.GetAsync<StationViewModel>($"stations/{stationId}");
                 ViewBag.StationName = station.Name;
                 ViewBag.StationId = stationId;
 
-                var slots = await _api.GetAsync<List<SlotViewModel>>($"api/stations/{stationId}/slots");
+                var slots = await _api.GetAsync<List<SlotViewModel>>($"stations/{stationId}/slots");
                 return View(slots);
             }
             catch (ApiException ex)
@@ -52,7 +52,7 @@ namespace SolarGrid.Web.Controllers
         {
             try
             {
-                await _api.PostAsync("api/slots", model);
+                await _api.PostAsync("slots", model);
                 TempData["Success"] = "Slot created successfully.";
             }
             catch (ApiException ex)
@@ -62,12 +62,51 @@ namespace SolarGrid.Web.Controllers
             return RedirectToAction(nameof(Index), new { stationId = model.StationId });
         }
 
+        /// <summary>
+        /// POST /Slots/Update - changes how many battery slots a time block offers and
+        /// whether it can be booked. The API checks the booked count and station limit.
+        /// (Added by Shermon H)
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(string id, string stationId, int totalSlots, bool isAvailable)
+        {
+            try
+            {
+                await _api.PutAsync($"slots/{Uri.EscapeDataString(id)}", new { totalSlots, isAvailable });
+                TempData["Success"] = "Slot availability updated.";
+            }
+            catch (ApiException ex) when (ex.StatusCode != 401)
+            {
+                TempData["Error"] = ex.Message;
+            }
+            return RedirectToAction(nameof(Index), new { stationId });
+        }
+
+        /// <summary>
+        /// Shows the list of stations so the user can pick one to manage its slots.
+        /// (Added by Shermon H)
+        /// </summary>
+        private async Task<IActionResult> SelectStation()
+        {
+            try
+            {
+                var stations = await _api.GetAsync<List<StationViewModel>>("stations");
+                return View("SelectStation", stations);
+            }
+            catch (ApiException ex) when (ex.StatusCode != 401)
+            {
+                TempData["Error"] = ex.Message;
+                return View("SelectStation", new List<StationViewModel>());
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Delete(string id, string stationId)
         {
             try
             {
-                await _api.DeleteAsync($"api/slots/{id}");
+                await _api.DeleteAsync($"slots/{id}");
                 TempData["Success"] = "Slot deleted successfully.";
             }
             catch (ApiException ex)

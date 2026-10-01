@@ -1,0 +1,136 @@
+@*
+    File:        Edit.cshtml (Stations)
+    Author:      Shermon H (IT22177964)
+    Description: Edit Station page. Backoffice users update a microgrid node's
+                 details, GPS location, capacity, battery slots and weekly schedule.
+*@
+@model EditStationViewModel
+@{
+    ViewData["Title"] = "Edit Station";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Solar Stations</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+</nav>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="IsActive" />
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h1 class="h4 fw-bold mb-1">Edit Station</h1>
+                            <p class="text-muted mb-0">Update the node's details and capacity.</p>
+                        </div>
+                        <span class="badge @(Model.IsActive ? "bg-success" : "bg-secondary")">@(Model.IsActive ? "Active" : "Deactivated")</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </div>
+
+                    <h2 class="h6 text-uppercase text-muted fw-semibold mt-4 mb-3"><i class="bi bi-geo-alt"></i> GPS location</h2>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label asp-for="Latitude" class="form-label"></label>
+                            <input asp-for="Latitude" class="form-control" step="0.000001" />
+                            <span asp-validation-for="Latitude" class="text-danger small"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label asp-for="Longitude" class="form-label"></label>
+                            <input asp-for="Longitude" class="form-control" step="0.000001" />
+                            <span asp-validation-for="Longitude" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <a class="small" target="_blank" rel="noopener"
+                               href="https://www.google.com/maps?q=@Model.Latitude,@Model.Longitude">
+                                <i class="bi bi-box-arrow-up-right"></i> Check this location on Google Maps
+                            </a>
+                        </div>
+                    </div>
+
+                    <h2 class="h6 text-uppercase text-muted fw-semibold mt-4 mb-3"><i class="bi bi-battery-charging"></i> Capacity</h2>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label asp-for="CapacityKw" class="form-label"></label>
+                            <input asp-for="CapacityKw" class="form-control" step="0.1" />
+                            <span asp-validation-for="CapacityKw" class="text-danger small"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label asp-for="BatterySlots" class="form-label"></label>
+                            <input asp-for="BatterySlots" class="form-control" />
+                            <span asp-validation-for="BatterySlots" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h2 class="h5 fw-bold mb-1"><i class="bi bi-clock"></i> Operating schedule</h2>
+                    <p class="text-muted small mb-3">Untick a day to mark the station as closed on that day.</p>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Open</th>
+                                    <th>Opens at</th>
+                                    <th>Closes at</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.Schedule.Count; i++)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">
+                                            @Model.Schedule[i].Day
+                                            <input type="hidden" asp-for="Schedule[i].Day" />
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" asp-for="Schedule[i].IsOpen" />
+                                            </div>
+                                        </td>
+                                        <td><input type="time" asp-for="Schedule[i].OpenTime" class="form-control form-control-sm" /></td>
+                                        <td><input type="time" asp-for="Schedule[i].CloseTime" class="form-control form-control-sm" /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-solar"><i class="bi bi-check-lg"></i> Save Changes</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+        <a class="btn btn-outline-primary ms-auto" asp-controller="Slots" asp-action="Index" asp-route-stationId="@Model.Id">
+            <i class="bi bi-battery-half"></i> Manage Slots
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
