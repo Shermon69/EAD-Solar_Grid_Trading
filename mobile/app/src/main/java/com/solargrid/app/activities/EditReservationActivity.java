@@ -11,6 +11,7 @@ package com.solargrid.app.activities;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -176,16 +177,16 @@ public class EditReservationActivity extends AppCompatActivity {
                 if (!response.isSuccessful()
                         || response.body() == null) {
 
-                    Toast.makeText(
-                            EditReservationActivity.this,
+                    showApiError(
                             "Unable to load reservation.",
-                            Toast.LENGTH_LONG
-                    ).show();
+                            response
+                    );
 
                     return;
                 }
 
-                Reservation reservation = response.body();
+                Reservation reservation =
+                        response.body();
 
                 prosumerNic =
                         reservation.getProsumerNic();
@@ -214,8 +215,8 @@ public class EditReservationActivity extends AppCompatActivity {
                 btnEditDate.setText(selectedDate);
 
                 /*
-                 * Station and slot lists are loaded through the
-                 * central API. They require the Member 3 endpoints.
+                 * Station and slot lists are loaded through
+                 * the central Web API.
                  */
                 loadStations();
             }
@@ -254,6 +255,11 @@ public class EditReservationActivity extends AppCompatActivity {
                         if (!response.isSuccessful()
                                 || response.body() == null) {
 
+                            showApiError(
+                                    "Unable to load stations.",
+                                    response
+                            );
+
                             return;
                         }
 
@@ -266,7 +272,9 @@ public class EditReservationActivity extends AppCompatActivity {
                         List<String> stationNames =
                                 new ArrayList<>();
 
-                        stationNames.add("Select Station");
+                        stationNames.add(
+                                "Select Station"
+                        );
 
                         int selectedPosition = 0;
 
@@ -285,7 +293,8 @@ public class EditReservationActivity extends AppCompatActivity {
                                     && station.getId().equals(
                                     selectedStationId)) {
 
-                                selectedPosition = i + 1;
+                                selectedPosition =
+                                        i + 1;
                             }
                         }
 
@@ -300,7 +309,9 @@ public class EditReservationActivity extends AppCompatActivity {
                                 android.R.layout.simple_spinner_dropdown_item
                         );
 
-                        spinnerEditStation.setAdapter(adapter);
+                        spinnerEditStation.setAdapter(
+                                adapter
+                        );
 
                         if (selectedPosition > 0) {
 
@@ -309,6 +320,7 @@ public class EditReservationActivity extends AppCompatActivity {
                             );
 
                             if (!selectedDate.isEmpty()) {
+
                                 loadSlots();
                             }
                         }
@@ -319,8 +331,12 @@ public class EditReservationActivity extends AppCompatActivity {
                             Call<List<Station>> call,
                             Throwable t
                     ) {
-                        // Station API will be available after
-                        // Member 3 integration.
+
+                        Toast.makeText(
+                                EditReservationActivity.this,
+                                "Unable to connect to station service.",
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 });
     }
@@ -331,11 +347,11 @@ public class EditReservationActivity extends AppCompatActivity {
     private void setupStationSelection() {
 
         spinnerEditStation.setOnItemSelectedListener(
-                new android.widget.AdapterView.OnItemSelectedListener() {
+                new AdapterView.OnItemSelectedListener() {
 
                     @Override
                     public void onItemSelected(
-                            android.widget.AdapterView<?> parent,
+                            AdapterView<?> parent,
                             View view,
                             int position,
                             long id
@@ -362,6 +378,7 @@ public class EditReservationActivity extends AppCompatActivity {
                                             .getId();
 
                             if (!selectedDate.isEmpty()) {
+
                                 loadSlots();
                             }
                         }
@@ -369,8 +386,9 @@ public class EditReservationActivity extends AppCompatActivity {
 
                     @Override
                     public void onNothingSelected(
-                            android.widget.AdapterView<?> parent
+                            AdapterView<?> parent
                     ) {
+
                         selectedStationId = "";
                     }
                 }
@@ -402,6 +420,11 @@ public class EditReservationActivity extends AppCompatActivity {
                 if (!response.isSuccessful()
                         || response.body() == null) {
 
+                    showApiError(
+                            "Unable to load available slots.",
+                            response
+                    );
+
                     clearSlots();
 
                     return;
@@ -416,7 +439,9 @@ public class EditReservationActivity extends AppCompatActivity {
                 List<String> slotNames =
                         new ArrayList<>();
 
-                slotNames.add("Select Time Slot");
+                slotNames.add(
+                        "Select Time Slot"
+                );
 
                 int selectedPosition = 0;
 
@@ -427,9 +452,14 @@ public class EditReservationActivity extends AppCompatActivity {
                     Slot slot =
                             slotList.get(i);
 
+                    /*
+                     * Keep the currently selected slot visible
+                     * even if its availability changed.
+                     */
                     if (!slot.isAvailable()
                             && (slot.getId() == null
-                            || !slot.getId().equals(selectedSlotId))) {
+                            || !slot.getId().equals(
+                            selectedSlotId))) {
 
                         continue;
                     }
@@ -445,7 +475,9 @@ public class EditReservationActivity extends AppCompatActivity {
                             );
 
                     slotNames.add(
-                            start + " - " + end
+                            start
+                                    + " - "
+                                    + end
                     );
 
                     if (slot.getId() != null
@@ -471,11 +503,11 @@ public class EditReservationActivity extends AppCompatActivity {
                 spinnerEditSlot.setAdapter(adapter);
 
                 spinnerEditSlot.setOnItemSelectedListener(
-                        new android.widget.AdapterView.OnItemSelectedListener() {
+                        new AdapterView.OnItemSelectedListener() {
 
                             @Override
                             public void onItemSelected(
-                                    android.widget.AdapterView<?> parent,
+                                    AdapterView<?> parent,
                                     View view,
                                     int position,
                                     long id
@@ -505,8 +537,9 @@ public class EditReservationActivity extends AppCompatActivity {
 
                             @Override
                             public void onNothingSelected(
-                                    android.widget.AdapterView<?> parent
+                                    AdapterView<?> parent
                             ) {
+
                                 selectedSlotId = "";
                             }
                         }
@@ -525,7 +558,14 @@ public class EditReservationActivity extends AppCompatActivity {
                     Call<List<Slot>> call,
                     Throwable t
             ) {
+
                 clearSlots();
+
+                Toast.makeText(
+                        EditReservationActivity.this,
+                        "Unable to connect to slot service.",
+                        Toast.LENGTH_LONG
+                ).show();
             }
         });
     }
@@ -546,16 +586,20 @@ public class EditReservationActivity extends AppCompatActivity {
              i < slotList.size();
              i++) {
 
-            Slot slot = slotList.get(i);
+            Slot slot =
+                    slotList.get(i);
 
             if (!slot.isAvailable()
                     && (slot.getId() == null
-                    || !slot.getId().equals(selectedSlotId))) {
+                    || !slot.getId().equals(
+                    selectedSlotId))) {
 
                 continue;
             }
 
-            if (currentVisiblePosition == visiblePosition) {
+            if (currentVisiblePosition ==
+                    visiblePosition) {
+
                 return i;
             }
 
@@ -577,7 +621,9 @@ public class EditReservationActivity extends AppCompatActivity {
         List<String> slots =
                 new ArrayList<>();
 
-        slots.add("Select Time Slot");
+        slots.add(
+                "Select Time Slot"
+        );
 
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
@@ -620,7 +666,10 @@ public class EditReservationActivity extends AppCompatActivity {
                                         selectedDate
                                 );
 
+                                selectedSlotId = "";
+
                                 if (!selectedStationId.isEmpty()) {
+
                                     loadSlots();
                                 }
                             },
@@ -737,8 +786,47 @@ public class EditReservationActivity extends AppCompatActivity {
                         .getSelectedItem()
                         .toString();
 
+        /*
+         * IMPORTANT:
+         * Use the selected slot's actual start time.
+         *
+         * The previous implementation always sent:
+         *
+         * selectedDate + "T00:00:00"
+         *
+         * which does not fall inside the selected slot and can
+         * therefore be rejected by the reservation business rules.
+         */
         String reservationTime =
-                selectedDate + "T00:00:00";
+                getSelectedSlotStartTime();
+
+        if (reservationTime.isEmpty()) {
+
+            Toast.makeText(
+                    this,
+                    "Unable to determine the selected time slot.",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        /*
+         * Ensure the selected date is used together with the
+         * selected slot's time.
+         */
+        String slotTime =
+                extractTimePart(
+                        reservationTime
+                );
+
+        if (!slotTime.isEmpty()) {
+
+            reservationTime =
+                    selectedDate
+                            + "T"
+                            + slotTime;
+        }
 
         CreateReservationRequest request =
                 new CreateReservationRequest(
@@ -751,6 +839,81 @@ public class EditReservationActivity extends AppCompatActivity {
                 );
 
         sendUpdateRequest(request);
+    }
+
+    /**
+     * Finds the start time of the currently selected slot.
+     *
+     * @return selected slot start time
+     */
+    private String getSelectedSlotStartTime() {
+
+        if (selectedSlotId == null
+                || selectedSlotId.isEmpty()) {
+
+            return "";
+        }
+
+        for (Slot slot : slotList) {
+
+            if (slot.getId() != null
+                    && slot.getId().equals(
+                    selectedSlotId)) {
+
+                String startTime =
+                        slot.getStartTime();
+
+                return startTime == null
+                        ? ""
+                        : startTime;
+            }
+        }
+
+        return "";
+    }
+
+    /**
+     * Extracts the time portion from an API date-time value.
+     *
+     * Example:
+     * 2026-10-03T09:00:00 -> 09:00:00
+     *
+     * @param dateTime API date-time value
+     * @return time portion
+     */
+    private String extractTimePart(
+            String dateTime
+    ) {
+
+        if (dateTime == null
+                || dateTime.isEmpty()) {
+
+            return "";
+        }
+
+        int separatorIndex =
+                dateTime.indexOf('T');
+
+        if (separatorIndex >= 0
+                && separatorIndex + 1 < dateTime.length()) {
+
+            return dateTime.substring(
+                    separatorIndex + 1
+            );
+        }
+
+        separatorIndex =
+                dateTime.indexOf(' ');
+
+        if (separatorIndex >= 0
+                && separatorIndex + 1 < dateTime.length()) {
+
+            return dateTime.substring(
+                    separatorIndex + 1
+            );
+        }
+
+        return dateTime;
     }
 
     /**
@@ -791,11 +954,10 @@ public class EditReservationActivity extends AppCompatActivity {
 
                         } else {
 
-                            Toast.makeText(
-                                    EditReservationActivity.this,
+                            showApiError(
                                     "Unable to update reservation.",
-                                    Toast.LENGTH_LONG
-                            ).show();
+                                    response
+                            );
                         }
                     }
 
@@ -885,26 +1047,106 @@ public class EditReservationActivity extends AppCompatActivity {
             );
         }
 
+        if (reservationTime.contains(" ")) {
+
+            return reservationTime.substring(
+                    0,
+                    Math.min(
+                            10,
+                            reservationTime.length()
+                    )
+            );
+        }
+
         return reservationTime;
     }
 
     /**
-     * Formats an API time value for display.
+     * Formats an API date-time value into a readable time.
      *
-     * @param time API time value
+     * Example:
+     * 2026-10-03T09:00:00 -> 09:00
+     *
+     * @param time API date-time value
      * @return readable time
      */
     private String formatTime(String time) {
 
         if (time == null || time.isEmpty()) {
+
             return "";
         }
 
-        if (time.length() >= 5) {
-            return time.substring(0, 5);
+        int separatorIndex =
+                time.indexOf('T');
+
+        if (separatorIndex >= 0
+                && time.length() >= separatorIndex + 6) {
+
+            return time.substring(
+                    separatorIndex + 1,
+                    separatorIndex + 6
+            );
+        }
+
+        separatorIndex =
+                time.indexOf(' ');
+
+        if (separatorIndex >= 0
+                && time.length() >= separatorIndex + 6) {
+
+            return time.substring(
+                    separatorIndex + 1,
+                    separatorIndex + 6
+            );
         }
 
         return time;
+    }
+
+    /**
+     * Displays a useful API error message.
+     *
+     * @param prefix message shown before the API error
+     * @param response Retrofit API response
+     */
+    private void showApiError(
+            String prefix,
+            Response<?> response
+    ) {
+
+        String message =
+                prefix
+                        + " HTTP "
+                        + response.code();
+
+        if (response.errorBody() != null) {
+
+            try {
+
+                String error =
+                        response.errorBody().string();
+
+                if (error != null
+                        && !error.trim().isEmpty()) {
+
+                    message +=
+                            "\n"
+                                    + error;
+
+                }
+
+            } catch (Exception ignored) {
+                // Keep the HTTP status message if the
+                // error response cannot be read.
+            }
+        }
+
+        Toast.makeText(
+                this,
+                message,
+                Toast.LENGTH_LONG
+        ).show();
     }
 
     /**
