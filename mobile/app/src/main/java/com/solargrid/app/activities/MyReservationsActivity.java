@@ -25,7 +25,11 @@ import com.solargrid.app.api.ApiClient;
 import com.solargrid.app.api.ApiService;
 import com.solargrid.app.models.Reservation;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,6 +69,26 @@ public class MyReservationsActivity extends AppCompatActivity {
         setupFilterButtons();
 
         loadReservations();
+    }
+
+    /**
+     * Refreshes the reservation list whenever the activity
+     * becomes visible again.
+     *
+     * This ensures that changes made in the Edit or Details
+     * screen are immediately reflected in the list.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        /*
+         * Avoid loading before the API service and views have
+         * been initialized during the first activity creation.
+         */
+        if (apiService != null) {
+            loadReservations();
+        }
     }
 
     /**
@@ -148,11 +172,44 @@ public class MyReservationsActivity extends AppCompatActivity {
 
                 hideLoading();
 
-                if (!response.isSuccessful()
-                        || response.body() == null) {
+                /*
+                 * Show the actual HTTP status and API error message
+                 * so that communication problems can be diagnosed.
+                 */
+                if (!response.isSuccessful()) {
+
+                    String errorMessage =
+                            "HTTP " + response.code();
+
+                    if (response.errorBody() != null) {
+
+                        try {
+
+                            String serverMessage =
+                                    response.errorBody().string();
+
+                            if (serverMessage != null
+                                    && !serverMessage.trim().isEmpty()) {
+
+                                errorMessage +=
+                                        "\n" + serverMessage;
+                            }
+
+                        } catch (Exception ignored) {
+                            // Keep the HTTP status when the error body
+                            // cannot be read.
+                        }
+                    }
+
+                    showNoReservations(errorMessage);
+
+                    return;
+                }
+
+                if (response.body() == null) {
 
                     showNoReservations(
-                            "Unable to load reservations."
+                            "Server returned an empty response."
                     );
 
                     return;
@@ -169,9 +226,17 @@ public class MyReservationsActivity extends AppCompatActivity {
 
                 hideLoading();
 
-                showNoReservations(
-                        "Unable to connect to server."
-                );
+                String errorMessage =
+                        "Unable to connect to server.";
+
+                if (t.getMessage() != null
+                        && !t.getMessage().trim().isEmpty()) {
+
+                    errorMessage +=
+                            "\n" + t.getMessage();
+                }
+
+                showNoReservations(errorMessage);
             }
         });
     }
@@ -187,7 +252,8 @@ public class MyReservationsActivity extends AppCompatActivity {
 
         reservationsContainer.removeAllViews();
 
-        if (reservations == null || reservations.isEmpty()) {
+        if (reservations == null
+                || reservations.isEmpty()) {
 
             showNoReservations(
                     showingCurrent
@@ -219,41 +285,89 @@ public class MyReservationsActivity extends AppCompatActivity {
             Reservation reservation
     ) {
 
-        TextView textView = new TextView(this);
+        TextView textView =
+                new TextView(this);
 
-        String stationName = reservation.getStationName();
-        String reservationTime = reservation.getReservationTime();
-        String status = reservation.getStatus();
-        String type = reservation.getType();
+        String stationName =
+                reservation.getStationName();
 
-        if (stationName == null || stationName.isEmpty()) {
+        String reservationTime =
+                reservation.getReservationTime();
+
+        String status =
+                reservation.getStatus();
+
+        String type =
+                reservation.getType();
+
+        if (stationName == null
+                || stationName.isEmpty()) {
+
             stationName = "Station";
         }
 
-        if (reservationTime == null || reservationTime.isEmpty()) {
-            reservationTime = "Date not available";
+        if (reservationTime == null
+                || reservationTime.isEmpty()) {
+
+            reservationTime = "";
         }
 
-        if (status == null || status.isEmpty()) {
+        if (status == null
+                || status.isEmpty()) {
+
             status = "Unknown";
         }
 
-        if (type == null || type.isEmpty()) {
+        if (type == null
+                || type.isEmpty()) {
+
             type = "Not specified";
         }
 
-        String displayText =
-                "Station: " + stationName
-                        + "\nDate: "
-                        + formatReservationDate(reservationTime)
-                        + "\nEnergy: "
-                        + reservation.getEnergyKwh()
-                        + " kWh"
-                        + "\nType: " + type
-                        + "\nStatus: " + status
-                        + "\n\nTap to view details";
+        String formattedDate =
+                formatReservationDate(
+                        reservationTime
+                );
 
-        textView.setText(displayText);
+        String formattedTime =
+                formatReservationTime(
+                        reservationTime
+                );
+
+        StringBuilder displayBuilder =
+                new StringBuilder();
+
+        displayBuilder
+                .append("Station: ")
+                .append(stationName);
+
+        if (!formattedDate.isEmpty()) {
+
+            displayBuilder
+                    .append("\nDate: ")
+                    .append(formattedDate);
+        }
+
+        if (!formattedTime.isEmpty()) {
+
+            displayBuilder
+                    .append("\nTime: ")
+                    .append(formattedTime);
+        }
+
+        displayBuilder
+                .append("\nEnergy: ")
+                .append(reservation.getEnergyKwh())
+                .append(" kWh")
+                .append("\nType: ")
+                .append(type)
+                .append("\nStatus: ")
+                .append(status)
+                .append("\n\nTap to view details");
+
+        textView.setText(
+                displayBuilder.toString()
+        );
 
         textView.setTextSize(16);
 
@@ -268,7 +382,9 @@ public class MyReservationsActivity extends AppCompatActivity {
                 28
         );
 
-        textView.setGravity(Gravity.START);
+        textView.setGravity(
+                Gravity.START
+        );
 
         LinearLayout.LayoutParams params =
                 new LinearLayout.LayoutParams(
@@ -301,10 +417,11 @@ public class MyReservationsActivity extends AppCompatActivity {
                 return;
             }
 
-            Intent intent = new Intent(
-                    MyReservationsActivity.this,
-                    ReservationDetailsActivity.class
-            );
+            Intent intent =
+                    new Intent(
+                            MyReservationsActivity.this,
+                            ReservationDetailsActivity.class
+                    );
 
             intent.putExtra(
                     "reservationId",
@@ -320,22 +437,166 @@ public class MyReservationsActivity extends AppCompatActivity {
     /**
      * Formats the reservation date for display.
      *
+     * Example:
+     * 2026-10-03T04:30:00Z
+     * becomes:
+     * 03 Oct 2026
+     *
      * @param reservationTime API reservation date/time
-     * @return formatted reservation date/time
+     * @return formatted reservation date
      */
     private String formatReservationDate(
             String reservationTime
     ) {
 
-        if (reservationTime == null) {
+        if (reservationTime == null
+                || reservationTime.trim().isEmpty()) {
+
             return "";
         }
 
-        if (reservationTime.contains("T")) {
-            return reservationTime.replace("T", " ");
+        String cleanDateTime =
+                extractDateTimePart(
+                        reservationTime
+                );
+
+        SimpleDateFormat inputFormat =
+                new SimpleDateFormat(
+                        "yyyy-MM-dd'T'HH:mm:ss",
+                        Locale.ENGLISH
+                );
+
+        SimpleDateFormat outputFormat =
+                new SimpleDateFormat(
+                        "dd MMM yyyy",
+                        Locale.ENGLISH
+                );
+
+        try {
+
+            Date date =
+                    inputFormat.parse(
+                            cleanDateTime
+                    );
+
+            if (date != null) {
+
+                return outputFormat.format(date);
+            }
+
+        } catch (ParseException ignored) {
+            // Fall back to the original value if parsing fails.
         }
 
-        return reservationTime;
+        return cleanDateTime;
+    }
+
+    /**
+     * Formats the reservation time for display.
+     *
+     * Example:
+     * 2026-10-03T04:30:00Z
+     * becomes:
+     * 04:30 AM
+     *
+     * @param reservationTime API reservation date/time
+     * @return formatted reservation time
+     */
+    private String formatReservationTime(
+            String reservationTime
+    ) {
+
+        if (reservationTime == null
+                || reservationTime.trim().isEmpty()) {
+
+            return "";
+        }
+
+        String cleanDateTime =
+                extractDateTimePart(
+                        reservationTime
+                );
+
+        SimpleDateFormat inputFormat =
+                new SimpleDateFormat(
+                        "yyyy-MM-dd'T'HH:mm:ss",
+                        Locale.ENGLISH
+                );
+
+        SimpleDateFormat outputFormat =
+                new SimpleDateFormat(
+                        "hh:mm a",
+                        Locale.ENGLISH
+                );
+
+        try {
+
+            Date date =
+                    inputFormat.parse(
+                            cleanDateTime
+                    );
+
+            if (date != null) {
+
+                return outputFormat.format(date);
+            }
+
+        } catch (ParseException ignored) {
+            // Fall back to the original value if parsing fails.
+        }
+
+        return "";
+    }
+
+    /**
+     * Extracts the first 19 characters of an ISO date/time
+     * value so that timezone information such as Z or an offset
+     * does not interfere with display formatting.
+     *
+     * Example:
+     * 2026-10-03T04:30:00Z
+     * becomes:
+     * 2026-10-03T04:30:00
+     *
+     * @param reservationTime API reservation date/time
+     * @return clean date/time value
+     */
+    private String extractDateTimePart(
+            String reservationTime
+    ) {
+
+        String value =
+                reservationTime.trim();
+
+        /*
+         * Convert a space separator to the ISO T separator.
+         */
+        if (value.contains(" ")
+                && !value.contains("T")) {
+
+            value =
+                    value.replace(
+                            " ",
+                            "T"
+                    );
+        }
+
+        /*
+         * Keep only:
+         * yyyy-MM-ddTHH:mm:ss
+         *
+         * This removes milliseconds and timezone information.
+         */
+        if (value.length() >= 19
+                && value.contains("T")) {
+
+            return value.substring(
+                    0,
+                    19
+            );
+        }
+
+        return value;
     }
 
     /**
@@ -343,9 +604,13 @@ public class MyReservationsActivity extends AppCompatActivity {
      */
     private void showLoading() {
 
-        progressReservations.setVisibility(View.VISIBLE);
+        progressReservations.setVisibility(
+                View.VISIBLE
+        );
 
-        tvNoReservations.setVisibility(View.GONE);
+        tvNoReservations.setVisibility(
+                View.GONE
+        );
 
         reservationsContainer.removeAllViews();
     }
@@ -355,7 +620,9 @@ public class MyReservationsActivity extends AppCompatActivity {
      */
     private void hideLoading() {
 
-        progressReservations.setVisibility(View.GONE);
+        progressReservations.setVisibility(
+                View.GONE
+        );
     }
 
     /**
@@ -363,12 +630,18 @@ public class MyReservationsActivity extends AppCompatActivity {
      *
      * @param message message to display
      */
-    private void showNoReservations(String message) {
+    private void showNoReservations(
+            String message
+    ) {
 
         reservationsContainer.removeAllViews();
 
-        tvNoReservations.setText(message);
+        tvNoReservations.setText(
+                message
+        );
 
-        tvNoReservations.setVisibility(View.VISIBLE);
+        tvNoReservations.setVisibility(
+                View.VISIBLE
+        );
     }
 }
