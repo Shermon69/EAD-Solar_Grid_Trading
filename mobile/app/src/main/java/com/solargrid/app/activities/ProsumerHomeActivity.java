@@ -44,25 +44,28 @@ public class ProsumerHomeActivity extends AppCompatActivity {
         tvRole.setText(R.string.prosumer_role);
         findViewById(R.id.btnLogout).setOnClickListener(v -> confirmLogout());
 
-        // Member 2: Dashboard -> startActivity(new Intent(this, DashboardActivity.class))
+        // Member 2: Dashboard
         MenuCardHelper.setup(findViewById(R.id.cardDashboard), R.drawable.ic_dashboard,
-                R.string.menu_dashboard, R.string.menu_dashboard_desc, R.color.navy, v -> comingSoon());
+                R.string.menu_dashboard, R.string.menu_dashboard_desc, R.color.navy,
+                v -> startActivity(new Intent(this, DashboardActivity.class)));
 
         // Member 4: New Booking -> startActivity(new Intent(this, CreateBookingActivity.class))
         MenuCardHelper.setup(findViewById(R.id.cardNewBooking), R.drawable.ic_add,
                 R.string.menu_new_booking, R.string.menu_new_booking_desc, R.color.solar, v -> comingSoon());
 
-        // Member 2: My Bookings -> startActivity(new Intent(this, MyBookingsActivity.class))
+        // Member 2: My Bookings
         MenuCardHelper.setup(findViewById(R.id.cardMyBookings), R.drawable.ic_list,
-                R.string.menu_my_bookings, R.string.menu_my_bookings_desc, R.color.purple, v -> comingSoon());
+                R.string.menu_my_bookings, R.string.menu_my_bookings_desc, R.color.purple,
+                v -> startActivity(new Intent(this, BookingsActivity.class)));
 
         // Member 3: Nearby Stations -> startActivity(new Intent(this, StationsMapActivity.class))
         MenuCardHelper.setup(findViewById(R.id.cardNearby), R.drawable.ic_place,
                 R.string.menu_nearby, R.string.menu_nearby_desc, R.color.success, v -> comingSoon());
 
-        // Member 2: Profile -> startActivity(new Intent(this, ProfileActivity.class))
+        // Member 2: Profile
         MenuCardHelper.setup(findViewById(R.id.cardProfile), R.drawable.ic_person,
-                R.string.menu_profile, R.string.menu_profile_desc, R.color.info, v -> comingSoon());
+                R.string.menu_profile, R.string.menu_profile_desc, R.color.info,
+                v -> startActivity(new Intent(this, ProfileActivity.class)));
     }
 
     /**
