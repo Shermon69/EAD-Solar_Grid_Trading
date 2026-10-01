@@ -58,7 +58,7 @@ which unblocks everyone else.
 | **Report** | High-level diagram, deployment steps, compile report | Database design | DFD | Use case diagram |
 
 ### Member 1 – Team Lead: Project Setup, Login & Staff User Management
-**Setup (done first, pushed to `main` so everyone can start):**
+**Setup (done first, merged into `development` so everyone can start):**
 - API skeleton: `SolarGrid.Api` project, folder structure, MongoDB connection (`MongoDbContext`), the 4 model classes,
   JWT authentication, Swagger, global error handler (`BusinessRuleException` → `{ message }`)
 - Web skeleton: ASP.NET Core MVC + Bootstrap 5, layout + navbar (menu items by role), `ApiClient` that adds the token, cookie login that remembers the role
@@ -364,9 +364,9 @@ Unreferenced copied code counts as plagiarism, which means **zero marks**. Also 
 Our commit history is **marked** ("meaningful, descriptive commits"), so please follow this.
 
 1. **Clone once:** `git clone https://github.com/Shermon69/EAD-Solar_Grid_Trading.git`
-2. **Always start from an up-to-date main:**
+2. **Always start from an up-to-date `development` branch** (our integration branch; `main` gets the final version):
    ```
-   git checkout main
+   git checkout development
    git pull
    git checkout -b feature/<area>-<short-name>
    ```
@@ -376,8 +376,8 @@ Our commit history is **marked** ("meaningful, descriptive commits"), so please 
    - ✅ `Create station list page with Bootstrap table`
    - ✅ `Show nearby stations on Google Map`
    - ❌ `update`, `fix`, `asdf`, `final final 2`
-4. **Push and open a Pull Request** to `main`. Tell the team in the chat. Merge once it builds.
-   Pull main into your branch often (`git pull origin main`) to avoid big conflicts.
+4. **Push and open a Pull Request** to **`development`**. Tell the team in the chat. Merge once it builds.
+   Pull development into your branch often (`git pull origin development`) to avoid big conflicts.
 5. **Never commit:** `bin/`, `obj/`, `build/`, `appsettings.Development.json`, connection strings, API keys (the `.gitignore` handles most of this).
 6. **Use your own GitHub account.** Check with `git config user.name` / `git config user.email`.
 
@@ -385,18 +385,18 @@ Our commit history is **marked** ("meaningful, descriptive commits"), so please 
 
 ## 10. Work phases
 
-Finish each phase before moving on. Merge working code into `main` at the end of every phase.
+Finish each phase before moving on. Merge working code into `development` at the end of every phase.
 
 ### Phase 1 – Setup (everyone unblocked)
 | Who | Task |
 |---|---|
 | All | Install tools (Section 4), clone repo, read this file, set git identity |
-| M1 | Create MongoDB Atlas cluster, share connection string. Push the **API, web and Android skeletons** (see M1 in Section 2) to `main`, then tell the team |
+| M1 | Create MongoDB Atlas cluster, share connection string. Push the **API, web and Android skeletons** (see M1 in Section 2) to `development`, then tell the team |
 | M2 | While waiting: sketch the prosumer screens (register, profile, dashboard) and the web prosumer pages |
 | M3 | Create the **Google Maps API key** (needs a Google Cloud account, so do this early). Collect real lat/long for 4–5 sample stations |
 | M4 | While waiting: write out the reservation rules (R5–R7, R10) and sketch the booking screens and web reservation page |
 
-Once the skeletons are on `main`, everyone pulls, creates their feature branch and starts Phase 2.
+Once the skeletons are on `development`, everyone pulls, creates their feature branch and starts Phase 2.
 
 ### Phase 2 – API features
 Everyone builds their API endpoints (Section 7) and tests them in **Swagger** before building UI.
