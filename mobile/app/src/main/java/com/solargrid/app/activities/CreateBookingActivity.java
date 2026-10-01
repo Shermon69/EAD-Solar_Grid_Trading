@@ -87,12 +87,22 @@ public class CreateBookingActivity extends AppCompatActivity {
      * Finds and stores references to the screen controls.
      */
     private void initializeViews() {
+
         spinnerStation = findViewById(R.id.spinnerStation);
+
         spinnerSlot = findViewById(R.id.spinnerSlot);
-        spinnerReservationType = findViewById(R.id.spinnerReservationType);
-        btnSelectDate = findViewById(R.id.btnSelectDate);
-        btnCreateBooking = findViewById(R.id.btnCreateBooking);
-        etEnergyKwh = findViewById(R.id.etEnergyKwh);
+
+        spinnerReservationType =
+                findViewById(R.id.spinnerReservationType);
+
+        btnSelectDate =
+                findViewById(R.id.btnSelectDate);
+
+        btnCreateBooking =
+                findViewById(R.id.btnCreateBooking);
+
+        etEnergyKwh =
+                findViewById(R.id.etEnergyKwh);
     }
 
     /**
@@ -105,11 +115,12 @@ public class CreateBookingActivity extends AppCompatActivity {
                 "Charging"
         };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                reservationTypes
-        );
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        reservationTypes
+                );
 
         adapter.setDropDownViewResource(
                 android.R.layout.simple_spinner_dropdown_item
@@ -123,59 +134,70 @@ public class CreateBookingActivity extends AppCompatActivity {
      */
     private void loadStations() {
 
-        apiService.getStations(true).enqueue(new Callback<List<Station>>() {
+        apiService.getStations(true)
+                .enqueue(new Callback<List<Station>>() {
 
-            @Override
-            public void onResponse(
-                    Call<List<Station>> call,
-                    Response<List<Station>> response
-            ) {
+                    @Override
+                    public void onResponse(
+                            Call<List<Station>> call,
+                            Response<List<Station>> response
+                    ) {
 
-                if (!response.isSuccessful() || response.body() == null) {
-                    Toast.makeText(
-                            CreateBookingActivity.this,
-                            "Unable to load stations.",
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    return;
-                }
+                        if (!response.isSuccessful()
+                                || response.body() == null) {
 
-                stationList.clear();
-                stationList.addAll(response.body());
+                            Toast.makeText(
+                                    CreateBookingActivity.this,
+                                    "Unable to load stations.",
+                                    Toast.LENGTH_SHORT
+                            ).show();
 
-                List<String> stationNames = new ArrayList<>();
-                stationNames.add("Select Station");
+                            return;
+                        }
 
-                for (Station station : stationList) {
-                    stationNames.add(station.getName());
-                }
+                        stationList.clear();
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                        CreateBookingActivity.this,
-                        android.R.layout.simple_spinner_item,
-                        stationNames
-                );
+                        stationList.addAll(response.body());
 
-                adapter.setDropDownViewResource(
-                        android.R.layout.simple_spinner_dropdown_item
-                );
+                        List<String> stationNames =
+                                new ArrayList<>();
 
-                spinnerStation.setAdapter(adapter);
-            }
+                        stationNames.add("Select Station");
 
-            @Override
-            public void onFailure(
-                    Call<List<Station>> call,
-                    Throwable t
-            ) {
+                        for (Station station : stationList) {
 
-                Toast.makeText(
-                        CreateBookingActivity.this,
-                        "Unable to connect to server.",
-                        Toast.LENGTH_SHORT
-                ).show();
-            }
-        });
+                            stationNames.add(
+                                    station.getName()
+                            );
+                        }
+
+                        ArrayAdapter<String> adapter =
+                                new ArrayAdapter<>(
+                                        CreateBookingActivity.this,
+                                        android.R.layout.simple_spinner_item,
+                                        stationNames
+                                );
+
+                        adapter.setDropDownViewResource(
+                                android.R.layout.simple_spinner_dropdown_item
+                        );
+
+                        spinnerStation.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Call<List<Station>> call,
+                            Throwable t
+                    ) {
+
+                        Toast.makeText(
+                                CreateBookingActivity.this,
+                                "Unable to connect to server.",
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    }
+                });
     }
 
     /**
@@ -196,8 +218,11 @@ public class CreateBookingActivity extends AppCompatActivity {
                     ) {
 
                         if (position == 0) {
+
                             selectedStationId = "";
+
                             clearSlots();
+
                             return;
                         }
 
@@ -207,9 +232,12 @@ public class CreateBookingActivity extends AppCompatActivity {
                                 && stationIndex < stationList.size()) {
 
                             selectedStationId =
-                                    stationList.get(stationIndex).getId();
+                                    stationList
+                                            .get(stationIndex)
+                                            .getId();
 
                             if (!selectedDate.isEmpty()) {
+
                                 loadSlots();
                             }
                         }
@@ -219,6 +247,7 @@ public class CreateBookingActivity extends AppCompatActivity {
                     public void onNothingSelected(
                             android.widget.AdapterView<?> parent
                     ) {
+
                         selectedStationId = "";
                     }
                 }
@@ -232,29 +261,35 @@ public class CreateBookingActivity extends AppCompatActivity {
 
         btnSelectDate.setOnClickListener(v -> {
 
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar =
+                    Calendar.getInstance();
 
-            DatePickerDialog dialog = new DatePickerDialog(
-                    this,
-                    (view, year, month, dayOfMonth) -> {
+            DatePickerDialog dialog =
+                    new DatePickerDialog(
+                            this,
+                            (view, year, month, dayOfMonth) -> {
 
-                        selectedDate = String.format(
-                                "%04d-%02d-%02d",
-                                year,
-                                month + 1,
-                                dayOfMonth
-                        );
+                                selectedDate =
+                                        String.format(
+                                                "%04d-%02d-%02d",
+                                                year,
+                                                month + 1,
+                                                dayOfMonth
+                                        );
 
-                        btnSelectDate.setText(selectedDate);
+                                btnSelectDate.setText(
+                                        selectedDate
+                                );
 
-                        if (!selectedStationId.isEmpty()) {
-                            loadSlots();
-                        }
-                    },
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)
-            );
+                                if (!selectedStationId.isEmpty()) {
+
+                                    loadSlots();
+                                }
+                            },
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH)
+                    );
 
             dialog.getDatePicker().setMinDate(
                     System.currentTimeMillis()
@@ -269,129 +304,154 @@ public class CreateBookingActivity extends AppCompatActivity {
      */
     private void loadSlots() {
 
-        if (selectedStationId.isEmpty() || selectedDate.isEmpty()) {
+        if (selectedStationId.isEmpty()
+                || selectedDate.isEmpty()) {
+
             return;
         }
 
         apiService.getStationSlots(
-                selectedStationId,
-                selectedDate
-        ).enqueue(new Callback<List<Slot>>() {
+                        selectedStationId,
+                        selectedDate
+                )
+                .enqueue(new Callback<List<Slot>>() {
 
-            @Override
-            public void onResponse(
-                    Call<List<Slot>> call,
-                    Response<List<Slot>> response
-            ) {
+                    @Override
+                    public void onResponse(
+                            Call<List<Slot>> call,
+                            Response<List<Slot>> response
+                    ) {
 
-                if (!response.isSuccessful() || response.body() == null) {
+                        if (!response.isSuccessful()
+                                || response.body() == null) {
 
-                    Toast.makeText(
-                            CreateBookingActivity.this,
-                            "Unable to load available slots.",
-                            Toast.LENGTH_SHORT
-                    ).show();
+                            Toast.makeText(
+                                    CreateBookingActivity.this,
+                                    "Unable to load available slots.",
+                                    Toast.LENGTH_SHORT
+                            ).show();
 
-                    clearSlots();
-                    return;
-                }
+                            clearSlots();
 
-                slotList.clear();
+                            return;
+                        }
 
-                for (Slot slot : response.body()) {
+                        slotList.clear();
 
-                    if (slot.isAvailable()
-                            && slot.getAvailableSlots() > 0) {
+                        for (Slot slot : response.body()) {
 
-                        slotList.add(slot);
-                    }
-                }
+                            if (slot.isAvailable()
+                                    && slot.getAvailableSlots() > 0) {
 
-                List<String> slotNames = new ArrayList<>();
-                slotNames.add("Select Time Slot");
-
-                for (Slot slot : slotList) {
-
-                    String startTime = formatTime(slot.getStartTime());
-                    String endTime = formatTime(slot.getEndTime());
-
-                    slotNames.add(
-                            startTime + " - " + endTime
-                    );
-                }
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                        CreateBookingActivity.this,
-                        android.R.layout.simple_spinner_item,
-                        slotNames
-                );
-
-                adapter.setDropDownViewResource(
-                        android.R.layout.simple_spinner_dropdown_item
-                );
-
-                spinnerSlot.setAdapter(adapter);
-
-                spinnerSlot.setOnItemSelectedListener(
-                        new android.widget.AdapterView.OnItemSelectedListener() {
-
-                            @Override
-                            public void onItemSelected(
-                                    android.widget.AdapterView<?> parent,
-                                    android.view.View view,
-                                    int position,
-                                    long id
-                            ) {
-
-                                if (position == 0) {
-                                    selectedSlotId = "";
-                                    return;
-                                }
-
-                                int slotIndex = position - 1;
-
-                                if (slotIndex >= 0
-                                        && slotIndex < slotList.size()) {
-
-                                    selectedSlotId =
-                                            slotList.get(slotIndex).getId();
-                                }
-                            }
-
-                            @Override
-                            public void onNothingSelected(
-                                    android.widget.AdapterView<?> parent
-                            ) {
-                                selectedSlotId = "";
+                                slotList.add(slot);
                             }
                         }
-                );
 
-                if (slotList.isEmpty()) {
+                        List<String> slotNames =
+                                new ArrayList<>();
 
-                    Toast.makeText(
-                            CreateBookingActivity.this,
-                            "No available slots for this date.",
-                            Toast.LENGTH_SHORT
-                    ).show();
-                }
-            }
+                        slotNames.add(
+                                "Select Time Slot"
+                        );
 
-            @Override
-            public void onFailure(
-                    Call<List<Slot>> call,
-                    Throwable t
-            ) {
+                        for (Slot slot : slotList) {
 
-                Toast.makeText(
-                        CreateBookingActivity.this,
-                        "Unable to connect to server.",
-                        Toast.LENGTH_SHORT
-                ).show();
+                            String startTime =
+                                    formatTime(
+                                            slot.getStartTime()
+                                    );
 
-                clearSlots();
-            }
-        });
+                            String endTime =
+                                    formatTime(
+                                            slot.getEndTime()
+                                    );
+
+                            slotNames.add(
+                                    startTime
+                                            + " - "
+                                            + endTime
+                            );
+                        }
+
+                        ArrayAdapter<String> adapter =
+                                new ArrayAdapter<>(
+                                        CreateBookingActivity.this,
+                                        android.R.layout.simple_spinner_item,
+                                        slotNames
+                                );
+
+                        adapter.setDropDownViewResource(
+                                android.R.layout.simple_spinner_dropdown_item
+                        );
+
+                        spinnerSlot.setAdapter(adapter);
+
+                        spinnerSlot.setOnItemSelectedListener(
+                                new android.widget.AdapterView.OnItemSelectedListener() {
+
+                                    @Override
+                                    public void onItemSelected(
+                                            android.widget.AdapterView<?> parent,
+                                            android.view.View view,
+                                            int position,
+                                            long id
+                                    ) {
+
+                                        if (position == 0) {
+
+                                            selectedSlotId = "";
+
+                                            return;
+                                        }
+
+                                        int slotIndex =
+                                                position - 1;
+
+                                        if (slotIndex >= 0
+                                                && slotIndex < slotList.size()) {
+
+                                            selectedSlotId =
+                                                    slotList
+                                                            .get(slotIndex)
+                                                            .getId();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(
+                                            android.widget.AdapterView<?> parent
+                                    ) {
+
+                                        selectedSlotId = "";
+                                    }
+                                }
+                        );
+
+                        if (slotList.isEmpty()) {
+
+                            Toast.makeText(
+                                    CreateBookingActivity.this,
+                                    "No available slots for this date.",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Call<List<Slot>> call,
+                            Throwable t
+                    ) {
+
+                        Toast.makeText(
+                                CreateBookingActivity.this,
+                                "Unable to connect to server.",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        clearSlots();
+                    }
+                });
     }
 
     /**
@@ -400,16 +460,20 @@ public class CreateBookingActivity extends AppCompatActivity {
     private void clearSlots() {
 
         selectedSlotId = "";
+
         slotList.clear();
 
-        List<String> emptySlots = new ArrayList<>();
+        List<String> emptySlots =
+                new ArrayList<>();
+
         emptySlots.add("Select Time Slot");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                emptySlots
-        );
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        emptySlots
+                );
 
         adapter.setDropDownViewResource(
                 android.R.layout.simple_spinner_dropdown_item
@@ -419,19 +483,51 @@ public class CreateBookingActivity extends AppCompatActivity {
     }
 
     /**
-     * Converts an API time value into a readable time.
+     * Converts an API date-time value into a readable time.
      *
-     * @param time API time value
+     * Example:
+     * 2026-10-03T09:00:00 -> 09:00
+     *
+     * @param time API date-time value
      * @return readable time value
      */
     private String formatTime(String time) {
 
         if (time == null || time.isEmpty()) {
+
             return "";
         }
 
-        if (time.length() >= 5) {
-            return time.substring(0, 5);
+        /*
+         * Handles API values such as:
+         * 2026-10-03T09:00:00
+         */
+        int separatorIndex =
+                time.indexOf('T');
+
+        if (separatorIndex >= 0
+                && time.length() >= separatorIndex + 6) {
+
+            return time.substring(
+                    separatorIndex + 1,
+                    separatorIndex + 6
+            );
+        }
+
+        /*
+         * Handles values such as:
+         * 2026-10-03 09:00:00
+         */
+        separatorIndex =
+                time.indexOf(' ');
+
+        if (separatorIndex >= 0
+                && time.length() >= separatorIndex + 6) {
+
+            return time.substring(
+                    separatorIndex + 1,
+                    separatorIndex + 6
+            );
         }
 
         return time;
@@ -444,9 +540,10 @@ public class CreateBookingActivity extends AppCompatActivity {
 
         btnCreateBooking.setOnClickListener(v -> {
 
-            String energyText = etEnergyKwh.getText()
-                    .toString()
-                    .trim();
+            String energyText =
+                    etEnergyKwh.getText()
+                            .toString()
+                            .trim();
 
             if (spinnerStation.getSelectedItemPosition() == 0
                     || selectedStationId.isEmpty()) {
@@ -485,7 +582,10 @@ public class CreateBookingActivity extends AppCompatActivity {
 
             if (energyText.isEmpty()) {
 
-                etEnergyKwh.setError("Enter energy amount");
+                etEnergyKwh.setError(
+                        "Enter energy amount"
+                );
+
                 etEnergyKwh.requestFocus();
 
                 return;
@@ -495,7 +595,10 @@ public class CreateBookingActivity extends AppCompatActivity {
 
             try {
 
-                energyKwh = Double.parseDouble(energyText);
+                energyKwh =
+                        Double.parseDouble(
+                                energyText
+                        );
 
             } catch (NumberFormatException e) {
 
@@ -519,9 +622,11 @@ public class CreateBookingActivity extends AppCompatActivity {
                 return;
             }
 
-            String prosumerNic = sessionManager.getNic();
+            String prosumerNic =
+                    sessionManager.getNic();
 
-            if (prosumerNic == null || prosumerNic.isEmpty()) {
+            if (prosumerNic == null
+                    || prosumerNic.isEmpty()) {
 
                 Toast.makeText(
                         this,
@@ -537,8 +642,56 @@ public class CreateBookingActivity extends AppCompatActivity {
                             .getSelectedItem()
                             .toString();
 
+            /*
+             * Find the selected slot and use its actual start time
+             * as the reservation time.
+             */
+            Slot selectedSlot = null;
+
+            for (Slot slot : slotList) {
+
+                if (slot.getId() != null
+                        && slot.getId().equals(selectedSlotId)) {
+
+                    selectedSlot = slot;
+
+                    break;
+                }
+            }
+
+            if (selectedSlot == null
+                    || selectedSlot.getStartTime() == null
+                    || selectedSlot.getStartTime().isEmpty()) {
+
+                Toast.makeText(
+                        this,
+                        "Unable to determine selected time slot.",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                return;
+            }
+
             String reservationTime =
-                    selectedDate + "T00:00:00";
+                    selectedSlot.getStartTime();
+
+            /*
+             * If the API returns a date-time with a different date,
+             * ensure the selected booking date remains the date
+             * selected by the user.
+             */
+            String slotTime =
+                    extractTimePart(
+                            selectedSlot.getStartTime()
+                    );
+
+            if (!slotTime.isEmpty()) {
+
+                reservationTime =
+                        selectedDate
+                                + "T"
+                                + slotTime;
+            }
 
             CreateReservationRequest request =
                     new CreateReservationRequest(
@@ -555,6 +708,48 @@ public class CreateBookingActivity extends AppCompatActivity {
     }
 
     /**
+     * Extracts the time portion from an API date-time value.
+     *
+     * Example:
+     * 2026-10-03T09:00:00 -> 09:00:00
+     *
+     * @param dateTime API date-time value
+     * @return time portion of the value
+     */
+    private String extractTimePart(String dateTime) {
+
+        if (dateTime == null
+                || dateTime.isEmpty()) {
+
+            return "";
+        }
+
+        int separatorIndex =
+                dateTime.indexOf('T');
+
+        if (separatorIndex >= 0
+                && separatorIndex + 1 < dateTime.length()) {
+
+            return dateTime.substring(
+                    separatorIndex + 1
+            );
+        }
+
+        separatorIndex =
+                dateTime.indexOf(' ');
+
+        if (separatorIndex >= 0
+                && separatorIndex + 1 < dateTime.length()) {
+
+            return dateTime.substring(
+                    separatorIndex + 1
+            );
+        }
+
+        return dateTime;
+    }
+
+    /**
      * Sends the reservation request to the central Web API.
      *
      * @param request reservation request data
@@ -566,51 +761,53 @@ public class CreateBookingActivity extends AppCompatActivity {
         btnCreateBooking.setEnabled(false);
 
         apiService.createReservation(request)
-                .enqueue(new Callback<com.solargrid.app.models.Reservation>() {
+                .enqueue(
+                        new Callback<com.solargrid.app.models.Reservation>() {
 
-                    @Override
-                    public void onResponse(
-                            Call<com.solargrid.app.models.Reservation> call,
-                            Response<com.solargrid.app.models.Reservation> response
-                    ) {
+                            @Override
+                            public void onResponse(
+                                    Call<com.solargrid.app.models.Reservation> call,
+                                    Response<com.solargrid.app.models.Reservation> response
+                            ) {
 
-                        btnCreateBooking.setEnabled(true);
+                                btnCreateBooking.setEnabled(true);
 
-                        if (response.isSuccessful()
-                                && response.body() != null) {
+                                if (response.isSuccessful()
+                                        && response.body() != null) {
 
-                            Toast.makeText(
-                                    CreateBookingActivity.this,
-                                    "Reservation created successfully.",
-                                    Toast.LENGTH_LONG
-                            ).show();
+                                    Toast.makeText(
+                                            CreateBookingActivity.this,
+                                            "Reservation created successfully.",
+                                            Toast.LENGTH_LONG
+                                    ).show();
 
-                            finish();
+                                    finish();
 
-                        } else {
+                                } else {
 
-                            Toast.makeText(
-                                    CreateBookingActivity.this,
-                                    "Unable to create reservation.",
-                                    Toast.LENGTH_LONG
-                            ).show();
+                                    Toast.makeText(
+                                            CreateBookingActivity.this,
+                                            "Unable to create reservation.",
+                                            Toast.LENGTH_LONG
+                                    ).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(
+                                    Call<com.solargrid.app.models.Reservation> call,
+                                    Throwable t
+                            ) {
+
+                                btnCreateBooking.setEnabled(true);
+
+                                Toast.makeText(
+                                        CreateBookingActivity.this,
+                                        "Unable to connect to server.",
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            }
                         }
-                    }
-
-                    @Override
-                    public void onFailure(
-                            Call<com.solargrid.app.models.Reservation> call,
-                            Throwable t
-                    ) {
-
-                        btnCreateBooking.setEnabled(true);
-
-                        Toast.makeText(
-                                CreateBookingActivity.this,
-                                "Unable to connect to server.",
-                                Toast.LENGTH_LONG
-                        ).show();
-                    }
-                });
+                );
     }
 }
