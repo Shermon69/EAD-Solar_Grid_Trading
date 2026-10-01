@@ -43,6 +43,10 @@ builder.Services.AddSingleton<JwtTokenGenerator>();
 // Each member registers their own service here, e.g. builder.Services.AddScoped<StationService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<StationService>();
+builder.Services.AddScoped<SlotService>();
+builder.Services.AddScoped<QrVerificationService>();
+builder.Services.AddScoped<ProsumerService>();
 
 // ---------- Controllers ----------
 builder.Services.AddControllers()

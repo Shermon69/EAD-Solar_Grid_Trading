@@ -73,9 +73,9 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setOnClickListener(v -> attemptLogin());
 
-        // Member 2: replace the Toast with startActivity(new Intent(this, RegisterActivity.class));
+        // Member 2: opens the Register screen
         tvRegister.setOnClickListener(v ->
-                Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(this, RegisterActivity.class)));
     }
 
     /**
