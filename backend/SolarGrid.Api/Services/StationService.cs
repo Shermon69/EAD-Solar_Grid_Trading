@@ -43,6 +43,9 @@ namespace SolarGrid.Api.Services
 
         public async Task<SolarStation> CreateAsync(CreateStationRequest dto)
         {
+            // Check GPS, capacity, battery slots and schedule (added by Shermon H)
+            MicrogridValidator.ValidateStation(dto);
+
             var station = new SolarStation
             {
                 Name = dto.Name,
@@ -64,6 +67,9 @@ namespace SolarGrid.Api.Services
         public async Task<SolarStation> UpdateAsync(string id, UpdateStationRequest dto)
         {
             var station = await GetByIdAsync(id);
+
+            // Check GPS, capacity, battery slots and schedule (added by Shermon H)
+            MicrogridValidator.ValidateStation(dto);
 
             station.Name = dto.Name;
             station.Address = dto.Address;

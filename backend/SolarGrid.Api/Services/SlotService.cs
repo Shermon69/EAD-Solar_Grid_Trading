@@ -18,11 +18,13 @@ namespace SolarGrid.Api.Services
     {
         private readonly IMongoCollection<EnergySlot> _slots;
         private readonly IMongoCollection<EnergyReservation> _reservations;
+        private readonly IMongoCollection<SolarStation> _stations;
 
         public SlotService(MongoDbContext context)
         {
             _slots = context.Slots;
             _reservations = context.Reservations;
+            _stations = context.Stations;
         }
 
         public async Task<List<EnergySlot>> GetSlotsForStationAsync(string stationId, DateTime? date = null)
@@ -42,11 +44,14 @@ namespace SolarGrid.Api.Services
 
         public async Task<EnergySlot> CreateAsync(CreateSlotRequest dto)
         {
+            // Check station, times, slot count and overlaps (added by Shermon H)
+            var (start, end) = await MicrogridValidator.ValidateNewSlotAsync(dto, _stations, _slots);
+
             var slot = new EnergySlot
             {
                 StationId = dto.StationId,
-                StartTime = dto.StartTime,
-                EndTime = dto.EndTime,
+                StartTime = start,
+                EndTime = end,
                 TotalSlots = dto.TotalSlots,
                 AvailableSlots = dto.TotalSlots,
                 IsAvailable = true
@@ -60,6 +65,9 @@ namespace SolarGrid.Api.Services
         {
             var slot = await _slots.Find(s => s.Id == id).FirstOrDefaultAsync();
             if (slot == null) throw BusinessRuleException.NotFound("Slot not found.");
+
+            // New slot count must fit the station's battery slots (added by Shermon H)
+            await MicrogridValidator.ValidateSlotUpdateAsync(slot, dto, _stations);
 
             var usedSlots = slot.TotalSlots - slot.AvailableSlots;
             if (dto.TotalSlots < usedSlots)
