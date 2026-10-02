@@ -1,3 +1,11 @@
+/*
+ * File:        CreateReservationViewModel.cs
+ * Author:      Dissanayake D.M.S.N (IT22210692)
+ * Description: View model for the web Create Reservation form, plus the
+ *              prosumer, station and slot dropdown options it uses.
+ * Created:     29/09/2026
+ */
+
 using System.ComponentModel.DataAnnotations;
 
 namespace SolarGrid.Web.Models

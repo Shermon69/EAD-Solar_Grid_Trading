@@ -2,7 +2,8 @@
 
 SE4040 Enterprise Application Development – Assignment 1 (Group of 4)
 
-> **Deadline: Wednesday 30 September 2026, 11:59 PM.** Late submissions are not accepted.
+> **Deadline (extended): Tuesday 6 October 2026, 11:59 PM.** Late submissions are not accepted.
+> The day-by-day plan for finishing is in [INTEGRATION_PLAN.md](INTEGRATION_PLAN.md).
 > Aim to submit a few hours early so there is time to zip, check and upload.
 
 Everyone should read this whole file once before writing any code. If something here needs to

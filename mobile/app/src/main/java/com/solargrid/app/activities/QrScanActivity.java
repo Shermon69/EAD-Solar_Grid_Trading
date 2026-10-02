@@ -90,8 +90,8 @@ public class QrScanActivity extends AppCompatActivity {
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Reservation r = response.body();
-                    String details = String.format("Verification Successful!\nStation: %s\nTime: %s\nAmount: %.2f kWh\nProsumer NIC: %s", 
-                        r.stationName != null ? r.stationName : r.stationId, r.scheduledDate, r.energyKwh, r.prosumerNic);
+                    String details = String.format("Verification Successful!\nStation: %s\nTime: %s\nAmount: %.2f kWh\nProsumer NIC: %s",
+                        r.getStationName() != null ? r.getStationName() : r.getStationId(), r.getReservationTime(), r.getEnergyKwh(), r.getProsumerNic());
                     tvScanResult.setText(details);
                     btnComplete.setVisibility(View.VISIBLE);
                 } else {

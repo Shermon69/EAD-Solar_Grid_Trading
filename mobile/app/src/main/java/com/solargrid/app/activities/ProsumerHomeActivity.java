@@ -12,7 +12,6 @@ package com.solargrid.app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,7 +52,9 @@ public class ProsumerHomeActivity extends AppCompatActivity {
                 R.string.menu_dashboard,
                 R.string.menu_dashboard_desc,
                 R.color.navy,
-                v -> comingSoon()
+                v -> startActivity(
+                        new Intent(this, DashboardActivity.class)
+                )
         );
 
         // Member 4: New Booking
@@ -99,7 +100,9 @@ public class ProsumerHomeActivity extends AppCompatActivity {
                 R.string.menu_profile,
                 R.string.menu_profile_desc,
                 R.color.info,
-                v -> comingSoon()
+                v -> startActivity(
+                        new Intent(this, ProfileActivity.class)
+                )
         );
     }
 
@@ -113,17 +116,6 @@ public class ProsumerHomeActivity extends AppCompatActivity {
 
         TextView tvUserName = findViewById(R.id.tvUserName);
         tvUserName.setText(session.getFullName());
-    }
-
-    /**
-     * Temporary action for features that are not built yet.
-     */
-    private void comingSoon() {
-        Toast.makeText(
-                this,
-                R.string.coming_soon,
-                Toast.LENGTH_SHORT
-        ).show();
     }
 
     /**
