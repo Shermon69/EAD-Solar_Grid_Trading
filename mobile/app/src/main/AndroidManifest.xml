@@ -49,6 +49,11 @@
             android:name=".activities.OperatorHomeActivity"
             android:exported="false" />
 
+        <!-- Operator mode: approve or cancel prosumer bookings -->
+        <activity
+            android:name=".activities.OperatorBookingsActivity"
+            android:exported="false" />
+
         <!-- M4 Reservation activities -->
         <activity
             android:name=".activities.MyReservationsActivity"

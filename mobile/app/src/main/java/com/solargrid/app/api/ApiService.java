@@ -213,4 +213,35 @@ public interface ApiService {
     Call<Reservation> cancelReservation(
             @Path("id") String id
     );
+
+
+    // ---------- Member 1: Operator bookings (Grid Operator mode) ----------
+
+    /**
+     * GET /api/reservations - lists reservations of all prosumers
+     * (Backoffice and Grid Operator only).
+     *
+     * @param status optional status filter, or null for all
+     * @param stationId optional station filter, or null for all
+     * @param nic optional prosumer NIC filter, or null for all
+     * @return list of reservations
+     */
+    @GET("reservations")
+    Call<List<Reservation>> getAllReservations(
+            @Query("status") String status,
+            @Query("stationId") String stationId,
+            @Query("nic") String nic
+    );
+
+    /**
+     * PATCH /api/reservations/{id}/approve - approves a pending reservation
+     * and creates its QR token (Backoffice and Grid Operator only).
+     *
+     * @param id reservation ID
+     * @return approved reservation
+     */
+    @PATCH("reservations/{id}/approve")
+    Call<Reservation> approveReservation(
+            @Path("id") String id
+    );
 }
