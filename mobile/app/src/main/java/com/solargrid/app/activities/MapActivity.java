@@ -78,7 +78,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      * Executes the loadStationsOnMap operation.
      */
     private void loadStationsOnMap() {
-        com.solargrid.app.api.ApiService apiService = com.solargrid.app.api.ApiClient.getClient().create(com.solargrid.app.api.ApiService.class);
+        com.solargrid.app.api.ApiService apiService = com.solargrid.app.api.ApiClient.getService(this);
         apiService.getStations(true).enqueue(new retrofit2.Callback<List<Station>>() {
             @Override
             public void onResponse(@NonNull retrofit2.Call<List<Station>> call, @NonNull retrofit2.Response<List<Station>> response) {
