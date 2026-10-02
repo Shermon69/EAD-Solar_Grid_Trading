@@ -7,17 +7,25 @@ Read this once, then do your tasks in Section 3 for the day. Tick the boxes in y
 
 ---
 
-## 1. Where we are (2 Oct)
+## 1. Where we are (updated 2 Oct, evening)
 
 | Part | Status |
 |---|---|
-| Web API | Builds. All endpoints in TEAM_PLAN §7 exist. Rules R3–R10 enforced in the services |
-| Web app | Builds. All pages exist |
-| Mobile app | **Did not compile** on `development` – fixed on `fix/integration` (see below) |
+| Web API | ✅ Builds. All endpoints in TEAM_PLAN §7 exist, including `POST /prosumers`. Rules R3–R10 enforced in the services |
+| Web app | ✅ Builds. All pages exist, including **Prosumers → New Prosumer** |
+| Mobile app | ✅ Compiles (fixed in PR #9) |
+| Method comments | ❌ 62 methods still have no comment (M2: 1, M3: 9, M4: 52) – see Section 3, Sat 3 Oct |
 | Docs / report / video | Not started |
-| IIS hosting | Not started |
+| IIS hosting | ✅ Done. API runs on IIS (port 8080), web app and the phone build use it. Set up with `deploy/setup-iis.ps1` |
+| End-to-end test | ✅ API (~100 checks) and web (all pages, both roles) pass. Android tested on a real phone: register, activate, map, booking, QR scan, dashboard all work |
 
-### Fixed on `fix/integration` (M1)
+### Progress log
+| PR | Who | What |
+|---|---|---|
+| #9 `fix/integration` | M1 | Integration blockers (below) + this plan |
+| #10 `feature/prosumer-accounts` | M2 | Create prosumer from the web: `POST /api/prosumers` (Backoffice) + **New Prosumer** page and button. Removed duplicate flash messages (the layout already shows them) |
+
+### Fixed in PR #9 `fix/integration` (M1)
 - `QrScanActivity` used private `Reservation` fields and a missing `scheduledDate` → now uses the getters
 - `MapActivity` called `ApiClient.getClient()`, which does not exist → now `ApiClient.getService(this)`
 - Prosumer home: **Dashboard** and **Profile** cards were reset to "coming soon" by a merge → linked again to `DashboardActivity` and `ProfileActivity`
@@ -48,21 +56,22 @@ fix/<your-area>  ──►      ▲
 ### Fri 2 Oct – Unblock
 | Who | Task |
 |---|---|
-| M1 | Merge `fix/integration` into `development`, post in the group |
+| M1 | ✅ Merge `fix/integration` into `development`, post in the group (PR #9) |
 | All | Pull `development`, run API + web locally, compile mobile (Section 6). Report anything that does not work |
 | M3 | Add each member's **debug SHA-1** to the Maps key restrictions in Google Cloud (or remove the Android-app restriction until submission), otherwise the map is blank on other laptops |
 
 ### Sat 3 Oct – Finish features, comments and hosting
 
 **M1 – Shermon H (IT22177964)**
-- [ ] Host the API on IIS (Section 5) and share the URL
-- [ ] Point the web app (`ApiSettings:BaseUrl`) and mobile (`API_BASE_URL`) at it
+- [x] Host the API on IIS (Section 5) and share the URL
+- [x] Point the web app (`ApiSettings:BaseUrl`) and mobile (`API_BASE_URL`) at it
 - [ ] Fill in README: real names + IT numbers, contribution lines, run instructions for the IIS build
 
 **M2 – Premaratne R.A.N.C (IT22050908)**
-- [ ] **Create prosumer from the web.** The brief requires "Create, update, and deactivate prosumer profiles"; we only have update/deactivate
-  - API: `POST /api/prosumers` (Backoffice) in `ProsumersController` → `ProsumerService.CreateAsync`: validate NIC (`NicValidator`), reject duplicate NIC, hash password, `Role = Prosumer`, `Status = Active` (created by Backoffice, so no activation needed)
-  - Web: `Prosumers/Create` page + "Add prosumer" button on the Prosumers list
+- [x] **Create prosumer from the web** – done in PR #10. It reuses the register logic, so a prosumer created on the web
+  also starts as **Pending** and is activated from Pending Activations (same rule R3 as mobile sign-ups). Be ready to explain this in the viva
+- [ ] Optional: on the Create page, show the API's own error text (e.g. "This NIC is already registered.") instead of the general
+  "Could not create this prosumer" message
 - [ ] Pending Activations page: also list **deactivation requests** (`DeactivationRequested == true`) with a Deactivate button (TEAM_PLAN §2)
 - [ ] Comment above the constructor in `backend/.../Controllers/ProsumersController.cs`
 - [ ] Database design section of the report (4 collections, fields, relationships, a sample document each)
@@ -115,7 +124,7 @@ Use the IIS API. Sample password for seeded users: `Password@123`.
 | 3 | Backoffice creates a Grid Operator, edits it, deactivates it, then that user tries to log in | Web | Created/updated; deactivated user cannot log in | M1 | |
 | 4 | Backoffice creates a station with lat/long, capacity, battery slots, schedule; edits the schedule | Web | Saved and listed | M3 | |
 | 5 | Grid Operator adds slot blocks for the next days, changes availability | Web | Slots listed with correct counts | M3 | |
-| 6 | Backoffice creates a prosumer from the web | Web | Created as Active | M2 | |
+| 6 | Backoffice creates a prosumer from the web (**Prosumers → + New Prosumer**), then activates it on Pending Activations | Web | Created as Pending, shown on Pending Activations; after activating it can log in on mobile. Creating the same NIC again is rejected | M2 | |
 | 7 | Prosumer registers on mobile with a new NIC | Mobile | "Pending activation"; login is refused | M2 | |
 | 8 | Backoffice opens **Pending Activations** and activates them | Web | Prosumer can now log in | M2 | |
 | 9 | Prosumer logs in | Mobile | **Prosumer home**; session survives closing/reopening the app (SQLite) | M1 | |
@@ -150,8 +159,11 @@ Use the IIS API. Sample password for seeded users: `Password@123`.
 The API reads the Mongo connection string and JWT key from `appsettings.Development.json`, which does **not** load on IIS
 (IIS runs as *Production*). Without step 4 the API stops at startup with "Missing settings".
 
+> Steps 1, 2 and 5-7 are automated by `deploy/setup-iis.ps1`. Run it from an **administrator** PowerShell after steps 3 and 4:
+> `powershell -ExecutionPolicy Bypass -File .\deploy\setup-iis.ps1`. The manual steps below explain what it does (useful for the report).
+
 1. Windows Features → enable **Internet Information Services** (+ *World Wide Web Services*).
-2. Install the **ASP.NET Core 8 Hosting Bundle**, then run `iisreset`.
+2. Install the **ASP.NET Core 8 Hosting Bundle** (the IIS module installs to `C:\Program Files\IIS\Asp.Net Core Module\V2`), then run `iisreset`.
 3. Publish (to D: because C: is nearly full):
    `dotnet publish backend/SolarGrid.Api -c Release -o D:\inetpub\SolarGridApi`
 4. In `D:\inetpub\SolarGridApi`, create `appsettings.Production.json` with the same `MongoDbSettings` and `JwtSettings`
