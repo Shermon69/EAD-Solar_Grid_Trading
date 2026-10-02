@@ -23,6 +23,8 @@ namespace SolarGrid.Api.Controllers;
 public class ProsumersController : ControllerBase
 {
     private readonly ProsumerService _service;
+
+    /// <summary>Creates the controller with the prosumer service.</summary>
     public ProsumersController(ProsumerService service) => _service = service;
     private string CurrentNic => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
