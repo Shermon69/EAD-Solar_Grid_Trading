@@ -27,6 +27,9 @@ public final class Constants {
     public static final String EXTRA_RESERVATION_ID = "reservation_id";
     public static final String EXTRA_STATION_ID = "station_id";
 
+    // Tells the login screen the user was sent back because the session ran out
+    public static final String EXTRA_SESSION_EXPIRED = "session_expired";
+
     /**
      * Private constructor: this class only holds constants.
      */

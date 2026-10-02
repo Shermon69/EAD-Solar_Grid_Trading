@@ -14,6 +14,7 @@
     <string name="error_nic_required">Please enter your NIC</string>
     <string name="error_password_required">Please enter your password</string>
     <string name="error_backoffice_mobile">Backoffice users please use the web portal.</string>
+    <string name="session_expired">Your session has expired. Please log in again.</string>
 
     <!-- Home screens -->
     <string name="prosumer_role">Solar Prosumer</string>
@@ -35,4 +36,24 @@
     <string name="menu_scan_qr_desc">Verify and complete an energy transfer</string>
     <string name="menu_stations">Solar Stations</string>
     <string name="menu_stations_desc">Stations and their locations</string>
+    <string name="menu_bookings">Bookings</string>
+    <string name="menu_bookings_desc">Approve or cancel prosumer bookings</string>
+
+    <!-- Operator bookings screen -->
+    <string name="bookings_title">Bookings</string>
+    <string name="bookings_subtitle">Approve or cancel prosumer bookings</string>
+    <string name="bookings_search_hint">Search by prosumer NIC</string>
+    <string name="bookings_empty">No bookings found.</string>
+    <string name="filter_pending">Pending</string>
+    <string name="filter_approved">Approved</string>
+    <string name="filter_completed">Completed</string>
+    <string name="filter_cancelled">Cancelled</string>
+    <string name="filter_all">All</string>
+    <string name="btn_approve">Approve</string>
+    <string name="btn_cancel_booking">Cancel booking</string>
+    <string name="booking_approved">Booking approved</string>
+    <string name="booking_cancelled">Booking cancelled</string>
+    <string name="cancel_confirm_title">Cancel this booking?</string>
+    <string name="cancel_confirm_yes">Yes, cancel</string>
+    <string name="cancel_confirm_no">Keep it</string>
 </resources>
