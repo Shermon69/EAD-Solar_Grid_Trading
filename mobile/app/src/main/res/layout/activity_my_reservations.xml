@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    File:        activity_my_reservations.xml
+    Author:      Dissanayake D.M.S.N (IT22210692)
+    Description: UI layout for displaying the prosumer's energy reservations.
+    Created:     30/09/2026
+-->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F5F7FA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Page title -->
+        <TextView
+            android:id="@+id/tvReservationsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="My Reservations"
+            android:textColor="#123B6D"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Page description -->
+        <TextView
+            android:id="@+id/tvReservationsSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View and manage your energy bookings"
+            android:textColor="#667085"
+            android:textSize="15sp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Filter buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnCurrentReservations"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Current"
+                android:textAllCaps="false" />
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="1dp" />
+
+            <Button
+                android:id="@+id/btnHistoryReservations"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="History"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+        <!-- Loading indicator -->
+        <ProgressBar
+            android:id="@+id/progressReservations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Empty state -->
+        <TextView
+            android:id="@+id/tvNoReservations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No reservations found."
+            android:textColor="#667085"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="30dp"
+            android:visibility="gone" />
+
+        <!-- Reservation list -->
+        <LinearLayout
+            android:id="@+id/reservationsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+
+</ScrollView>
