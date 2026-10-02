@@ -19,12 +19,18 @@ namespace SolarGrid.Api.Services
         private readonly IMongoCollection<SolarStation> _stations;
         private readonly IMongoCollection<EnergyReservation> _reservations;
 
+        /// <summary>
+        /// Initializes a new instance of StationService.
+        /// </summary>
         public StationService(MongoDbContext context)
         {
             _stations = context.Stations;
             _reservations = context.Reservations;
         }
 
+        /// <summary>
+        /// Executes the GetAllAsync operation.
+        /// </summary>
         public async Task<List<SolarStation>> GetAllAsync(bool activeOnly = false)
         {
             if (activeOnly)
@@ -34,6 +40,9 @@ namespace SolarGrid.Api.Services
             return await _stations.Find(_ => true).ToListAsync();
         }
 
+        /// <summary>
+        /// Executes the GetByIdAsync operation.
+        /// </summary>
         public async Task<SolarStation> GetByIdAsync(string id)
         {
             var station = await _stations.Find(s => s.Id == id).FirstOrDefaultAsync();
@@ -41,6 +50,9 @@ namespace SolarGrid.Api.Services
             return station;
         }
 
+        /// <summary>
+        /// Executes the CreateAsync operation.
+        /// </summary>
         public async Task<SolarStation> CreateAsync(CreateStationRequest dto)
         {
             // Check GPS, capacity, battery slots and schedule (added by Shermon H)
@@ -64,6 +76,9 @@ namespace SolarGrid.Api.Services
             return station;
         }
 
+        /// <summary>
+        /// Executes the UpdateAsync operation.
+        /// </summary>
         public async Task<SolarStation> UpdateAsync(string id, UpdateStationRequest dto)
         {
             var station = await GetByIdAsync(id);
@@ -106,6 +121,9 @@ namespace SolarGrid.Api.Services
             await _stations.ReplaceOneAsync(s => s.Id == id, station);
         }
 
+        /// <summary>
+        /// Executes the ActivateAsync operation.
+        /// </summary>
         public async Task ActivateAsync(string id)
         {
             var station = await GetByIdAsync(id);
@@ -135,6 +153,9 @@ namespace SolarGrid.Api.Services
             return nearby;
         }
 
+        /// <summary>
+        /// Executes the CalculateDistance operation.
+        /// </summary>
         private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
         {
             var r = 6371; // Earth radius in km
@@ -147,6 +168,9 @@ namespace SolarGrid.Api.Services
             return r * c;
         }
 
+        /// <summary>
+        /// Executes the ToRadians operation.
+        /// </summary>
         private double ToRadians(double angle)
         {
             return Math.PI * angle / 180.0;

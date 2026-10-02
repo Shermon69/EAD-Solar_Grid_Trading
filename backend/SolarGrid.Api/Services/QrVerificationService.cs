@@ -18,6 +18,9 @@ namespace SolarGrid.Api.Services
     {
         private readonly IMongoCollection<EnergyReservation> _reservations;
 
+        /// <summary>
+        /// Initializes a new instance of QrVerificationService.
+        /// </summary>
         public QrVerificationService(MongoDbContext context)
         {
             _reservations = context.Reservations;

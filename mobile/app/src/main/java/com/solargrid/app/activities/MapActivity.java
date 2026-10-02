@@ -58,6 +58,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         loadStationsOnMap();
     }
 
+    /**
+     * Executes the enableMyLocation operation.
+     */
     private void enableMyLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) 
                 == PackageManager.PERMISSION_GRANTED || 
@@ -71,14 +74,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * Executes the loadStationsOnMap operation.
+     */
     private void loadStationsOnMap() {
-        List<Station> stations = stationDao.getCachedStations();
-        
+        com.solargrid.app.api.ApiService apiService = com.solargrid.app.api.ApiClient.getClient().create(com.solargrid.app.api.ApiService.class);
+        apiService.getStations(true).enqueue(new retrofit2.Callback<List<Station>>() {
+            @Override
+            public void onResponse(@NonNull retrofit2.Call<List<Station>> call, @NonNull retrofit2.Response<List<Station>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    stationDao.cacheStations(response.body());
+                    displayStationsOnMap(response.body());
+                } else {
+                    displayStationsOnMap(stationDao.getCachedStations());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull retrofit2.Call<List<Station>> call, @NonNull Throwable t) {
+                displayStationsOnMap(stationDao.getCachedStations());
+                Toast.makeText(MapActivity.this, "Failed to load from API. Showing cached stations.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * Executes the displayStationsOnMap operation.
+     */
+    private void displayStationsOnMap(List<Station> stations) {
         if (stations.isEmpty()) {
             Toast.makeText(this, "No stations cached locally.", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        mMap.clear();
         for (Station s : stations) {
             LatLng location = new LatLng(s.latitude, s.longitude);
             mMap.addMarker(new MarkerOptions()

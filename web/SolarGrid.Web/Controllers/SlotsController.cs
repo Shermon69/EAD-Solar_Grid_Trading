@@ -18,11 +18,17 @@ namespace SolarGrid.Web.Controllers
     {
         private readonly ApiClient _api;
 
+        /// <summary>
+        /// Initializes a new instance of SlotsController.
+        /// </summary>
         public SlotsController(ApiClient api)
         {
             _api = api;
         }
 
+        /// <summary>
+        /// Executes the Index operation.
+        /// </summary>
         public async Task<IActionResult> Index(string stationId)
         {
             // No station chosen yet (e.g. opened from the navbar): show a station picker (added by Shermon H)
@@ -48,6 +54,9 @@ namespace SolarGrid.Web.Controllers
         }
 
         [HttpPost]
+        /// <summary>
+        /// Executes the Create operation.
+        /// </summary>
         public async Task<IActionResult> Create(CreateSlotViewModel model)
         {
             try
@@ -69,6 +78,9 @@ namespace SolarGrid.Web.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        /// <summary>
+        /// Executes the Update operation.
+        /// </summary>
         public async Task<IActionResult> Update(string id, string stationId, int totalSlots, bool isAvailable)
         {
             try
@@ -102,6 +114,9 @@ namespace SolarGrid.Web.Controllers
         }
 
         [HttpPost]
+        /// <summary>
+        /// Executes the Delete operation.
+        /// </summary>
         public async Task<IActionResult> Delete(string id, string stationId)
         {
             try

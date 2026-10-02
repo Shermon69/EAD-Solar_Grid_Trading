@@ -20,6 +20,9 @@ namespace SolarGrid.Api.Services
         private readonly IMongoCollection<EnergyReservation> _reservations;
         private readonly IMongoCollection<SolarStation> _stations;
 
+        /// <summary>
+        /// Initializes a new instance of SlotService.
+        /// </summary>
         public SlotService(MongoDbContext context)
         {
             _slots = context.Slots;
@@ -27,6 +30,9 @@ namespace SolarGrid.Api.Services
             _stations = context.Stations;
         }
 
+        /// <summary>
+        /// Executes the GetSlotsForStationAsync operation.
+        /// </summary>
         public async Task<List<EnergySlot>> GetSlotsForStationAsync(string stationId, DateTime? date = null)
         {
             var filterBuilder = Builders<EnergySlot>.Filter;
@@ -42,6 +48,9 @@ namespace SolarGrid.Api.Services
             return await _slots.Find(filter).SortBy(s => s.StartTime).ToListAsync();
         }
 
+        /// <summary>
+        /// Executes the CreateAsync operation.
+        /// </summary>
         public async Task<EnergySlot> CreateAsync(CreateSlotRequest dto)
         {
             // Check station, times, slot count and overlaps (added by Shermon H)
@@ -61,6 +70,9 @@ namespace SolarGrid.Api.Services
             return slot;
         }
 
+        /// <summary>
+        /// Executes the UpdateAsync operation.
+        /// </summary>
         public async Task<EnergySlot> UpdateAsync(string id, UpdateSlotRequest dto)
         {
             var slot = await _slots.Find(s => s.Id == id).FirstOrDefaultAsync();
@@ -83,6 +95,9 @@ namespace SolarGrid.Api.Services
             return slot;
         }
 
+        /// <summary>
+        /// Executes the DeleteAsync operation.
+        /// </summary>
         public async Task DeleteAsync(string id)
         {
             var slot = await _slots.Find(s => s.Id == id).FirstOrDefaultAsync();

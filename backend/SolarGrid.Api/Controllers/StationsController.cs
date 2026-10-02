@@ -20,6 +20,9 @@ namespace SolarGrid.Api.Controllers
         private readonly StationService _stationService;
         private readonly SlotService _slotService;
 
+        /// <summary>
+        /// Initializes a new instance of StationsController.
+        /// </summary>
         public StationsController(StationService stationService, SlotService slotService)
         {
             _stationService = stationService;
@@ -27,6 +30,9 @@ namespace SolarGrid.Api.Controllers
         }
 
         [HttpGet]
+        /// <summary>
+        /// Executes the GetAll operation.
+        /// </summary>
         public async Task<IActionResult> GetAll([FromQuery] bool activeOnly = false)
         {
             var stations = await _stationService.GetAllAsync(activeOnly);
@@ -34,6 +40,9 @@ namespace SolarGrid.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        /// <summary>
+        /// Executes the GetById operation.
+        /// </summary>
         public async Task<IActionResult> GetById(string id)
         {
             var station = await _stationService.GetByIdAsync(id);
@@ -41,6 +50,9 @@ namespace SolarGrid.Api.Controllers
         }
 
         [HttpGet("nearby")]
+        /// <summary>
+        /// Executes the GetNearby operation.
+        /// </summary>
         public async Task<IActionResult> GetNearby([FromQuery] double lat, [FromQuery] double lng, [FromQuery] double radiusKm)
         {
             var stations = await _stationService.GetNearbyAsync(lat, lng, radiusKm);
@@ -49,6 +61,9 @@ namespace SolarGrid.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Backoffice)]
+        /// <summary>
+        /// Executes the Create operation.
+        /// </summary>
         public async Task<IActionResult> Create([FromBody] CreateStationRequest dto)
         {
             var station = await _stationService.CreateAsync(dto);
@@ -57,6 +72,9 @@ namespace SolarGrid.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Backoffice)]
+        /// <summary>
+        /// Executes the Update operation.
+        /// </summary>
         public async Task<IActionResult> Update(string id, [FromBody] UpdateStationRequest dto)
         {
             var station = await _stationService.UpdateAsync(id, dto);
@@ -65,6 +83,9 @@ namespace SolarGrid.Api.Controllers
 
         [HttpPatch("{id}/deactivate")]
         [Authorize(Roles = Roles.Backoffice)]
+        /// <summary>
+        /// Executes the Deactivate operation.
+        /// </summary>
         public async Task<IActionResult> Deactivate(string id)
         {
             await _stationService.DeactivateAsync(id);
@@ -73,6 +94,9 @@ namespace SolarGrid.Api.Controllers
 
         [HttpPatch("{id}/activate")]
         [Authorize(Roles = Roles.Backoffice)]
+        /// <summary>
+        /// Executes the Activate operation.
+        /// </summary>
         public async Task<IActionResult> Activate(string id)
         {
             await _stationService.ActivateAsync(id);
@@ -82,6 +106,9 @@ namespace SolarGrid.Api.Controllers
         // --- Slots related to a specific station ---
 
         [HttpGet("{id}/slots")]
+        /// <summary>
+        /// Executes the GetSlots operation.
+        /// </summary>
         public async Task<IActionResult> GetSlots(string id, [FromQuery] DateTime? date)
         {
             var slots = await _slotService.GetSlotsForStationAsync(id, date);

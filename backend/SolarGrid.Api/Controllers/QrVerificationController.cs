@@ -20,6 +20,9 @@ namespace SolarGrid.Api.Controllers
     {
         private readonly QrVerificationService _qrService;
 
+        /// <summary>
+        /// Initializes a new instance of QrVerificationController.
+        /// </summary>
         public QrVerificationController(QrVerificationService qrService)
         {
             _qrService = qrService;
@@ -27,6 +30,9 @@ namespace SolarGrid.Api.Controllers
 
         [HttpPost("verify-qr")]
         [Authorize(Roles = Roles.GridOperator)]
+        /// <summary>
+        /// Executes the VerifyQr operation.
+        /// </summary>
         public async Task<IActionResult> VerifyQr([FromBody] QrVerifyRequest dto)
         {
             var reservation = await _qrService.VerifyQrAsync(dto);
@@ -35,6 +41,9 @@ namespace SolarGrid.Api.Controllers
 
         [HttpPatch("{id}/complete")]
         [Authorize(Roles = Roles.GridOperator)]
+        /// <summary>
+        /// Executes the Complete operation.
+        /// </summary>
         public async Task<IActionResult> Complete(string id)
         {
             // Extract the NIC of the logged-in Grid Operator from the JWT token
