@@ -7,7 +7,6 @@ obj/
 *.rsuser
 publish/
 appsettings.Development.json
-appsettings.Production.json
 
 # ===== Misc =====
 .env
@@ -24,9 +23,6 @@ captures/
 *.aab
 *.keystore
 *.jks
-# Java crash logs (written when the JVM runs out of memory/disk)
-hs_err_pid*.log
-replay_pid*.log
 
 # ===== IDEs =====
 .idea/

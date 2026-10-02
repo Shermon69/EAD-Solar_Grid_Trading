@@ -6,11 +6,10 @@
  *              Web and mobile apps just call the endpoints.
  * Created:     29/09/2026
  */
-
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using SolarGrid.Api.Data;
+using SolarGrid.Api.Data;   
 using SolarGrid.Api.Dtos;
 using SolarGrid.Api.Models;
 
@@ -26,15 +25,13 @@ public class ProsumerService
     private readonly IMongoCollection<BookingRecord> _bookings;
     private readonly IMongoCollection<SolarStation> _stations;
 
-    // Injects the MongoDB database and resolves the collections needed.
+    // Injects the MongoDB database and resolves the two collections needed.
     public ProsumerService(MongoDbContext dbContext)
     {
         _users = dbContext.Users;
-
-        // Read EnergyReservations through the BookingRecord projection.
+        // Read EnergyReservations through the BookingRecord projection
         _bookings = dbContext.Reservations.Database
             .GetCollection<BookingRecord>("EnergyReservations");
-
         _stations = dbContext.Stations;
     }
 
@@ -45,8 +42,7 @@ public class ProsumerService
     public async Task<bool> RegisterAsync(RegisterRequest r)
     {
         // Reject if the NIC is already used.
-        if (await _users.Find(u => u.Nic == r.Nic).AnyAsync())
-            return false;
+        if (await _users.Find(u => u.Nic == r.Nic).AnyAsync()) return false;
 
         var user = new User
         {
@@ -61,15 +57,8 @@ public class ProsumerService
             CreatedAt = DateTime.UtcNow
         };
 
-        try
-        {
-            await _users.InsertOneAsync(user);
-        }
-        catch (MongoWriteException ex)
-            when (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
-        {
-            return false;
-        }
+        try { await _users.InsertOneAsync(user); }
+        catch (MongoWriteException ex) when (ex.WriteError.Category == ServerErrorCategory.DuplicateKey) { return false; }
 
         return true;
     }
@@ -78,47 +67,25 @@ public class ProsumerService
     /// Lists prosumers with an optional status filter and an optional
     /// search on name, NIC or email.
     /// </summary>
-    public async Task<List<ProsumerResponse>> GetProsumersAsync(
-        string? search,
-        string? status)
+    public async Task<List<ProsumerResponse>> GetProsumersAsync(string? search, string? status)
     {
         var fb = Builders<User>.Filter;
-
-        var filter = fb.Eq(
-            u => u.Role,
-            "Prosumer"
-        );
+        var filter = fb.Eq(u => u.Role, "Prosumer");
 
         if (!string.IsNullOrWhiteSpace(status))
-        {
-            filter &= fb.Eq(
-                u => u.Status,
-                status
-            );
-        }
+            filter &= fb.Eq(u => u.Status, status);
 
         if (!string.IsNullOrWhiteSpace(search))
         {
-            var rx = new BsonRegularExpression(
-                Regex.Escape(search.Trim()),
-                "i"
-            );
-
+            var rx = new BsonRegularExpression(Regex.Escape(search.Trim()), "i");
             filter &= fb.Or(
                 fb.Regex(u => u.FullName, rx),
                 fb.Regex(u => u.Email, rx),
-                fb.Regex(u => u.Nic, rx)
-            );
+                fb.Regex(u => u.Nic, rx));
         }
 
-        var list = await _users
-            .Find(filter)
-            .SortByDescending(u => u.CreatedAt)
-            .ToListAsync();
-
-        return list
-            .Select(ToResponse)
-            .ToList();
+        var list = await _users.Find(filter).SortByDescending(u => u.CreatedAt).ToListAsync();
+        return list.Select(ToResponse).ToList();
     }
 
     /// <summary>
@@ -126,24 +93,15 @@ public class ProsumerService
     /// </summary>
     public async Task<ProsumerResponse?> GetByNicAsync(string nic)
     {
-        var u = await _users
-            .Find(x =>
-                x.Nic == nic &&
-                x.Role == "Prosumer")
-            .FirstOrDefaultAsync();
-
-        return u == null
-            ? null
-            : ToResponse(u);
+        var u = await _users.Find(x => x.Nic == nic && x.Role == "Prosumer").FirstOrDefaultAsync();
+        return u == null ? null : ToResponse(u);
     }
 
     /// <summary>
     /// Updates profile details and optionally the password. Returns false
     /// if the prosumer does not exist.
     /// </summary>
-    public async Task<bool> UpdateProfileAsync(
-        string nic,
-        UpdateProfileRequest r)
+    public async Task<bool> UpdateProfileAsync(string nic, UpdateProfileRequest r)
     {
         var update = Builders<User>.Update
             .Set(u => u.FullName, r.FullName.Trim())
@@ -152,20 +110,9 @@ public class ProsumerService
             .Set(u => u.Address, r.Address.Trim());
 
         if (!string.IsNullOrWhiteSpace(r.NewPassword))
-        {
-            update = update.Set(
-                u => u.PasswordHash,
-                BCrypt.Net.BCrypt.HashPassword(r.NewPassword)
-            );
-        }
+            update = update.Set(u => u.PasswordHash, BCrypt.Net.BCrypt.HashPassword(r.NewPassword));
 
-        var res = await _users.UpdateOneAsync(
-            u =>
-                u.Nic == nic &&
-                u.Role == "Prosumer",
-            update
-        );
-
+        var res = await _users.UpdateOneAsync(u => u.Nic == nic && u.Role == "Prosumer", update);
         return res.MatchedCount > 0;
     }
 
@@ -180,13 +127,8 @@ public class ProsumerService
             .Set(u => u.DeactivationRequested, false);
 
         var res = await _users.UpdateOneAsync(
-            u =>
-                u.Nic == nic &&
-                u.Role == "Prosumer" &&
-                u.Status != "Active",
-            update
-        );
-
+            u => u.Nic == nic && u.Role == "Prosumer" && u.Status != "Active",
+            update);
         return res.MatchedCount > 0;
     }
 
@@ -200,13 +142,8 @@ public class ProsumerService
             .Set(u => u.DeactivationRequested, false);
 
         var res = await _users.UpdateOneAsync(
-            u =>
-                u.Nic == nic &&
-                u.Role == "Prosumer" &&
-                u.Status != "Deactivated",
-            update
-        );
-
+            u => u.Nic == nic && u.Role == "Prosumer" && u.Status != "Deactivated",
+            update);
         return res.MatchedCount > 0;
     }
 
@@ -216,20 +153,10 @@ public class ProsumerService
     /// </summary>
     public async Task<bool> RequestDeactivationAsync(string nic)
     {
-        var update = Builders<User>.Update
-            .Set(
-                u => u.DeactivationRequested,
-                true
-            );
-
+        var update = Builders<User>.Update.Set(u => u.DeactivationRequested, true);
         var res = await _users.UpdateOneAsync(
-            u =>
-                u.Nic == nic &&
-                u.Role == "Prosumer" &&
-                u.Status == "Active",
-            update
-        );
-
+            u => u.Nic == nic && u.Role == "Prosumer" && u.Status == "Active",
+            update);
         return res.MatchedCount > 0;
     }
 
@@ -239,145 +166,50 @@ public class ProsumerService
     /// Optional search on station name or status. Looks up the station name
     /// from SolarStationInfo because the reservation only stores StationId.
     /// </summary>
-    public async Task<List<BookingResponse>> GetMyBookingsAsync(
-        string nic,
-        string type,
-        string? search)
+    public async Task<List<BookingResponse>> GetMyBookingsAsync(string nic, string type, string? search)
     {
         var fb = Builders<BookingRecord>.Filter;
-
         var now = DateTime.UtcNow;
-
-        var filter = fb.Eq(
-            b => b.ProsumerNic,
-            nic
-        );
-
-        bool history =
-            string.Equals(
-                type,
-                "history",
-                StringComparison.OrdinalIgnoreCase
-            );
+        var filter = fb.Eq(b => b.ProsumerNic, nic);
+        bool history = string.Equals(type, "history", StringComparison.OrdinalIgnoreCase);
 
         if (history)
-        {
             filter &= fb.Or(
-                fb.In(
-                    b => b.Status,
-                    new[]
-                    {
-                        "Completed",
-                        "Cancelled"
-                    }
-                ),
-                fb.Lt(
-                    b => b.ReservationDate,
-                    now
-                )
-            );
-        }
+                fb.In(b => b.Status, new[] { "Completed", "Cancelled" }),
+                fb.Lt(b => b.ReservationDate, now));
         else
-        {
-            filter &=
-                fb.In(
-                    b => b.Status,
-                    new[]
-                    {
-                        "Pending",
-                        "Approved"
-                    }
-                )
-                &
-                fb.Gte(
-                    b => b.ReservationDate,
-                    now
-                );
-        }
+            filter &= fb.In(b => b.Status, new[] { "Pending", "Approved" }) &
+                      fb.Gte(b => b.ReservationDate, now);
 
         var find = _bookings.Find(filter);
-
         var list = history
-            ? await find
-                .SortByDescending(b => b.ReservationDate)
-                .ToListAsync()
-            : await find
-                .SortBy(b => b.ReservationDate)
-                .ToListAsync();
+            ? await find.SortByDescending(b => b.ReservationDate).ToListAsync()
+            : await find.SortBy(b => b.ReservationDate).ToListAsync();
 
-        // Look up station names in one query to avoid N+1 queries.
-        var stationIds = list
-            .Select(b => b.StationId)
-            .Distinct()
-            .ToList();
-
-        var stationCollection =
-            _bookings.Database
-                .GetCollection<SolarStation>(
-                    "SolarStationInfo"
-                );
-
+        // Look up station names in one query (avoid N+1)
+        var stationIds = list.Select(b => b.StationId).Distinct().ToList();
+        var stationCollection = _bookings.Database.GetCollection<SolarStation>("SolarStationInfo");
         var stations = await stationCollection
-            .Find(
-                Builders<SolarStation>.Filter.In(
-                    s => s.Id,
-                    stationIds
-                )
-            )
+            .Find(Builders<SolarStation>.Filter.In(s => s.Id, stationIds))
             .ToListAsync();
+        var stationLookup = stations.ToDictionary(s => s.Id, s => s.Name);
 
-        var stationLookup =
-            stations.ToDictionary(
-                s => s.Id,
-                s => s.Name
-            );
-
-        // Fill in the display fields and apply the search filter.
-        var results = list
-            .Select(b => new BookingResponse
-            {
-                Id = b.Id,
-
-                StationName =
-                    stationLookup.GetValueOrDefault(
-                        b.StationId,
-                        "Unknown Station"
-                    ),
-
-                ReservationDate =
-                    b.ReservationDate,
-
-                // Include the reservation type so that
-                // mobile and web clients can display it.
-                Type = b.Type,
-
-                // Include the requested energy amount so that
-                // mobile and web clients can display it.
-                EnergyKwh = b.EnergyKwh,
-
-                Status = b.Status,
-
-                QrToken = b.QrToken
-            })
-            .ToList();
+        // Fill in the display fields and apply the search filter
+        var results = list.Select(b => new BookingResponse
+        {
+            Id = b.Id,
+            StationName = stationLookup.GetValueOrDefault(b.StationId, "Unknown Station"),
+            ReservationDate = b.ReservationDate,
+            Status = b.Status,
+            QrToken = b.QrToken
+        }).ToList();
 
         if (!string.IsNullOrWhiteSpace(search))
         {
             var term = search.Trim();
-
-            results = results
-                .Where(r =>
-                    r.StationName.Contains(
-                        term,
-                        StringComparison.OrdinalIgnoreCase
-                    )
-                    ||
-                    r.Status.Contains(
-                        term,
-                        StringComparison.OrdinalIgnoreCase
-                    )
-                )
-                .ToList();
+            results = results.Where(r =>
+                r.StationName.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                r.Status.Contains(term, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         return results;
@@ -387,27 +219,15 @@ public class ProsumerService
     /// Dashboard for one prosumer: their own pending bookings and approved
     /// future bookings, read live from the API.
     /// </summary>
-    public async Task<DashboardResponse> GetMyDashboardAsync(
-        string nic)
+    public async Task<DashboardResponse> GetMyDashboardAsync(string nic)
     {
         var now = DateTime.UtcNow;
-
         return new DashboardResponse
         {
-            PendingCount =
-                await _bookings.CountDocumentsAsync(
-                    b =>
-                        b.ProsumerNic == nic &&
-                        b.Status == "Pending"
-                ),
-
-            ApprovedFutureCount =
-                await _bookings.CountDocumentsAsync(
-                    b =>
-                        b.ProsumerNic == nic &&
-                        b.Status == "Approved" &&
-                        b.ReservationDate >= now
-                )
+            PendingCount = await _bookings.CountDocumentsAsync(
+                b => b.ProsumerNic == nic && b.Status == "Pending"),
+            ApprovedFutureCount = await _bookings.CountDocumentsAsync(
+                b => b.ProsumerNic == nic && b.Status == "Approved" && b.ReservationDate >= now)
         };
     }
 
@@ -418,22 +238,12 @@ public class ProsumerService
     public async Task<DashboardResponse> GetBackofficeDashboardAsync()
     {
         var now = DateTime.UtcNow;
-
         return new DashboardResponse
         {
-            PendingCount =
-                await _users.CountDocumentsAsync(
-                    u =>
-                        u.Role == "Prosumer" &&
-                        u.Status == "Pending"
-                ),
-
-            ApprovedFutureCount =
-                await _bookings.CountDocumentsAsync(
-                    b =>
-                        b.Status == "Approved" &&
-                        b.ReservationDate >= now
-                )
+            PendingCount = await _users.CountDocumentsAsync(
+                u => u.Role == "Prosumer" && u.Status == "Pending"),
+            ApprovedFutureCount = await _bookings.CountDocumentsAsync(
+                b => b.Status == "Approved" && b.ReservationDate >= now)
         };
     }
 

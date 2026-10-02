@@ -15,7 +15,7 @@ using SolarGrid.Api.Services;
 namespace SolarGrid.Api.Controllers;
 
 /// <summary>
-/// REST controller for all prosumer operations. Acts as a thin UI layer -
+/// REST controller for all prosumer operations. Acts as a thin UI layer —
 /// validates HTTP input and delegates all business logic to ProsumerService.
 /// </summary>
 [ApiController]
@@ -69,9 +69,9 @@ public class ProsumersController : ControllerBase
     public async Task<IActionResult> BackofficeDashboard()
         => Ok(await _service.GetBackofficeDashboardAsync());
 
-    /// <summary>Backoffice and Grid Operator: get one prosumer by NIC.</summary>
+    /// <summary>Backoffice: get one prosumer by NIC.</summary>
     [HttpGet("prosumers/{nic}")]
-    [Authorize(Roles = "Backoffice,GridOperator")]
+    [Authorize(Roles = "Backoffice")]
     public async Task<IActionResult> GetOne(string nic)
     {
         var p = await _service.GetByNicAsync(nic);
@@ -139,7 +139,7 @@ public class ProsumersController : ControllerBase
     public async Task<IActionResult> MyBookings([FromQuery] string type = "current", [FromQuery] string? search = null)
         => Ok(await _service.GetMyBookingsAsync(CurrentNic, type, search));
 
-    /// <summary>Prosumer: own dashboard - pending + approved future counts.</summary>
+    /// <summary>Prosumer: own dashboard — pending + approved future counts.</summary>
     [HttpGet("dashboard/prosumer")]
     [Authorize(Roles = "Prosumer")]
     public async Task<IActionResult> MyDashboard()

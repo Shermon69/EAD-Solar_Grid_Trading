@@ -7,7 +7,6 @@
  *              lists and dashboard counts.
  * Created:     29/09/2026
  */
-
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -41,14 +40,6 @@ public class BookingRecord
     // Start time of the booked slot (UTC). Stored as ReservationTime in MongoDB.
     [BsonElement("ReservationTime")]
     public DateTime ReservationDate { get; set; }
-
-    // Reservation type: Charging or Dropoff.
-    [BsonElement("Type")]
-    public string Type { get; set; } = string.Empty;
-
-    // Amount of energy involved in the reservation.
-    [BsonElement("EnergyKwh")]
-    public double EnergyKwh { get; set; }
 
     // One of: Pending, Approved, Completed, Cancelled.
     [BsonElement("Status")]
