@@ -80,6 +80,14 @@ public class ProsumerApiService
         return res.IsSuccessStatusCode ? await res.Content.ReadFromJsonAsync<ProsumerVm>() : null;
     }
 
+    /// <summary>Creates a new prosumer through the API (Backoffice only). The new
+    /// account starts as Pending until Backoffice activates it.</summary>
+    public async Task<bool> CreateAsync(ProsumerCreateVm vm)
+    {
+        var res = await CreateClient().PostAsJsonAsync("prosumers", vm);
+        return res.IsSuccessStatusCode;
+    }
+
     /// <summary>Updates a prosumer's details through the API.</summary>
     public async Task<bool> UpdateAsync(ProsumerEditVm vm)
     {

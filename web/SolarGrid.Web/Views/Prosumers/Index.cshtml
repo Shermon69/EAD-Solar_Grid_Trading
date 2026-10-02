@@ -5,67 +5,66 @@
                  edit, activate, and deactivate prosumers.
 *@
 @model List<SolarGrid.Web.Models.ProsumerVm>
-    @{ ViewData["Title"] = "Prosumer Management"; }
 
-    <h2 class="mb-3">Prosumer Management</h2>
+@{
+    ViewData["Title"] = "Prosumer Management";
+}
 
-    @* Flash messages set by the controller after an action. *@
-    @if (TempData["Success"] != null)
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Prosumer Management</h2>
+    <a asp-action="Create" class="btn btn-success">+ New Prosumer</a>
+</div>
+
+@if (TempData["Success"] != null)
 {
     <div class="alert alert-success">@TempData["Success"]</div>
 }
-    @if (TempData["Error"] != null)
+
+@if (TempData["Error"] != null)
 {
     <div class="alert alert-danger">@TempData["Error"]</div>
 }
 
-    @* Search and status filter form (GET). *@
-    <form method="get" class="row g-2 mb-3">
+<form method="get" class="row g-2 mb-3 align-items-end">
+    <div class="col-md-5">
+        <input name="search" value="@ViewBag.Search" class="form-control"
+               placeholder="Search by name, NIC or email" />
+    </div>
 
-        @* Search box: name, NIC or email. *@
-        <div class="col-md-5">
-            <input name="search" value="@ViewBag.Search" class="form-control"
-                   placeholder="Search by name, NIC or email" />
-        </div>
-
-        @* Status filter dropdown. *@
-        <div class="col-md-3">
-            <select name="status" class="form-select">
-                <option value="">All statuses</option>
-                @foreach (var s in new[] { "Pending", "Active", "Deactivated" })
+    <div class="col-md-3">
+        <select name="status" class="form-select">
+            <option value="">All statuses</option>
+            @foreach (var s in new[] { "Pending", "Active", "Deactivated" })
             {
                 <option value="@s" selected="@((string?)ViewBag.Status == s)">@s</option>
             }
-            </select>
-        </div>
+        </select>
+    </div>
 
-        @* Buttons: search and go to pending activations. *@
-        <div class="col-md-2">
-            <button class="btn btn-primary w-100">Search</button>
-        </div>
-        <div class="col-md-2">
-            <a asp-action="Pending" class="btn btn-outline-secondary w-100">Pending activations</a>
-        </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100">Search</button>
+    </div>
 
-    </form>
+    <div class="col-md-2">
+        <a asp-action="Pending" class="btn btn-outline-secondary w-100">Pending activations</a>
+    </div>
+</form>
 
-    @* Results table. *@
-    <div class="table-responsive">
-        <table class="table table-striped align-middle">
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>NIC</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
 
-            <thead>
-                <tr>
-                    <th>NIC</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var p in Model)
+        <tbody>
+            @foreach (var p in Model)
             {
                 <tr>
                     <td>@p.Nic</td>
@@ -73,58 +72,59 @@
                     <td>@p.Email</td>
                     <td>@p.Phone</td>
 
-                    @* Status badge + deactivation request badge. *@
                     <td>
-                        <span class="badge @(p.Status == "Active"
+                        <div class="d-flex flex-column align-items-start gap-1">
+                            <span class="badge @(p.Status == "Active"
                                                     ? "bg-success"
                                                     : p.Status == "Pending"
                                                         ? "bg-warning text-dark"
-                                                        : "bg-secondary")">@p.Status</span>
-                                                        @if (p.DeactivationRequested)
-                        {
-                                                        <span class="badge bg-danger">Deactivation requested</span>
-                        }
-                                                    </td>
+                                                        : "bg-secondary")">
+                                @p.Status
+                            </span>
 
-                                                    @* Action buttons: edit, activate/reactivate, deactivate. *@
-                                                    <td class="d-flex gap-1">
+                            @if (p.DeactivationRequested)
+                            {
+                                <span class="badge bg-danger">Deactivation requested</span>
+                            }
+                        </div>
+                    </td>
 
-                                                        <a asp-action="Edit" asp-route-id="@p.Nic"
-                                                           class="btn btn-sm btn-outline-primary">Edit</a>
+                    <td>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a asp-action="Edit" asp-route-id="@p.Nic"
+                               class="btn btn-sm btn-outline-primary">Edit</a>
 
-                                                        @if (p.Status != "Active")
-                        {
-                                                        <form asp-action="Activate" method="post">
-                                                            @Html.AntiForgeryToken()
-                                                            <input type="hidden" name="id" value="@p.Nic" />
-                                                            <button class="btn btn-sm btn-success">
-                                                                @(p.Status == "Pending" ? "Activate" : "Reactivate")
-                                                            </button>
-                                                        </form>
-                        }
+                            @if (p.Status != "Active")
+                            {
+                                <form asp-action="Activate" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@p.Nic" />
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        @(p.Status == "Pending" ? "Activate" : "Reactivate")
+                                    </button>
+                                </form>
+                            }
 
-                                                        @if (p.Status != "Deactivated")
-                        {
-                                                        <form asp-action="Deactivate" method="post"
-                                                              onsubmit="return confirm('Deactivate this prosumer?');">
-                                                            @Html.AntiForgeryToken()
-                                                            <input type="hidden" name="id" value="@p.Nic" />
-                                                            <button class="btn btn-sm btn-danger">Deactivate</button>
-                                                        </form>
-                        }
-
-                                                    </td>
-                                                </tr>
+                            @if (p.Status != "Deactivated")
+                            {
+                                <form asp-action="Deactivate" method="post" class="d-inline"
+                                      onsubmit="return confirm('Deactivate this prosumer?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@p.Nic" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Deactivate</button>
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
             }
 
-                @* Empty state when no prosumers match the filter. *@
-                @if (!Model.Any())
+            @if (!Model.Any())
             {
                 <tr>
                     <td colspan="6" class="text-center text-muted">No prosumers found.</td>
                 </tr>
             }
-            </tbody>
-
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
