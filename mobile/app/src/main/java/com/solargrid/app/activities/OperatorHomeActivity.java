@@ -54,6 +54,11 @@ public class OperatorHomeActivity extends AppCompatActivity {
         MenuCardHelper.setup(findViewById(R.id.cardStations), R.drawable.ic_place,
                 R.string.menu_stations, R.string.menu_stations_desc, R.color.success, 
                 v -> startActivity(new Intent(this, MapActivity.class)));
+
+        // Member 1: Bookings (approve or cancel prosumer bookings)
+        MenuCardHelper.setup(findViewById(R.id.cardBookings), R.drawable.ic_list,
+                R.string.menu_bookings, R.string.menu_bookings_desc, R.color.purple,
+                v -> startActivity(new Intent(this, OperatorBookingsActivity.class)));
     }
 
     /**

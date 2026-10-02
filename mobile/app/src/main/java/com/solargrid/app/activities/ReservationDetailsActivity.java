@@ -29,6 +29,7 @@ import com.solargrid.app.R;
 import com.solargrid.app.api.ApiClient;
 import com.solargrid.app.api.ApiService;
 import com.solargrid.app.models.Reservation;
+import com.solargrid.app.utils.DateUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -492,24 +493,20 @@ public class ReservationDetailsActivity extends AppCompatActivity {
     }
 
     /**
-     * Formats the reservation date for display.
+     * Formats the reservation date and time for display, converting the
+     * API's UTC value to the phone's local time zone.
      *
-     * @param reservationTime API reservation date/time
-     * @return formatted reservation date/time
+     * Example (Sri Lanka):
+     * 2026-10-03T02:30:00Z becomes 03 Oct 2026, 08:00 AM
+     *
+     * @param reservationTime API reservation date/time in UTC
+     * @return formatted local reservation date/time
      */
     private String formatReservationDate(
             String reservationTime
     ) {
 
-        if (reservationTime == null) {
-            return "";
-        }
-
-        if (reservationTime.contains("T")) {
-            return reservationTime.replace("T", " ");
-        }
-
-        return reservationTime;
+        return DateUtils.formatLocal(reservationTime);
     }
 
     /**

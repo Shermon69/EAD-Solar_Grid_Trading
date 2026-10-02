@@ -12,8 +12,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Base64;
 
 import com.solargrid.app.models.LoginResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * Stores the current login session in SQLite.
@@ -47,10 +53,37 @@ public class SessionManager {
     }
 
     /**
-     * Returns true if a user is logged in.
+     * Returns true if a user is logged in with a token that has not run out yet.
      */
     public boolean isLoggedIn() {
-        return getToken() != null;
+        return getToken() != null && !isSessionExpired();
+    }
+
+    /**
+     * Returns true if a token is saved but its expiry time (the "exp" claim inside the
+     * JWT) has already passed. A token that cannot be read is treated as not expired,
+     * because the API will answer 401 if it is really invalid.
+     */
+    public boolean isSessionExpired() {
+        String token = getToken();
+        if (token == null) {
+            return false;
+        }
+
+        try {
+            // A JWT is header.payload.signature; the payload is Base64-URL encoded JSON
+            String[] parts = token.split("\\.");
+            if (parts.length < 2) {
+                return false;
+            }
+
+            byte[] payload = Base64.decode(parts[1], Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
+            long expirySeconds = new JSONObject(new String(payload, StandardCharsets.UTF_8)).optLong("exp", 0);
+
+            return expirySeconds > 0 && expirySeconds * 1000L <= System.currentTimeMillis();
+        } catch (IllegalArgumentException | JSONException e) {
+            return false;
+        }
     }
 
     /**

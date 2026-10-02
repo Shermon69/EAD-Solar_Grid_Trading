@@ -24,12 +24,9 @@ import com.solargrid.app.R;
 import com.solargrid.app.api.ApiClient;
 import com.solargrid.app.api.ApiService;
 import com.solargrid.app.models.Reservation;
+import com.solargrid.app.utils.DateUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -435,168 +432,41 @@ public class MyReservationsActivity extends AppCompatActivity {
     }
 
     /**
-     * Formats the reservation date for display.
+     * Formats the reservation date for display, converting the API's
+     * UTC value to the phone's local time zone.
      *
-     * Example:
+     * Example (Sri Lanka):
      * 2026-10-03T04:30:00Z
      * becomes:
      * 03 Oct 2026
      *
-     * @param reservationTime API reservation date/time
-     * @return formatted reservation date
+     * @param reservationTime API reservation date/time in UTC
+     * @return formatted local reservation date
      */
     private String formatReservationDate(
             String reservationTime
     ) {
 
-        if (reservationTime == null
-                || reservationTime.trim().isEmpty()) {
-
-            return "";
-        }
-
-        String cleanDateTime =
-                extractDateTimePart(
-                        reservationTime
-                );
-
-        SimpleDateFormat inputFormat =
-                new SimpleDateFormat(
-                        "yyyy-MM-dd'T'HH:mm:ss",
-                        Locale.ENGLISH
-                );
-
-        SimpleDateFormat outputFormat =
-                new SimpleDateFormat(
-                        "dd MMM yyyy",
-                        Locale.ENGLISH
-                );
-
-        try {
-
-            Date date =
-                    inputFormat.parse(
-                            cleanDateTime
-                    );
-
-            if (date != null) {
-
-                return outputFormat.format(date);
-            }
-
-        } catch (ParseException ignored) {
-            // Fall back to the original value if parsing fails.
-        }
-
-        return cleanDateTime;
+        return DateUtils.formatLocalDate(reservationTime);
     }
 
     /**
-     * Formats the reservation time for display.
+     * Formats the reservation time for display, converting the API's
+     * UTC value to the phone's local time zone.
      *
-     * Example:
+     * Example (Sri Lanka):
      * 2026-10-03T04:30:00Z
      * becomes:
-     * 04:30 AM
+     * 10:00 AM
      *
-     * @param reservationTime API reservation date/time
-     * @return formatted reservation time
+     * @param reservationTime API reservation date/time in UTC
+     * @return formatted local reservation time
      */
     private String formatReservationTime(
             String reservationTime
     ) {
 
-        if (reservationTime == null
-                || reservationTime.trim().isEmpty()) {
-
-            return "";
-        }
-
-        String cleanDateTime =
-                extractDateTimePart(
-                        reservationTime
-                );
-
-        SimpleDateFormat inputFormat =
-                new SimpleDateFormat(
-                        "yyyy-MM-dd'T'HH:mm:ss",
-                        Locale.ENGLISH
-                );
-
-        SimpleDateFormat outputFormat =
-                new SimpleDateFormat(
-                        "hh:mm a",
-                        Locale.ENGLISH
-                );
-
-        try {
-
-            Date date =
-                    inputFormat.parse(
-                            cleanDateTime
-                    );
-
-            if (date != null) {
-
-                return outputFormat.format(date);
-            }
-
-        } catch (ParseException ignored) {
-            // Fall back to the original value if parsing fails.
-        }
-
-        return "";
-    }
-
-    /**
-     * Extracts the first 19 characters of an ISO date/time
-     * value so that timezone information such as Z or an offset
-     * does not interfere with display formatting.
-     *
-     * Example:
-     * 2026-10-03T04:30:00Z
-     * becomes:
-     * 2026-10-03T04:30:00
-     *
-     * @param reservationTime API reservation date/time
-     * @return clean date/time value
-     */
-    private String extractDateTimePart(
-            String reservationTime
-    ) {
-
-        String value =
-                reservationTime.trim();
-
-        /*
-         * Convert a space separator to the ISO T separator.
-         */
-        if (value.contains(" ")
-                && !value.contains("T")) {
-
-            value =
-                    value.replace(
-                            " ",
-                            "T"
-                    );
-        }
-
-        /*
-         * Keep only:
-         * yyyy-MM-ddTHH:mm:ss
-         *
-         * This removes milliseconds and timezone information.
-         */
-        if (value.length() >= 19
-                && value.contains("T")) {
-
-            return value.substring(
-                    0,
-                    19
-            );
-        }
-
-        return value;
+        return DateUtils.formatLocalTime(reservationTime);
     }
 
     /**

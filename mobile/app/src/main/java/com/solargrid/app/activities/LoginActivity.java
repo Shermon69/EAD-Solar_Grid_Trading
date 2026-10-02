@@ -50,18 +50,30 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Sets up the screen. If the user is already logged in, goes straight to their home screen.
+     * A saved token that has run out is cleared first, so the user logs in again.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         session = new SessionManager(this);
+
+        boolean tokenExpired = session.isSessionExpired();
+        if (tokenExpired) {
+            session.logout();
+        }
+
         if (session.isLoggedIn()) {
             openHomeForRole(session.getRole());
             return;
         }
 
         setContentView(R.layout.activity_login);
+
+        // Sent here by ApiClient (API answered 401) or the saved token had already run out
+        if (tokenExpired || getIntent().getBooleanExtra(Constants.EXTRA_SESSION_EXPIRED, false)) {
+            Toast.makeText(this, R.string.session_expired, Toast.LENGTH_LONG).show();
+        }
 
         layoutNic = findViewById(R.id.layoutNic);
         layoutPassword = findViewById(R.id.layoutPassword);
