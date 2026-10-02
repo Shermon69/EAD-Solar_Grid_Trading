@@ -18,11 +18,17 @@ namespace SolarGrid.Web.Controllers
     {
         private readonly ApiClient _api;
 
+        /// <summary>
+        /// Initializes a new instance of StationsController.
+        /// </summary>
         public StationsController(ApiClient api)
         {
             _api = api;
         }
 
+        /// <summary>
+        /// Executes the Index operation.
+        /// </summary>
         public async Task<IActionResult> Index()
         {
             try
@@ -38,6 +44,9 @@ namespace SolarGrid.Web.Controllers
         }
 
         [Authorize(Roles = "Backoffice")]
+        /// <summary>
+        /// Executes the Create operation.
+        /// </summary>
         public IActionResult Create()
         {
             return View(new CreateStationViewModel());
@@ -45,6 +54,9 @@ namespace SolarGrid.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Backoffice")]
+        /// <summary>
+        /// Executes the Create operation.
+        /// </summary>
         public async Task<IActionResult> Create(CreateStationViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -68,6 +80,9 @@ namespace SolarGrid.Web.Controllers
         /// </summary>
         [HttpGet]
         [Authorize(Roles = "Backoffice")]
+        /// <summary>
+        /// Executes the Edit operation.
+        /// </summary>
         public async Task<IActionResult> Edit(string id)
         {
             try
@@ -100,6 +115,9 @@ namespace SolarGrid.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Backoffice")]
+        /// <summary>
+        /// Executes the Edit operation.
+        /// </summary>
         public async Task<IActionResult> Edit(string id, EditStationViewModel model)
         {
             model.Id = id;
@@ -135,6 +153,9 @@ namespace SolarGrid.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Backoffice")]
+        /// <summary>
+        /// Executes the ToggleStatus operation.
+        /// </summary>
         public async Task<IActionResult> ToggleStatus(string id, bool currentStatus)
         {
             try

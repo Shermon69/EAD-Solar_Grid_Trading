@@ -18,10 +18,16 @@ import java.util.List;
 public class StationDao {
     private final SQLiteDatabase db;
 
+    /**
+     * Initializes a new instance of StationDao.
+     */
     public StationDao(DatabaseHelper dbHelper) {
         this.db = dbHelper.getWritableDatabase();
     }
 
+    /**
+     * Executes the cacheStations operation.
+     */
     public void cacheStations(List<Station> stations) {
         db.beginTransaction();
         try {
@@ -45,6 +51,9 @@ public class StationDao {
         }
     }
 
+    /**
+     * Executes the getCachedStations operation.
+     */
     public List<Station> getCachedStations() {
         List<Station> list = new ArrayList<>();
         Cursor cursor = db.query(DatabaseHelper.TABLE_STATIONS, null, null, null, null, null, null);

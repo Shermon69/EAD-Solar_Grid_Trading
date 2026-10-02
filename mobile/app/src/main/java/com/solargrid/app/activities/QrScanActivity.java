@@ -22,6 +22,8 @@ import com.solargrid.app.R;
 import com.solargrid.app.api.ApiClient;
 import com.solargrid.app.models.QrVerifyRequest;
 
+import com.solargrid.app.models.Reservation;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,6 +56,9 @@ public class QrScanActivity extends AppCompatActivity {
         btnComplete.setOnClickListener(v -> completeReservation());
     }
 
+    /**
+     * Executes the scanCode operation.
+     */
     private void scanCode() {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Volume up to flash on");
@@ -63,6 +68,9 @@ public class QrScanActivity extends AppCompatActivity {
         barcodeLauncher.launch(options);
     }
 
+    /**
+     * Executes the verifyQrOnServer operation.
+     */
     private void verifyQrOnServer(String qrText) {
         String[] parts = qrText.split("\\|");
         if (parts.length != 2) {
@@ -77,11 +85,14 @@ public class QrScanActivity extends AppCompatActivity {
         tvScanResult.setText("Verifying...");
 
         QrVerifyRequest request = new QrVerifyRequest(scannedReservationId, qrToken);
-        ApiClient.getService(this).verifyQr(request).enqueue(new Callback<Object>() {
+        ApiClient.getService(this).verifyQr(request).enqueue(new Callback<Reservation>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                if (response.isSuccessful()) {
-                    tvScanResult.setText("Verification Successful!\nReservation is valid.");
+            public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Reservation r = response.body();
+                    String details = String.format("Verification Successful!\nStation: %s\nTime: %s\nAmount: %.2f kWh\nProsumer NIC: %s", 
+                        r.stationName != null ? r.stationName : r.stationId, r.scheduledDate, r.energyKwh, r.prosumerNic);
+                    tvScanResult.setText(details);
                     btnComplete.setVisibility(View.VISIBLE);
                 } else {
                     tvScanResult.setText("Verification Failed. Invalid or expired QR.");
@@ -90,13 +101,16 @@ public class QrScanActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<Reservation> call, Throwable t) {
                 tvScanResult.setText("Network error: " + t.getMessage());
                 btnComplete.setVisibility(View.GONE);
             }
         });
     }
 
+    /**
+     * Executes the completeReservation operation.
+     */
     private void completeReservation() {
         if (scannedReservationId == null) return;
         

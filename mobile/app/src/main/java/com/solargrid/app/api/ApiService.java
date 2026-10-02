@@ -150,7 +150,7 @@ public interface ApiService {
      * @return verification response
      */
     @POST("reservations/verify-qr")
-    Call<Object> verifyQr(
+    Call<Reservation> verifyQr(
             @Body QrVerifyRequest request
     );
 

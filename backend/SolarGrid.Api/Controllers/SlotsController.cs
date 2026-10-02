@@ -19,6 +19,9 @@ namespace SolarGrid.Api.Controllers
     {
         private readonly SlotService _slotService;
 
+        /// <summary>
+        /// Initializes a new instance of SlotsController.
+        /// </summary>
         public SlotsController(SlotService slotService)
         {
             _slotService = slotService;
@@ -26,6 +29,9 @@ namespace SolarGrid.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Staff)]
+        /// <summary>
+        /// Executes the Create operation.
+        /// </summary>
         public async Task<IActionResult> Create([FromBody] CreateSlotRequest dto)
         {
             var slot = await _slotService.CreateAsync(dto);
@@ -34,6 +40,9 @@ namespace SolarGrid.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Staff)]
+        /// <summary>
+        /// Executes the Update operation.
+        /// </summary>
         public async Task<IActionResult> Update(string id, [FromBody] UpdateSlotRequest dto)
         {
             var slot = await _slotService.UpdateAsync(id, dto);
@@ -42,6 +51,9 @@ namespace SolarGrid.Api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = Roles.Staff)]
+        /// <summary>
+        /// Executes the Delete operation.
+        /// </summary>
         public async Task<IActionResult> Delete(string id)
         {
             await _slotService.DeleteAsync(id);

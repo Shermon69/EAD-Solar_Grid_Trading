@@ -33,6 +33,3 @@ captures/
 .DS_Store
 Thumbs.db
 desktop.ini
-EAD_SE4040_Assignment_2026.md
-web/SolarGrid.Web/Views/Stations/Index.cshtml
-web/SolarGrid.Web/Views/Stations/Create.cshtml
