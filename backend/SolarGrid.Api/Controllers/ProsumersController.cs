@@ -36,6 +36,18 @@ public class ProsumersController : ControllerBase
         return Ok(new { message = "Registered. Your account is pending activation by Backoffice." });
     }
 
+    /// <summary>Backoffice: create a new prosumer from the web. Account starts as Pending.</summary>
+    [HttpPost("prosumers")]
+    [Authorize(Roles = "Backoffice")]
+    public async Task<IActionResult> Create([FromBody] RegisterRequest request)
+    {
+        var created = await _service.RegisterAsync(request);
+        if (!created) return Conflict(new { message = "This NIC is already registered." });
+
+        var prosumer = await _service.GetByNicAsync(request.Nic);
+        return CreatedAtAction(nameof(GetOne), new { nic = request.Nic }, prosumer);
+    }
+
     /// <summary>Backoffice and Grid Operator: list/search prosumers by search text and status.
     /// Grid Operators need this to pick a prosumer when creating a reservation.</summary>
     [HttpGet("prosumers")]

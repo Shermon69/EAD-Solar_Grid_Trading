@@ -37,6 +37,29 @@ public class ProsumersController : Controller
     public async Task<IActionResult> Pending()
         => View(await _api.GetPendingAsync());
 
+    /// <summary>Shows the form to create a new prosumer (GET).</summary>
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View(new ProsumerCreateVm());
+    }
+
+    /// <summary>Saves the new prosumer through the API (POST).</summary>
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(ProsumerCreateVm vm)
+    {
+        if (!ModelState.IsValid) return View(vm);
+
+        if (await _api.CreateAsync(vm))
+        {
+            TempData["Success"] = "Prosumer created. The account is Pending until activated.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        TempData["Error"] = "Could not create this prosumer. The NIC may already exist.";
+        return View(vm);
+    }
+
     /// <summary>Shows the edit form for one prosumer (GET).</summary>
     [HttpGet]
     public async Task<IActionResult> Edit(string id)

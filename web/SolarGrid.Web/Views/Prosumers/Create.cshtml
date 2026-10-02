@@ -1,0 +1,71 @@
+@*
+    File:        Create.cshtml
+    Author:      Premaratne R.A.N.C (IT22050908)
+    Description: Create new prosumer form (Backoffice). Validates the fields
+                 required to register a new prosumer account.
+*@
+@model SolarGrid.Web.Models.ProsumerCreateVm
+
+@{
+    ViewData["Title"] = "New Prosumer";
+}
+
+<h2 class="mb-3">New Prosumer</h2>
+
+@* Server-side validation summary. *@
+<div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+<form asp-action="Create" method="post" class="row g-3">
+
+    @* NIC is the primary key and must be unique. *@
+    <div class="col-md-6">
+        <label asp-for="Nic" class="form-label"></label>
+        <input asp-for="Nic" class="form-control" placeholder="200012345678 or 991234567V" />
+        <span asp-validation-for="Nic" class="text-danger"></span>
+    </div>
+
+    @* Full name. *@
+    <div class="col-md-6">
+        <label asp-for="FullName" class="form-label"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    @* Email address. *@
+    <div class="col-md-6">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    @* Sri Lankan mobile number. *@
+    <div class="col-md-6">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" placeholder="07XXXXXXXX" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    @* Postal address. *@
+    <div class="col-12">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    @* Temporary password. The prosumer can change it later in the app. *@
+    <div class="col-md-6">
+        <label asp-for="Password" class="form-label">Temporary password</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    @* Actions. *@
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

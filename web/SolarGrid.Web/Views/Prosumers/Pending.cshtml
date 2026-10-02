@@ -9,16 +9,6 @@
 
     <h2 class="mb-3">Pending Activations</h2>
 
-    @* Flash messages set by the controller after an action. *@
-    @if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
-    @if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
-
     @* Table of prosumers waiting for activation. *@
     <table class="table table-striped align-middle">
 
