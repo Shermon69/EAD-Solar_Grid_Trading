@@ -15,7 +15,7 @@ using SolarGrid.Api.Services;
 namespace SolarGrid.Api.Controllers;
 
 /// <summary>
-/// REST controller for all prosumer operations. Acts as a thin UI layer —
+/// REST controller for all prosumer operations. Acts as a thin UI layer â€”
 /// validates HTTP input and delegates all business logic to ProsumerService.
 /// </summary>
 [ApiController]
@@ -23,6 +23,8 @@ namespace SolarGrid.Api.Controllers;
 public class ProsumersController : ControllerBase
 {
     private readonly ProsumerService _service;
+
+    /// <summary>Creates the controller with the prosumer service.</summary>
     public ProsumersController(ProsumerService service) => _service = service;
     private string CurrentNic => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
@@ -48,9 +50,10 @@ public class ProsumersController : ControllerBase
         return CreatedAtAction(nameof(GetOne), new { nic = request.Nic }, prosumer);
     }
 
-    /// <summary>Backoffice: list/search prosumers by search text and status.</summary>
+    /// <summary>Backoffice and Grid Operator: list/search prosumers by search text and status.
+    /// Grid Operators need this to pick a prosumer when creating a reservation.</summary>
     [HttpGet("prosumers")]
-    [Authorize(Roles = "Backoffice")]
+    [Authorize(Roles = "Backoffice,GridOperator")]
     public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? status)
         => Ok(await _service.GetProsumersAsync(search, status));
 
@@ -136,7 +139,7 @@ public class ProsumersController : ControllerBase
     public async Task<IActionResult> MyBookings([FromQuery] string type = "current", [FromQuery] string? search = null)
         => Ok(await _service.GetMyBookingsAsync(CurrentNic, type, search));
 
-    /// <summary>Prosumer: own dashboard — pending + approved future counts.</summary>
+    /// <summary>Prosumer: own dashboard â€” pending + approved future counts.</summary>
     [HttpGet("dashboard/prosumer")]
     [Authorize(Roles = "Prosumer")]
     public async Task<IActionResult> MyDashboard()
