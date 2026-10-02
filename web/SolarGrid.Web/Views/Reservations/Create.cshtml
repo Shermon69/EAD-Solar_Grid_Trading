@@ -1,0 +1,373 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model SolarGrid.Web.Models.CreateReservationViewModel
+
+@{
+    ViewData["Title"] = "Create Reservation";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Create Reservation</h2>
+            <p class="text-muted mb-0">
+                Create an energy reservation for a prosumer.
+            </p>
+        </div>
+
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Reservations
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form asp-action="Create" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger"
+                     role="alert"></div>
+
+                <div class="row g-4">
+
+                    <!-- Prosumer -->
+                    <div class="col-md-6">
+                        <label asp-for="ProsumerNic"
+                               class="form-label fw-semibold">
+                            Prosumer <span class="text-danger">*</span>
+                        </label>
+
+                        <select asp-for="ProsumerNic"
+                                class="form-select"
+                                asp-items="@(new SelectList(
+                                    Model.Prosumers,
+                                    "Nic",
+                                    "FullName"))">
+
+                            <option value="">
+                                -- Select Prosumer --
+                            </option>
+
+                        </select>
+
+                        <div class="form-text">
+                            Select an active prosumer.
+                        </div>
+
+                        <span asp-validation-for="ProsumerNic"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- Station -->
+                    <div class="col-md-6">
+                        <label asp-for="StationId"
+                               class="form-label fw-semibold">
+                            Solar Station <span class="text-danger">*</span>
+                        </label>
+
+                        <select asp-for="StationId"
+                                class="form-select"
+                                id="stationSelect">
+
+                            <option value="">
+                                -- Select Station --
+                            </option>
+
+                            @foreach (var station in Model.Stations)
+                            {
+                                <option value="@station.Id">
+                                    @station.Name
+                                    @if (!string.IsNullOrWhiteSpace(station.Address))
+                                    {
+                                        @: - @station.Address
+                                    }
+                                </option>
+                            }
+
+                        </select>
+
+                        <div class="form-text">
+                            Only active stations are shown.
+                        </div>
+
+                        <span asp-validation-for="StationId"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="col-md-6">
+                        <label asp-for="ReservationDate"
+                               class="form-label fw-semibold">
+                            Reservation Date <span class="text-danger">*</span>
+                        </label>
+
+                        <input asp-for="ReservationDate"
+                               type="date"
+                               class="form-control"
+                               id="reservationDate" />
+
+                        <div class="form-text">
+                            Select a date within the allowed reservation period.
+                        </div>
+
+                        <span asp-validation-for="ReservationDate"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- Slot -->
+                    <div class="col-md-6">
+                        <label asp-for="SlotId"
+                               class="form-label fw-semibold">
+                            Available Time Slot <span class="text-danger">*</span>
+                        </label>
+
+                        <select asp-for="SlotId"
+                                class="form-select"
+                                id="slotSelect"
+                                disabled>
+
+                            <option value="">
+                                -- Select station and date first --
+                            </option>
+
+                        </select>
+
+                        <div id="slotLoading"
+                             class="form-text d-none">
+                            Loading available slots...
+                        </div>
+
+                        <div id="slotMessage"
+                             class="form-text text-muted">
+                        </div>
+
+                        <span asp-validation-for="SlotId"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- Reservation Type -->
+                    <div class="col-md-6">
+                        <label asp-for="Type"
+                               class="form-label fw-semibold">
+                            Reservation Type
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <select asp-for="Type"
+                                class="form-select">
+
+                            <option value="Charging">
+                                Charging
+                            </option>
+
+                            <option value="Dropoff">
+                                Dropoff
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Type"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- Energy -->
+                    <div class="col-md-6">
+                        <label asp-for="EnergyKwh"
+                               class="form-label fw-semibold">
+                            Energy (kWh)
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input asp-for="EnergyKwh"
+                               type="number"
+                               class="form-control"
+                               min="0.1"
+                               step="0.1"
+                               placeholder="e.g. 2.5" />
+
+                        <div class="form-text">
+                            Enter the required energy amount in kWh.
+                        </div>
+
+                        <span asp-validation-for="EnergyKwh"
+                              class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary"
+                            id="createButton">
+                        <i class="bi bi-calendar-plus me-1"></i>
+                        Create Reservation
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const stationSelect =
+                document.getElementById("stationSelect");
+
+            const dateInput =
+                document.getElementById("reservationDate");
+
+            const slotSelect =
+                document.getElementById("slotSelect");
+
+            const slotLoading =
+                document.getElementById("slotLoading");
+
+            const slotMessage =
+                document.getElementById("slotMessage");
+
+            async function loadSlots() {
+
+                const stationId = stationSelect.value;
+                const date = dateInput.value;
+
+                slotSelect.innerHTML =
+                    '<option value="">-- Select Time Slot --</option>';
+
+                slotSelect.disabled = true;
+                slotMessage.textContent = "";
+
+                if (!stationId || !date) {
+
+                    slotSelect.innerHTML =
+                        '<option value="">-- Select station and date first --</option>';
+
+                    return;
+                }
+
+                slotLoading.classList.remove("d-none");
+
+                try {
+
+                    const url =
+                        '@Url.Action("Slots", "Reservations")' +
+                        '?stationId=' +
+                        encodeURIComponent(stationId) +
+                        '&date=' +
+                        encodeURIComponent(date);
+
+                    const response =
+                        await fetch(url, {
+                            method: "GET",
+                            headers: {
+                                "Accept": "application/json"
+                            }
+                        });
+
+                    if (!response.ok) {
+                        throw new Error(
+                            "Unable to load available slots."
+                        );
+                    }
+
+                    const slots =
+                        await response.json();
+
+                    if (!slots || slots.length === 0) {
+
+                        slotSelect.innerHTML =
+                            '<option value="">No available slots for this date</option>';
+
+                        slotMessage.textContent =
+                            "Please choose another date or station.";
+
+                        return;
+                    }
+
+                    slots.forEach(function (slot) {
+
+                        const option =
+                            document.createElement("option");
+
+                        const start =
+                            new Date(slot.startTime);
+
+                        const end =
+                            new Date(slot.endTime);
+
+                        const startText =
+                            start.toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            });
+
+                        const endText =
+                            end.toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            });
+
+                        option.value = slot.id;
+
+                        option.textContent =
+                            `${startText} - ${endText} (${slot.availableSlots} available)`;
+
+                        slotSelect.appendChild(option);
+                    });
+
+                    slotSelect.disabled = false;
+
+                    slotMessage.textContent =
+                        `${slots.length} available slot(s) found.`;
+
+                }
+                catch (error) {
+
+                    console.error(error);
+
+                    slotSelect.innerHTML =
+                        '<option value="">Unable to load slots</option>';
+
+                    slotMessage.textContent =
+                        "Please try again or select another station/date.";
+
+                }
+                finally {
+
+                    slotLoading.classList.add("d-none");
+                }
+            }
+
+            stationSelect.addEventListener(
+                "change",
+                loadSlots
+            );
+
+            dateInput.addEventListener(
+                "change",
+                loadSlots
+            );
+
+        });
+    </script>
+}

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    File:        activity_reservation_details.xml
+    Author:      Dissanayake D.M.S.N (IT22210692)
+    Description: UI layout for displaying details of an energy reservation.
+    Created:     30/09/2026
+-->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F5F7FA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tvDetailsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservation Details"
+            android:textColor="#123B6D"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <TextView
+            android:id="@+id/tvDetailsSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View your energy reservation information"
+            android:textColor="#667085"
+            android:textSize="15sp"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/tvDetailStationLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Station"
+            android:textColor="#667085"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDetailStation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Station"
+            android:textColor="#123B6D"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/tvDetailDateLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservation Date"
+            android:textColor="#667085"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDetailDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textColor="#123B6D"
+            android:textSize="18sp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/tvDetailEnergyLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Energy"
+            android:textColor="#667085"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDetailEnergy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0 kWh"
+            android:textColor="#123B6D"
+            android:textSize="18sp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/tvDetailTypeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservation Type"
+            android:textColor="#667085"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDetailType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Energy Drop-off"
+            android:textColor="#123B6D"
+            android:textSize="18sp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/tvDetailStatusLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:textColor="#667085"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDetailStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pending"
+            android:textColor="#123B6D"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="28dp" />
+
+        <Button
+            android:id="@+id/btnEditReservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Reservation"
+            android:textAllCaps="false"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnCancelReservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel Reservation"
+            android:textAllCaps="false"
+            android:layout_marginBottom="28dp" />
+
+        <!-- QR Code Section -->
+
+        <TextView
+            android:id="@+id/tvQrTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservation QR"
+            android:textColor="#123B6D"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/ivReservationQr"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Reservation QR Code"
+            android:scaleType="fitCenter"
+            android:background="#FFFFFF"
+            android:padding="12dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvQrInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your QR code will appear after the reservation is approved."
+            android:textColor="#667085"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:padding="16dp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progressReservationDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+
+</ScrollView>
