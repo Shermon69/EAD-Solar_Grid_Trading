@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.solargrid.app.R;
 import com.solargrid.app.api.ApiClient;
 import com.solargrid.app.models.Booking;
+import com.solargrid.app.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,10 +142,8 @@ public class BookingsActivity extends AppCompatActivity {
 
             h.station.setText(b.stationName);
 
-            // Show only the first 10 characters of the ISO date (yyyy-MM-dd).
-            String date = (b.reservationDate == null)
-                    ? ""
-                    : b.reservationDate.substring(0, Math.min(10, b.reservationDate.length()));
+            // The API sends UTC; show the date and time in the phone's local time zone.
+            String date = DateUtils.formatLocal(b.reservationDate);
 
             h.details.setText(date + "  |  " + b.status);
         }

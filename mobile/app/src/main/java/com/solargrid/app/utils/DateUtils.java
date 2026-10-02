@@ -27,10 +27,32 @@ public final class DateUtils {
 
     /**
      * Converts an API timestamp such as 2026-10-03T04:30:00Z (UTC) to the phone's
-     * local time, e.g. "03 Oct 2026, 10:00 AM". If the text cannot be read, it is
-     * returned unchanged so the screen still shows something.
+     * local date and time, e.g. "03 Oct 2026, 10:00 AM". If the text cannot be read,
+     * it is returned unchanged so the screen still shows something.
      */
     public static String formatLocal(String utcText) {
+        return convert(utcText, "dd MMM yyyy, hh:mm a");
+    }
+
+    /**
+     * Same conversion, but only the local date, e.g. "03 Oct 2026".
+     */
+    public static String formatLocalDate(String utcText) {
+        return convert(utcText, "dd MMM yyyy");
+    }
+
+    /**
+     * Same conversion, but only the local time, e.g. "10:00 AM".
+     */
+    public static String formatLocalTime(String utcText) {
+        return convert(utcText, "hh:mm a");
+    }
+
+    /**
+     * Reads an API UTC timestamp and writes it in the phone's time zone using the
+     * given pattern. Returns the original text if it cannot be read.
+     */
+    private static String convert(String utcText, String outputPattern) {
         if (utcText == null) {
             return "";
         }
@@ -44,7 +66,7 @@ public final class DateUtils {
             input.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date date = input.parse(utcText.substring(0, 19));
 
-            SimpleDateFormat output = new SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.ENGLISH);
+            SimpleDateFormat output = new SimpleDateFormat(outputPattern, Locale.ENGLISH);
             output.setTimeZone(TimeZone.getDefault());
 
             return date == null ? utcText : output.format(date);

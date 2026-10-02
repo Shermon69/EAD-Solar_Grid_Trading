@@ -28,6 +28,7 @@ import com.solargrid.app.models.CreateReservationRequest;
 import com.solargrid.app.models.Reservation;
 import com.solargrid.app.models.Slot;
 import com.solargrid.app.models.Station;
+import com.solargrid.app.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -1062,46 +1063,18 @@ public class EditReservationActivity extends AppCompatActivity {
     }
 
     /**
-     * Formats an API date-time value into a readable time.
+     * Formats an API date-time value (UTC) into a readable time
+     * in the phone's local time zone.
      *
-     * Example:
-     * 2026-10-03T09:00:00 -> 09:00
+     * Example (Sri Lanka):
+     * 2026-10-03T02:30:00Z -> 08:00 AM
      *
-     * @param time API date-time value
-     * @return readable time
+     * @param time API date-time value in UTC
+     * @return readable local time
      */
     private String formatTime(String time) {
 
-        if (time == null || time.isEmpty()) {
-
-            return "";
-        }
-
-        int separatorIndex =
-                time.indexOf('T');
-
-        if (separatorIndex >= 0
-                && time.length() >= separatorIndex + 6) {
-
-            return time.substring(
-                    separatorIndex + 1,
-                    separatorIndex + 6
-            );
-        }
-
-        separatorIndex =
-                time.indexOf(' ');
-
-        if (separatorIndex >= 0
-                && time.length() >= separatorIndex + 6) {
-
-            return time.substring(
-                    separatorIndex + 1,
-                    separatorIndex + 6
-            );
-        }
-
-        return time;
+        return DateUtils.formatLocalTime(time);
     }
 
     /**

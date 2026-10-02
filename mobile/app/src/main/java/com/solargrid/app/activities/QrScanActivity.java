@@ -21,6 +21,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import com.solargrid.app.R;
 import com.solargrid.app.api.ApiClient;
 import com.solargrid.app.models.QrVerifyRequest;
+import com.solargrid.app.utils.DateUtils;
 
 import com.solargrid.app.models.Reservation;
 
@@ -91,7 +92,7 @@ public class QrScanActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Reservation r = response.body();
                     String details = String.format("Verification Successful!\nStation: %s\nTime: %s\nAmount: %.2f kWh\nProsumer NIC: %s",
-                        r.getStationName() != null ? r.getStationName() : r.getStationId(), r.getReservationTime(), r.getEnergyKwh(), r.getProsumerNic());
+                        r.getStationName() != null ? r.getStationName() : r.getStationId(), DateUtils.formatLocal(r.getReservationTime()), r.getEnergyKwh(), r.getProsumerNic());
                     tvScanResult.setText(details);
                     btnComplete.setVisibility(View.VISIBLE);
                 } else {
