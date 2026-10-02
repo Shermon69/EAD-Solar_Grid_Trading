@@ -15,16 +15,6 @@
     <a asp-action="Create" class="btn btn-success">+ New Prosumer</a>
 </div>
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
-
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
-
 <form method="get" class="row g-2 mb-3 align-items-end">
     <div class="col-md-5">
         <input name="search" value="@ViewBag.Search" class="form-control"
