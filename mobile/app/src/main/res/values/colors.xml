@@ -7,6 +7,7 @@
     <color name="navy_dark">#0D1628</color>
     <color name="background">#F6F7FB</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="text_primary">#1B1B1B</color>
     <color name="text_secondary">#6C757D</color>
     <color name="success">#198754</color>
