@@ -19,6 +19,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
+        <!-- Page title -->
         <TextView
             android:id="@+id/tvEditReservationTitle"
             android:layout_width="match_parent"
@@ -29,6 +30,7 @@
             android:textStyle="bold"
             android:layout_marginBottom="6dp" />
 
+        <!-- Page description -->
         <TextView
             android:id="@+id/tvEditReservationSubtitle"
             android:layout_width="match_parent"
@@ -38,6 +40,7 @@
             android:textSize="15sp"
             android:layout_marginBottom="24dp" />
 
+        <!-- Station selection -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp" />
 
+        <!-- Reservation date -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,6 +72,7 @@
             android:textAllCaps="false"
             android:layout_marginBottom="20dp" />
 
+        <!-- Time slot selection -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,6 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp" />
 
+        <!-- Energy amount -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,6 +104,7 @@
             android:inputType="numberDecimal"
             android:layout_marginBottom="20dp" />
 
+        <!-- Reservation type -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -112,6 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="28dp" />
 
+        <!-- Save changes -->
         <Button
             android:id="@+id/btnSaveReservation"
             android:layout_width="match_parent"
@@ -120,6 +128,7 @@
             android:textAllCaps="false"
             android:layout_marginBottom="12dp" />
 
+        <!-- Loading indicator shown while the reservation is being processed -->
         <ProgressBar
             android:id="@+id/progressEditReservation"
             android:layout_width="wrap_content"

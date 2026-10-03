@@ -169,10 +169,16 @@ public interface ApiService {
     // ---------- Member 4: Reservations ----------
 
     /**
-     * GET /api/reservations/{id} - gets one reservation by ID.
+     * Retrieves a single reservation using its unique reservation ID.
      *
-     * @param id reservation ID
-     * @return reservation details
+     * This endpoint is used by the mobile reservation details and
+     * edit screens to load the latest reservation information
+     * from the central Web API.
+     *
+     * GET /api/reservations/{id}
+     *
+     * @param id unique reservation ID
+     * @return API response containing the requested reservation
      */
     @GET("reservations/{id}")
     Call<Reservation> getReservation(
@@ -180,10 +186,16 @@ public interface ApiService {
     );
 
     /**
-     * POST /api/reservations - creates a new energy reservation.
+     * Creates a new energy reservation through the central Web API.
      *
-     * @param request reservation creation request
-     * @return created reservation
+     * The reservation request contains the prosumer NIC, selected
+     * station, selected booking slot, reservation time, reservation
+     * type and requested energy amount.
+     *
+     * POST /api/reservations
+     *
+     * @param request reservation creation data
+     * @return API response containing the newly created reservation
      */
     @POST("reservations")
     Call<Reservation> createReservation(
@@ -191,11 +203,18 @@ public interface ApiService {
     );
 
     /**
-     * PUT /api/reservations/{id} - updates an existing reservation.
+     * Updates an existing energy reservation through the central
+     * Web API.
      *
-     * @param id reservation ID
-     * @param request updated reservation details
-     * @return updated reservation
+     * The reservation ID identifies the booking to update, while
+     * the request contains the new station, slot, reservation time,
+     * reservation type and energy amount.
+     *
+     * PUT /api/reservations/{id}
+     *
+     * @param id unique reservation ID
+     * @param request updated reservation data
+     * @return API response containing the updated reservation
      */
     @PUT("reservations/{id}")
     Call<Reservation> updateReservation(
@@ -204,10 +223,17 @@ public interface ApiService {
     );
 
     /**
-     * PATCH /api/reservations/{id}/cancel - cancels a reservation.
+     * Cancels an existing energy reservation through the central
+     * Web API.
      *
-     * @param id reservation ID
-     * @return cancelled reservation
+     * The reservation ID identifies the booking that should be
+     * cancelled. The API applies the reservation cancellation
+     * business rules before returning the updated reservation.
+     *
+     * PATCH /api/reservations/{id}/cancel
+     *
+     * @param id unique reservation ID
+     * @return API response containing the cancelled reservation
      */
     @PATCH("reservations/{id}/cancel")
     Call<Reservation> cancelReservation(

@@ -227,6 +227,7 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
+        // Gets the form controls used for dynamically loading reservation slots.
         const stationSelect =
             document.getElementById("stationSelect");
 
@@ -242,17 +243,21 @@
         const slotError =
             document.getElementById("slotError");
 
+        // Stores the currently selected slot so it can remain selected after slots are reloaded.
         const currentSlotId =
             "@Model.SlotId";
 
+        // Loads the available time slots for the selected station and reservation date.
         async function loadSlots() {
 
             const stationId = stationSelect.value;
             const date = dateInput.value;
 
+            // Clears any previous slot loading error.
             slotError.style.display = "none";
             slotError.textContent = "";
 
+            // Requires both a station and date before requesting available slots.
             if (!stationId || !date) {
                 slotSelect.innerHTML =
                     '<option value="">-- Select Time Slot --</option>';
@@ -267,6 +272,7 @@
 
             try {
 
+                // Requests the available slots from the Reservations controller.
                 const response =
                     await fetch(
                         '@Url.Action("Slots", "Reservations")'
@@ -285,9 +291,11 @@
                 const slots =
                     await response.json();
 
+                // Resets the slot dropdown before adding the newly loaded slots.
                 slotSelect.innerHTML =
                     '<option value="">-- Select Time Slot --</option>';
 
+                // Displays a message when there are no available slots.
                 if (!slots || slots.length === 0) {
 
                     slotSelect.innerHTML =
@@ -296,6 +304,7 @@
                     return;
                 }
 
+                // Creates a dropdown option for each available reservation slot.
                 slots.forEach(function (slot) {
 
                     const option =
@@ -317,6 +326,7 @@
                         + slot.availableSlots
                         + " available)";
 
+                    // Keeps the previously selected slot selected after reloading.
                     if (slot.id === currentSlotId) {
                         option.selected = true;
                     }
@@ -327,6 +337,7 @@
             }
             catch (error) {
 
+                // Displays an error when the available slots cannot be retrieved.
                 slotSelect.innerHTML =
                     '<option value="">Unable to load slots</option>';
 
@@ -337,10 +348,12 @@
             }
             finally {
 
+                // Hides the loading indicator after the request is completed.
                 slotLoading.style.display = "none";
             }
         }
 
+        // Formats a Date object into a readable time for the slot dropdown.
         function formatTime(date) {
 
             return date.toLocaleTimeString(
@@ -352,6 +365,7 @@
             );
         }
 
+        // Reloads available slots whenever the selected station changes.
         stationSelect.addEventListener(
             "change",
             function () {
@@ -359,6 +373,7 @@
             }
         );
 
+        // Reloads available slots whenever the reservation date changes.
         dateInput.addEventListener(
             "change",
             function () {

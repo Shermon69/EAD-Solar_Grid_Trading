@@ -22,6 +22,7 @@ namespace SolarGrid.Web.Controllers
 
         public ReservationsController(ApiClient apiClient)
         {
+            // Stores the injected API client for communicating with the central Web API.
             _apiClient = apiClient;
         }
 
@@ -33,6 +34,7 @@ namespace SolarGrid.Web.Controllers
             string? stationId,
             string? nic)
         {
+            // Builds the query parameters based on the filters selected by the staff user.
             var queryParts = new List<string>();
 
             if (!string.IsNullOrWhiteSpace(status))
@@ -57,6 +59,7 @@ namespace SolarGrid.Web.Controllers
                 ? "?" + string.Join("&", queryParts)
                 : string.Empty;
 
+            // Retrieves the filtered reservation records through the central API.
             var bookings =
                 await _apiClient.GetAsync<List<BookingRecord>>(
                     $"reservations{query}");
@@ -73,11 +76,13 @@ namespace SolarGrid.Web.Controllers
         /// </summary>
         public async Task<IActionResult> Details(string id)
         {
+            // Validates that a reservation ID was supplied before requesting the details.
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest();
             }
 
+            // Retrieves the selected reservation details from the central API.
             var booking =
                 await _apiClient.GetAsync<BookingRecord>(
                     $"reservations/{Uri.EscapeDataString(id)}");
@@ -97,6 +102,7 @@ namespace SolarGrid.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            // Initializes the create reservation form with today's date as the default reservation date.
             var model = new CreateReservationViewModel
             {
                 ReservationDate = DateTime.Today
@@ -146,6 +152,7 @@ namespace SolarGrid.Web.Controllers
             string stationId,
             string date)
         {
+            // Validates that both the station ID and reservation date are provided.
             if (string.IsNullOrWhiteSpace(stationId) ||
                 string.IsNullOrWhiteSpace(date))
             {
@@ -155,6 +162,7 @@ namespace SolarGrid.Web.Controllers
                 });
             }
 
+            // Converts the supplied date string into a DateTime value for slot retrieval.
             if (!DateTime.TryParse(
                     date,
                     CultureInfo.InvariantCulture,
@@ -169,6 +177,7 @@ namespace SolarGrid.Web.Controllers
 
             try
             {
+                // Formats the selected date for the station slot API request.
                 var formattedDate =
                     selectedDate.ToString(
                         "yyyy-MM-dd",
@@ -180,6 +189,7 @@ namespace SolarGrid.Web.Controllers
                     await _apiClient.GetAsync<List<SlotOption>>(
                         $"stations/{Uri.EscapeDataString(stationId)}/slots?date={formattedDate}");
 
+                // Filters the returned slots to include only those that still have available capacity.
                 var availableSlots =
                     (slots ?? new List<SlotOption>())
                     .Where(s =>
@@ -198,6 +208,7 @@ namespace SolarGrid.Web.Controllers
             }
             catch (Exception ex)
             {
+                // Returns an error response when the slot information cannot be retrieved.
                 return StatusCode(500, new
                 {
                     message =
@@ -214,6 +225,7 @@ namespace SolarGrid.Web.Controllers
         public async Task<IActionResult> Create(
             CreateReservationViewModel model)
         {
+            // Validates the submitted reservation form before communicating with the API.
             if (!ModelState.IsValid)
             {
                 await LoadCreateFormData(model);
@@ -228,6 +240,7 @@ namespace SolarGrid.Web.Controllers
                     await _apiClient.GetAsync<List<SlotOption>>(
                         $"stations/{Uri.EscapeDataString(model.StationId)}/slots?date={model.ReservationDate:yyyy-MM-dd}");
 
+                // Finds the slot selected by the staff user.
                 var selectedSlot =
                     slots?.FirstOrDefault(
                         s => s.Id == model.SlotId);
@@ -242,6 +255,7 @@ namespace SolarGrid.Web.Controllers
                     return View(model);
                 }
 
+                // Verifies that the selected slot still has available capacity before creating the reservation.
                 if (!selectedSlot.IsAvailable ||
                     selectedSlot.AvailableSlots <= 0)
                 {
@@ -253,6 +267,7 @@ namespace SolarGrid.Web.Controllers
                     return View(model);
                 }
 
+                // Creates the reservation request using the selected prosumer, station, slot and booking details.
                 var request = new
                 {
                     prosumerNic = model.ProsumerNic,
@@ -263,6 +278,7 @@ namespace SolarGrid.Web.Controllers
                     energyKwh = model.EnergyKwh
                 };
 
+                // Sends the new reservation request to the central Web API.
                 await _apiClient.PostAsync<object>(
                     "reservations",
                     request);
@@ -274,6 +290,7 @@ namespace SolarGrid.Web.Controllers
             }
             catch (Exception ex)
             {
+                // Displays the API error and reloads the form data when reservation creation fails.
                 ModelState.AddModelError(
                     string.Empty,
                     $"Unable to create reservation: {ex.Message}");
@@ -289,6 +306,7 @@ namespace SolarGrid.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
+            // Validates that a reservation ID was supplied before loading the edit form.
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest();
@@ -296,6 +314,7 @@ namespace SolarGrid.Web.Controllers
 
             try
             {
+                // Retrieves the selected reservation from the central API.
                 var booking =
                     await _apiClient.GetAsync<BookingRecord>(
                         $"reservations/{Uri.EscapeDataString(id)}");
@@ -305,6 +324,7 @@ namespace SolarGrid.Web.Controllers
                     return NotFound();
                 }
 
+                // Prevents cancelled or completed reservations from being edited.
                 if (booking.Status == "Cancelled" ||
                     booking.Status == "Completed")
                 {
@@ -314,6 +334,7 @@ namespace SolarGrid.Web.Controllers
                     return RedirectToAction(nameof(Details), new { id });
                 }
 
+                // Populates the edit model using the existing reservation details.
                 var model = new UpdateReservationViewModel
                 {
                     Id = booking.Id,
@@ -325,12 +346,14 @@ namespace SolarGrid.Web.Controllers
                     EnergyKwh = booking.EnergyKwh
                 };
 
+                // Loads the active prosumers, stations and available slots required by the edit form.
                 await LoadEditFormData(model);
 
                 return View(model);
             }
             catch (Exception ex)
             {
+                // Displays the error and returns the user to the reservation list if loading fails.
                 TempData["Error"] =
                     $"Unable to load reservation: {ex.Message}";
 
@@ -346,6 +369,7 @@ namespace SolarGrid.Web.Controllers
         public async Task<IActionResult> Edit(
             UpdateReservationViewModel model)
         {
+            // Validates the submitted edit form before sending the update request.
             if (!ModelState.IsValid)
             {
                 await LoadEditFormData(model);
@@ -360,6 +384,7 @@ namespace SolarGrid.Web.Controllers
                     await _apiClient.GetAsync<List<SlotOption>>(
                         $"stations/{Uri.EscapeDataString(model.StationId)}/slots?date={model.ReservationDate:yyyy-MM-dd}");
 
+                // Finds the selected slot from the available slots returned by the API.
                 var selectedSlot =
                     slots?.FirstOrDefault(
                         s => s.Id == model.SlotId);
@@ -374,6 +399,7 @@ namespace SolarGrid.Web.Controllers
                     return View(model);
                 }
 
+                // Creates the update request using the selected reservation details.
                 var request = new
                 {
                     prosumerNic = model.ProsumerNic,
@@ -385,6 +411,7 @@ namespace SolarGrid.Web.Controllers
                 };
 
                 // ApiClient.PutAsync is non-generic.
+                // Sends the updated reservation details to the central Web API.
                 await _apiClient.PutAsync(
                     $"reservations/{Uri.EscapeDataString(model.Id)}",
                     request);
@@ -399,6 +426,7 @@ namespace SolarGrid.Web.Controllers
             }
             catch (Exception ex)
             {
+                // Displays the API error and reloads the edit form when the update fails.
                 ModelState.AddModelError(
                     string.Empty,
                     $"Unable to update reservation: {ex.Message}");
@@ -414,6 +442,7 @@ namespace SolarGrid.Web.Controllers
         private async Task LoadEditFormData(
             UpdateReservationViewModel model)
         {
+            // Loads the active prosumers independently so that other API failures do not prevent the dropdown from loading.
             // Load active prosumers independently.
             // A station API failure should not prevent the prosumer
             // dropdown from being populated.
@@ -435,6 +464,7 @@ namespace SolarGrid.Web.Controllers
                     new List<ProsumerOption>();
             }
 
+            // Loads the active solar stations independently.
             // Load active stations independently.
             try
             {
@@ -454,6 +484,7 @@ namespace SolarGrid.Web.Controllers
                     new List<StationOption>();
             }
 
+            // Loads available slots when a valid station and reservation date are selected.
             // Load slots independently when a station and reservation
             // date are available.
             if (!string.IsNullOrWhiteSpace(model.StationId) &&
@@ -491,6 +522,7 @@ namespace SolarGrid.Web.Controllers
         private async Task LoadCreateFormData(
             CreateReservationViewModel model)
         {
+            // Reloads the active prosumers and stations so the create form can be displayed again.
             try
             {
                 var prosumers =
@@ -509,6 +541,7 @@ namespace SolarGrid.Web.Controllers
             }
             catch
             {
+                // Ensures the form collections are initialized even when an API request fails.
                 model.Prosumers ??=
                     new List<ProsumerOption>();
 
@@ -524,6 +557,7 @@ namespace SolarGrid.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(string id)
         {
+            // Validates that a reservation ID was supplied before sending the approval request.
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest();
@@ -532,6 +566,7 @@ namespace SolarGrid.Web.Controllers
             try
             {
                 // PatchAsync is non-generic in the existing ApiClient.
+                // Sends the approval request to the central Web API.
                 await _apiClient.PatchAsync(
                     $"reservations/{Uri.EscapeDataString(id)}/approve",
                     new { });
@@ -541,6 +576,7 @@ namespace SolarGrid.Web.Controllers
             }
             catch (Exception ex)
             {
+                // Displays the API error if the reservation approval fails.
                 TempData["Error"] =
                     $"Unable to approve reservation: {ex.Message}";
             }
@@ -555,6 +591,7 @@ namespace SolarGrid.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cancel(string id)
         {
+            // Validates that a reservation ID was supplied before sending the cancellation request.
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest();
@@ -563,6 +600,7 @@ namespace SolarGrid.Web.Controllers
             try
             {
                 // PatchAsync is non-generic in the existing ApiClient.
+                // Sends the cancellation request to the central Web API.
                 await _apiClient.PatchAsync(
                     $"reservations/{Uri.EscapeDataString(id)}/cancel",
                     new { });
@@ -572,6 +610,7 @@ namespace SolarGrid.Web.Controllers
             }
             catch (Exception ex)
             {
+                // Displays the API error if the reservation cancellation fails.
                 TempData["Error"] =
                     $"Unable to cancel reservation: {ex.Message}";
             }
