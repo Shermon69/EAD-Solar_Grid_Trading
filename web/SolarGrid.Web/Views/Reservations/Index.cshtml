@@ -1,3 +1,12 @@
+@*
+ * File:        Index.cshtml
+ * Author:      Dissanayake D.M.S.N (IT22210692)
+ * Description: Displays and manages energy reservations, including
+                filtering reservations, viewing details, approving
+                and cancelling reservations.
+ * Created:     29/09/2026
+ *@
+
 @model List<SolarGrid.Web.Models.BookingRecord>
 
 @{
@@ -170,6 +179,7 @@
 
             @if (Model == null || !Model.Any())
             {
+                <!-- Displays an empty-state message when no reservations match the filters. -->
                 <div class="text-center py-5">
 
                     <i class="bi bi-calendar-x display-4 text-muted"></i>
@@ -233,6 +243,7 @@
 
                                     <!-- Date -->
                                     <td>
+                                        @* Converts the reservation time to local time before displaying it. *@
                                         @(booking.ReservationDate
                                             .ToLocalTime()
                                             .ToString("dd MMM yyyy, hh:mm tt"))
@@ -242,6 +253,7 @@
                                     <!-- Status -->
                                     <td>
 
+                                        @* Displays a status badge based on the current reservation status. *@
                                         @if (booking.Status == "Pending")
                                         {
                                             <span class="badge bg-warning text-dark">
@@ -279,6 +291,7 @@
                                     <!-- QR -->
                                     <td>
 
+                                        @* Indicates whether an approved reservation has a QR token. *@
                                         @if (!string.IsNullOrWhiteSpace(booking.QrToken))
                                         {
                                             <span class="badge bg-success-subtle text-success">

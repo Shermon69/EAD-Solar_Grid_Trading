@@ -42,6 +42,7 @@ namespace SolarGrid.Api.Controllers
             [FromQuery] string? stationId = null,
             [FromQuery] string? nic = null)
         {
+            // Retrieves reservations based on the provided status, station and NIC filters.
             var reservations = await _reservationService.GetReservationsAsync(
                 status,
                 stationId,
@@ -57,12 +58,15 @@ namespace SolarGrid.Api.Controllers
         public async Task<ActionResult<ReservationResponse>> GetReservation(
             string id)
         {
+            // Retrieves the reservation details using the reservation ID.
             var reservation = await _reservationService
                 .GetReservationAsync(id);
 
+            // Gets the authenticated user's NIC and checks whether the user is staff.
             var currentNic = GetCurrentNic();
             var isStaff = IsStaff();
 
+            // Prevents a prosumer from accessing another prosumer's reservation.
             if (!isStaff && reservation.ProsumerNic != currentNic)
             {
                 return Forbid();
@@ -80,12 +84,14 @@ namespace SolarGrid.Api.Controllers
         public async Task<ActionResult<ReservationResponse>> CreateReservation(
             [FromBody] CreateReservationRequest request)
         {
+            // Determines the prosumer NIC based on whether the authenticated user is staff or a prosumer.
             var isStaff = IsStaff();
 
             var nic = isStaff
                 ? request.ProsumerNic
                 : GetCurrentNic();
 
+            // Validates that a prosumer NIC is available before creating the reservation.
             if (string.IsNullOrWhiteSpace(nic))
             {
                 return BadRequest(new
@@ -94,6 +100,7 @@ namespace SolarGrid.Api.Controllers
                 });
             }
 
+            // Creates the reservation using the reservation service.
             var reservation = await _reservationService
                 .CreateReservationAsync(request, nic);
 
@@ -111,9 +118,11 @@ namespace SolarGrid.Api.Controllers
             string id,
             [FromBody] UpdateReservationRequest request)
         {
+            // Gets the authenticated user's NIC and determines whether the user is staff.
             var nic = GetCurrentNic();
             var isStaff = IsStaff();
 
+            // Updates the reservation using the reservation ID and authenticated user details.
             var reservation = await _reservationService
                 .UpdateReservationAsync(
                     id,
@@ -131,9 +140,11 @@ namespace SolarGrid.Api.Controllers
         public async Task<ActionResult<ReservationResponse>> CancelReservation(
             string id)
         {
+            // Gets the authenticated user's NIC and determines whether the user is staff.
             var nic = GetCurrentNic();
             var isStaff = IsStaff();
 
+            // Cancels the reservation after validating the user's permissions and business rules.
             var reservation = await _reservationService
                 .CancelReservationAsync(
                     id,
@@ -151,6 +162,7 @@ namespace SolarGrid.Api.Controllers
         public async Task<ActionResult<ReservationResponse>> ApproveReservation(
             string id)
         {
+            // Approves the pending reservation and generates a QR token through the reservation service.
             var reservation = await _reservationService
                 .ApproveReservationAsync(id);
 
@@ -162,6 +174,7 @@ namespace SolarGrid.Api.Controllers
         /// </summary>
         private string GetCurrentNic()
         {
+            // Retrieves the authenticated user's NIC from the NameIdentifier claim in the JWT.
             return User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? throw new UnauthorizedAccessException(
                     "User identity was not found.");
@@ -173,6 +186,7 @@ namespace SolarGrid.Api.Controllers
         /// </summary>
         private bool IsStaff()
         {
+            // Checks whether the authenticated user has either the Backoffice or Grid Operator role.
             return User.IsInRole(Roles.Backoffice) ||
                    User.IsInRole(Roles.GridOperator);
         }

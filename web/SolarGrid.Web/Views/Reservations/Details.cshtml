@@ -1,6 +1,6 @@
 @*
  * File:        Details.cshtml
- * Author:      Pireethika Ragavan (IT23623118)
+ * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Displays the details, QR information and available
  *              actions for an energy reservation.
  * Created:     29/09/2026
@@ -110,6 +110,7 @@
 
                             <div class="mt-2">
 
+                                @* Displays a different badge depending on the reservation status. *@
                                 @if (Model.Status == "Pending")
                                 {
                                     <span class="badge bg-warning text-dark px-3 py-2">
@@ -156,6 +157,7 @@
 
                             <div class="mt-2">
 
+                                @* Indicates whether a QR token has been generated for the reservation. *@
                                 @if (!string.IsNullOrWhiteSpace(Model.QrToken))
                                 {
                                     <span class="badge bg-success-subtle text-success px-3 py-2">
@@ -195,6 +197,7 @@
 
                 <div class="card-body text-center">
 
+                    @* Displays the QR token when the reservation has been approved. *@
                     @if (!string.IsNullOrWhiteSpace(Model.QrToken))
                     {
                         <div class="mb-3">
@@ -238,6 +241,7 @@
             </div>
 
             <!-- Actions -->
+            @* Shows reservation actions only while the reservation is pending or approved. *@
             @if (Model.Status == "Pending" ||
                  Model.Status == "Approved")
             {

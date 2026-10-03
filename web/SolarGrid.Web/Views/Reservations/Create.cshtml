@@ -1,3 +1,11 @@
+@*
+ * File:        Create.cshtml
+ * Author:      Dissanayake D.M.S.N (IT22210692)
+ * Description: Web interface for creating energy reservations, including
+ *              prosumer, station, date, slot, type and energy selection.
+ * Created:     29/09/2026
+ *@
+
 @using Microsoft.AspNetCore.Mvc.Rendering
 @model SolarGrid.Web.Models.CreateReservationViewModel
 
@@ -231,6 +239,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
+            // Gets the form controls used to dynamically load available reservation slots.
             const stationSelect =
                 document.getElementById("stationSelect");
 
@@ -246,11 +255,13 @@
             const slotMessage =
                 document.getElementById("slotMessage");
 
+            // Loads the available time slots for the selected station and reservation date.
             async function loadSlots() {
 
                 const stationId = stationSelect.value;
                 const date = dateInput.value;
 
+                // Resets and disables the slot dropdown before retrieving new slot data.
                 slotSelect.innerHTML =
                     '<option value="">-- Select Time Slot --</option>';
 
@@ -269,6 +280,7 @@
 
                 try {
 
+                    // Builds the request URL using the selected station and reservation date.
                     const url =
                         '@Url.Action("Slots", "Reservations")' +
                         '?stationId=' +
@@ -276,6 +288,7 @@
                         '&date=' +
                         encodeURIComponent(date);
 
+                    // Requests available slots from the Reservations controller.
                     const response =
                         await fetch(url, {
                             method: "GET",
@@ -293,6 +306,7 @@
                     const slots =
                         await response.json();
 
+                    // Displays a message when no available slots exist for the selection.
                     if (!slots || slots.length === 0) {
 
                         slotSelect.innerHTML =
@@ -304,6 +318,7 @@
                         return;
                     }
 
+                    // Converts each available slot into an option in the time-slot dropdown.
                     slots.forEach(function (slot) {
 
                         const option =
@@ -335,6 +350,7 @@
                         slotSelect.appendChild(option);
                     });
 
+                    // Enables the dropdown after the available slots have been loaded.
                     slotSelect.disabled = false;
 
                     slotMessage.textContent =
@@ -343,6 +359,7 @@
                 }
                 catch (error) {
 
+                    // Handles errors that occur while retrieving available slot information.
                     console.error(error);
 
                     slotSelect.innerHTML =
@@ -354,15 +371,18 @@
                 }
                 finally {
 
+                    // Hides the loading message after the slot request has completed.
                     slotLoading.classList.add("d-none");
                 }
             }
 
+            // Reloads available slots whenever the selected station changes.
             stationSelect.addEventListener(
                 "change",
                 loadSlots
             );
 
+            // Reloads available slots whenever the reservation date changes.
             dateInput.addEventListener(
                 "change",
                 loadSlots
