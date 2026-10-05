@@ -102,7 +102,7 @@ namespace SolarGrid.Api.Controllers
             return NoContent();
         }
 
-        // --- Slots related to a specific station ---
+        // Slots related to a specific station
 
         [HttpGet("{id}/slots")]
         /// <summary>

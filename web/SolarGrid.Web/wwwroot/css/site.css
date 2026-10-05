@@ -21,7 +21,7 @@ body {
     background-color: #f6f7fb;
 }
 
-/* ---------- Colours ---------- */
+/* Colours */
 .text-solar { color: var(--solar) !important; }
 .bg-solar { background-color: var(--solar) !important; }
 .bg-solar-dark { background-color: var(--solar-dark) !important; }
@@ -48,12 +48,12 @@ body {
 .bg-red-soft { background: #fde8e8; color: #dc3545; }
 .bg-dark-soft { background: #e7e9ef; color: var(--solar-dark); }
 
-/* ---------- Navbar ---------- */
+/* Navbar */
 .navbar .nav-link.active {
     color: var(--solar) !important;
 }
 
-/* ---------- Landing page ---------- */
+/* Landing page */
 .hero-solar {
     background: linear-gradient(135deg, var(--solar-darker) 0%, var(--solar-dark) 60%, #1f3b6f 100%);
 }
@@ -79,7 +79,7 @@ body {
     justify-content: center;
 }
 
-/* ---------- Cards ---------- */
+/* Cards */
 .feature-card,
 .action-card {
     border: 0;
@@ -124,12 +124,12 @@ body {
     color: var(--solar);
 }
 
-/* ---------- Login ---------- */
+/* Login */
 .login-side {
     background: linear-gradient(160deg, var(--solar-darker), var(--solar-dark));
 }
 
-/* ---------- Tables (use class="table table-hover align-middle bg-white shadow-sm rounded") ---------- */
+/* Tables (use class="table table-hover align-middle bg-white shadow-sm rounded") */
 .table thead th {
     font-size: 0.8rem;
     text-transform: uppercase;
@@ -137,7 +137,7 @@ body {
     color: #6c757d;
 }
 
-/* ---------- Footer ---------- */
+/* Footer */
 .footer-solar {
     background-color: var(--solar-dark);
     color: rgba(255, 255, 255, 0.6);

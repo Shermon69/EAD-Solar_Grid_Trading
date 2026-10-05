@@ -38,7 +38,7 @@ import retrofit2.http.Query;
  */
 public interface ApiService {
 
-    // ---------- Member 1: Authentication ----------
+    // Member 1: Authentication
 
     /**
      * POST /api/auth/login - logs in with NIC and password.
@@ -49,7 +49,7 @@ public interface ApiService {
     );
 
 
-    // ---------- Member 2: Register, Profile, My Bookings, Dashboard ----------
+    // Member 2: Register, Profile, My Bookings, Dashboard
 
     /**
      * POST /api/auth/register - registers a new prosumer.
@@ -115,7 +115,7 @@ public interface ApiService {
     );
 
 
-    // ---------- Member 3: Stations & Slots ----------
+    // Member 3: Stations & Slots
 
     /**
      * GET /api/stations - gets active solar stations.
@@ -165,7 +165,7 @@ public interface ApiService {
     );
 
 
-    // ---------- Member 4: Reservations ----------
+    // Member 4: Reservations
 
     /**
      * Retrieves a single reservation using its unique reservation ID.
@@ -240,7 +240,7 @@ public interface ApiService {
     );
 
 
-    // ---------- Member 1: Operator bookings (Grid Operator mode) ----------
+    // Member 1: Operator bookings (Grid Operator mode)
 
     /**
      * GET /api/reservations - lists reservations of all prosumers

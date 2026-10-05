@@ -17,7 +17,7 @@ using SolarGrid.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ---------- Settings ----------
+// Settings
 
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDbSettings"));
@@ -44,15 +44,15 @@ if (mongoSettings.ConnectionString.StartsWith("SET_IN")
         + "and fill in the MongoDB connection string and JWT key.");
 }
 
-// ---------- Database ----------
+// Database
 
 builder.Services.AddSingleton<MongoDbContext>();
 
-// ---------- Helpers ----------
+// Helpers
 
 builder.Services.AddSingleton<JwtTokenGenerator>();
 
-// ---------- Services (business logic) ----------
+// Services (business logic)
 
 // Member 1
 builder.Services.AddScoped<AuthService>();
@@ -68,7 +68,7 @@ builder.Services.AddScoped<ProsumerService>();
 // Member 4
 builder.Services.AddScoped<ReservationService>();
 
-// ---------- Controllers ----------
+// Controllers
 
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -87,7 +87,7 @@ builder.Services.AddControllers()
         };
     });
 
-// ---------- JWT authentication ----------
+// JWT authentication
 
 builder.Services.AddAuthentication(
         JwtBearerDefaults.AuthenticationScheme)
@@ -112,7 +112,7 @@ builder.Services.AddAuthentication(
 
 builder.Services.AddAuthorization();
 
-// ---------- Swagger (with an "Authorize" button for the JWT token) ----------
+// Swagger (with an "Authorize" button for the JWT token)
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -164,7 +164,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// ---------- Sample data ----------
+// Sample data
 
 using (var scope = app.Services.CreateScope())
 {
@@ -175,7 +175,7 @@ using (var scope = app.Services.CreateScope())
     await DataSeeder.SeedAsync(db);
 }
 
-// ---------- Request pipeline ----------
+// Request pipeline
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 

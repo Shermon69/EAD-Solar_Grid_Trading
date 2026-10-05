@@ -28,7 +28,7 @@ namespace SolarGrid.Api.Data
             _database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        // Collection names match the database design in docs/TEAM_PLAN.md
+        // The four MongoDB collections used by the system
         public IMongoCollection<User> Users => _database.GetCollection<User>("Users");
         public IMongoCollection<SolarStation> Stations => _database.GetCollection<SolarStation>("SolarStationInfo");
         public IMongoCollection<EnergySlot> Slots => _database.GetCollection<EnergySlot>("EnergyBookingSlots");
