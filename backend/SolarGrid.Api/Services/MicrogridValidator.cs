@@ -5,7 +5,6 @@
  *              Used by StationService and SlotService before saving, so that
  *              invalid data (wrong GPS, overlapping slots, more slots than the
  *              station's batteries, etc.) is rejected by the API.
- * Created:     01/10/2026
  */
 
 using MongoDB.Driver;

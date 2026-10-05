@@ -2,7 +2,6 @@
  * File:        CreateReservationRequest.cs
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Data sent by the client when creating an energy reservation.
- * Created:     29/09/2026
  */
 
 using System.ComponentModel.DataAnnotations;

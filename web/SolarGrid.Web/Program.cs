@@ -4,7 +4,6 @@
  * Description: Entry point of the web app. Sets up MVC, cookie login and the
  *              ApiClient used to call the Web API. The web app is a UI layer
  *              only: all data and business logic come from the Web API.
- * Created:     28/09/2026
  */
 
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -13,14 +12,14 @@ using SolarGrid.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ---------- MVC ----------
+// MVC
 builder.Services.AddControllersWithViews(options =>
 {
     // Sends the user back to login if the API says the token has expired
     options.Filters.Add<SessionExpiredFilter>();
 });
 
-// ---------- Cookie login ----------
+// Cookie login
 // After a successful API login, the user's role and API token are kept in this cookie
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -32,7 +31,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 builder.Services.AddAuthorization();
 
-// ---------- Web API client ----------
+// Web API client
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient("Api", c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!));
 builder.Services.AddScoped<SolarGrid.Web.Services.ProsumerApiService>();
@@ -41,7 +40,7 @@ builder.Services.AddHttpClient<ApiClient>(client =>
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
 });
 
-// ---------- Session (ProsumerApiService reads the JWT from here) ----------
+// Session (ProsumerApiService reads the JWT from here)
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(8);   
@@ -51,7 +50,7 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// ---------- Request pipeline ----------
+// Request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

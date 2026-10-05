@@ -4,7 +4,6 @@
  * Description: If any page gets a 401 (token expired) from the API, this filter
  *              logs the user out and sends them back to the login page, so
  *              individual controllers don't need to handle it.
- * Created:     28/09/2026
  */
 
 using Microsoft.AspNetCore.Authentication;

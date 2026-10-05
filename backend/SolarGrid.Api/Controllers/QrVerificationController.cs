@@ -2,7 +2,6 @@
  * File:        QrVerificationController.cs
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: API endpoints for QR code verification and completing reservations.
- * Created:     29/09/2026
  */
 
 using Microsoft.AspNetCore.Authorization;

@@ -4,7 +4,6 @@
  * Description: Models for the Staff User Management pages. StaffUserViewModel
  *              matches the JSON from /api/users, and StaffUserFormViewModel holds
  *              the create/edit form fields.
- * Created:     29/09/2026
  */
 
 using System.ComponentModel.DataAnnotations;

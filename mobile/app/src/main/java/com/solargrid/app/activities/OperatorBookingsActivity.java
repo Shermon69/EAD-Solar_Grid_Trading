@@ -6,7 +6,6 @@
  *              approve pending bookings or cancel them. All rules (for example
  *              the 12-hour cancel rule) are checked by the API; this screen only
  *              shows the result or the API's error message.
- * Created:     02/10/2026
  */
 
 package com.solargrid.app.activities;

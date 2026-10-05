@@ -4,7 +4,6 @@
  * Description: REST endpoints for prosumer registration, management, profile,
  *              bookings and dashboards. Contains no business rules; it only
  *              calls ProsumerService.
- * Created:     29/09/2026
  */
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;

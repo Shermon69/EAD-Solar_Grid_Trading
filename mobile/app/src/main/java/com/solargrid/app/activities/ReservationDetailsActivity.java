@@ -3,7 +3,6 @@
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Displays details of a selected energy reservation and
  *              provides reservation management actions including QR display.
- * Created:     30/09/2026
  */
 
 package com.solargrid.app.activities;

@@ -2,7 +2,6 @@
  * File:        SlotDtos.cs
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: DTOs for energy booking slots.
- * Created:     29/09/2026
  */
 using System.ComponentModel.DataAnnotations;
 

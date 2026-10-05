@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Turns failed API calls into short messages that can be shown
  *              to the user (e.g. in a Toast).
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.utils;

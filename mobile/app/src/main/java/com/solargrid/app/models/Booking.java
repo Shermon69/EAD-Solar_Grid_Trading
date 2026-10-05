@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: One booking row returned by the API. Used in the bookings
  *              list and dashboard counts. Mapped from JSON by Gson.
- * Created:     29/09/2026
  */
 package com.solargrid.app.models;
 

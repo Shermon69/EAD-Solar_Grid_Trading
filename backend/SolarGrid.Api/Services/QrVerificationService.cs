@@ -3,7 +3,6 @@
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: Business logic for Grid Operator QR verification and completion
  *              of energy reservations (R9).
- * Created:     29/09/2026
  */
 
 using MongoDB.Driver;

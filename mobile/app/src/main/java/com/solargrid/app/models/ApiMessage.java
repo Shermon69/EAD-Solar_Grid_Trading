@@ -2,7 +2,6 @@
  * File:        ApiMessage.java
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: Simple { message } response returned by the API.
- * Created:     29/09/2026
  */
 package com.solargrid.app.models;
 

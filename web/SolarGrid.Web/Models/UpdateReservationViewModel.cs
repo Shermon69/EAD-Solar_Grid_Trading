@@ -2,7 +2,6 @@
  * File:        UpdateReservationViewModel.cs
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: View model for updating an energy reservation.
- * Created:     29/09/2026
  */
 
 using System.ComponentModel.DataAnnotations;

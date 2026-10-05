@@ -4,7 +4,6 @@
  * Description: Error thrown by ApiClient when the Web API returns an error or
  *              cannot be reached. The message is the one sent by the API, so
  *              it can be shown to the user directly.
- * Created:     28/09/2026
  */
 
 namespace SolarGrid.Web.Services

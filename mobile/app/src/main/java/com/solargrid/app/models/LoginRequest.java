@@ -2,7 +2,6 @@
  * File:        LoginRequest.java
  * Author:      Shermon H (IT22177964)
  * Description: Data sent to POST /api/auth/login.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.models;

@@ -2,7 +2,6 @@
  * File:        SlotsController.cs
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: Controller for the Slot Availability web pages.
- * Created:     29/09/2026
  */
 
 using Microsoft.AspNetCore.Authorization;

@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: Prosumer registration screen. NIC is the primary key. Account
  *              stays Pending until Backoffice activates it.
- * Created:     29/09/2026
  */
 package com.solargrid.app.activities;
 

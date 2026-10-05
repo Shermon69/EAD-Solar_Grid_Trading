@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: MVC pages for Prosumer Management and Pending Activations
  *              (Backoffice only). UI layer only — all data comes from the API.
- * Created:     29/09/2026
  */
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -2,7 +2,6 @@
  * File:        StationsController.cs
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: API endpoints for managing Solar Stations (nodes) and querying nearby stations.
- * Created:     29/09/2026
  */
 
 using Microsoft.AspNetCore.Authorization;
@@ -103,7 +102,7 @@ namespace SolarGrid.Api.Controllers
             return NoContent();
         }
 
-        // --- Slots related to a specific station ---
+        // Slots related to a specific station
 
         [HttpGet("{id}/slots")]
         /// <summary>

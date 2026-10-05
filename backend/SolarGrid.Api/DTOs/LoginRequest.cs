@@ -2,7 +2,6 @@
  * File:        LoginRequest.cs
  * Author:      Shermon H (IT22177964)
  * Description: Data sent by the web or mobile app when a user logs in.
- * Created:     28/09/2026
  */
 
 using System.ComponentModel.DataAnnotations;

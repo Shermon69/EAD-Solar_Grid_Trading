@@ -5,7 +5,6 @@
     Author:      Shermon H (IT22177964)
     Description: Summary page shown after a booking is created, updated
                  or cancelled. Shows the booking as returned by the Web API.
-    Created:     05/10/2026
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"

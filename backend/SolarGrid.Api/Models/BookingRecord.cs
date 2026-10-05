@@ -5,7 +5,6 @@
  *              collection. Maps the actual MongoDB field names (ReservationTime,
  *              StationId) to display-friendly names for the prosumer booking
  *              lists and dashboard counts.
- * Created:     29/09/2026
  */
 
 using MongoDB.Bson;

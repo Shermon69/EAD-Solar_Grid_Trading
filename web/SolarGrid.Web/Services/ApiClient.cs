@@ -5,7 +5,6 @@
  *              It adds the logged-in user's JWT token to every request,
  *              converts JSON to C# objects and turns API errors into
  *              ApiException. The web app never connects to MongoDB directly.
- * Created:     28/09/2026
  */
 
 using System.Net.Http.Headers;

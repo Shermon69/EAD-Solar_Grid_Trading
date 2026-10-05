@@ -4,7 +4,6 @@
  * Description: Catches exceptions from any controller or service and returns
  *              them as JSON in the same format: { "message": "..." }.
  *              This way the web and mobile apps can always show the message.
- * Created:     28/09/2026
  */
 
 using System.Text.Json;

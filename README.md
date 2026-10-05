@@ -24,7 +24,7 @@ central C# Web API (hosted on IIS) backed by MongoDB.
 | [backend/](backend/) | ASP.NET Core Web API (.NET 8), MongoDB, JWT authentication. All business logic lives here |
 | [web/](web/) | ASP.NET Core MVC + Bootstrap 5 web application for Backoffice and Grid Operator users |
 | [mobile/](mobile/) | Pure native Android app (Java) with SQLite, Google Maps and QR code scanning |
-| [docs/](docs/) | Team plan, diagrams and screenshots |
+| [docs/](docs/) | Diagrams and screenshots |
 
 ## Tech stack
 
@@ -69,8 +69,6 @@ Open http://localhost:5090 and log in with a Backoffice or Grid Operator account
 3. Run the app on an emulator. It connects to the API at `http://10.0.2.2:5080/api/`, which is the emulator's
    address for your PC. For a real phone, add `API_BASE_URL=http://<your-PC-IP>:5080/api/` to `local.properties`.
 4. Log in as a Prosumer (`200045678912`) or Grid Operator (`199234567891`).
-
-See [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md) for the team plan, database design, API contract and coding standards.
 
 ## Team and individual contributions
 

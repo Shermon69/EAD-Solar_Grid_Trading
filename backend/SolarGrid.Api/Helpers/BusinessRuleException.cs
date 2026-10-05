@@ -4,7 +4,6 @@
  * Description: Exception thrown by services when a business rule is broken
  *              (e.g. booking more than 7 days ahead). The error handling
  *              middleware turns it into an HTTP response with a message.
- * Created:     28/09/2026
  */
 
 namespace SolarGrid.Api.Helpers
