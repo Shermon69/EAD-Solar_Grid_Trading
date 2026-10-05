@@ -1,0 +1,61 @@
+@*
+    File:        Edit.cshtml
+    Author:      Premaratne R.A.N.C (IT22050908)
+    Description: Edit prosumer details form (Backoffice). NIC is read-only;
+                 all other fields are validated by the view model.
+*@
+@model SolarGrid.Web.Models.ProsumerEditVm
+@{ ViewData["Title"] = "Edit Prosumer"; }
+
+<h2 class="mb-3">Edit Prosumer</h2>
+
+@* Edit form — posts to the Edit POST action and includes an anti-forgery token. *@
+<form asp-action="Edit" method="post" class="col-md-6">
+
+    @* Hidden NIC field — sent back to the server but not edited by the user. *@
+    <input type="hidden" asp-for="Nic" />
+
+    @* NIC — shown read-only because it is the primary key. *@
+    <div class="mb-3">
+        <label class="form-label">NIC</label>
+        <input class="form-control" value="@Model.Nic" disabled />
+    </div>
+
+    @* Full name input with validation message. *@
+    <div class="mb-3">
+        <label asp-for="FullName" class="form-label"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    @* Email input with validation message. *@
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    @* Phone input with validation message. *@
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    @* Address input with validation message. *@
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    @* Action buttons: save (submit) or cancel (back to Index). *@
+    <button class="btn btn-primary">Save changes</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+
+</form>
+
+@* Client-side validation scripts for jQuery unobtrusive validation. *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

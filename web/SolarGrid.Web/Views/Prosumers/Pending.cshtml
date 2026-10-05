@@ -1,0 +1,64 @@
+@*
+    File:        Pending.cshtml
+    Author:      Premaratne R.A.N.C (IT22050908)
+    Description: Pending Activations page (Backoffice). Lists prosumers waiting
+                 for approval so they can be activated.
+*@
+@model List<SolarGrid.Web.Models.ProsumerVm>
+    @{ ViewData["Title"] = "Pending Activations"; }
+
+    <h2 class="mb-3">Pending Activations</h2>
+
+    @* Table of prosumers waiting for activation. *@
+    <table class="table table-striped align-middle">
+
+        <thead>
+            <tr>
+                <th>NIC</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Registered</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Nic</td>
+                <td>@p.FullName</td>
+                <td>@p.Email</td>
+                <td>@p.Phone</td>
+
+                @* Registration time shown in local time. *@
+                <td>@p.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+
+                @* Activate button. returnTo=Pending keeps the user on this page after activation. *@
+                <td>
+                    <form asp-action="Activate" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@p.Nic" />
+                        <input type="hidden" name="returnTo" value="Pending" />
+                        <button class="btn btn-sm btn-success">Activate</button>
+                    </form>
+                </td>
+            </tr>
+        }
+
+            @* Empty state when no accounts are pending. *@
+            @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="6" class="text-center text-muted">
+                    No accounts are waiting for activation.
+                </td>
+            </tr>
+        }
+        </tbody>
+
+    </table>
+
+    @* Back link. *@
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to all prosumers</a>

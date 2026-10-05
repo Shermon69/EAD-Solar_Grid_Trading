@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App colours. Same solar theme as the web app. -->
+<resources>
+    <color name="solar">#F5A524</color>
+    <color name="solar_light">#FFF4E0</color>
+    <color name="navy">#14213D</color>
+    <color name="navy_dark">#0D1628</color>
+    <color name="background">#F6F7FB</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="text_primary">#1B1B1B</color>
+    <color name="text_secondary">#6C757D</color>
+    <color name="success">#198754</color>
+    <color name="danger">#DC3545</color>
+    <color name="info">#0D6EFD</color>
+    <color name="purple">#6F42C1</color>
+</resources>

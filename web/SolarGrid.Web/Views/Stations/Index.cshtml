@@ -1,0 +1,88 @@
+@*
+ * File:        Index.cshtml
+ * Author:      WMVSB Wahundeniya (IT22292872)
+ * Description: Node Management page for listing and toggling status of Solar Stations.
+ *@
+@model List<SolarGrid.Web.Models.StationViewModel>
+@{
+    ViewData["Title"] = "Node Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>@ViewData["Title"]</h2>
+    @if (User.IsInRole("Backoffice"))
+    {
+        <a asp-action="Create" class="btn btn-primary">Add New Station</a>
+    }
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Location (Lat/Lng)</th>
+                    <th>Capacity</th>
+                    <th>Battery Slots</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var station in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@station.Name</strong><br />
+                            <small class="text-muted">@station.Address</small>
+                        </td>
+                        <td>@station.Latitude, @station.Longitude</td>
+                        <td>@station.CapacityKw kW</td>
+                        <td>@station.BatterySlots</td>
+                        <td>
+                            @if (station.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Deactivated</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@station.Id" class="btn btn-sm btn-secondary">Edit</a>
+                            <a asp-controller="Slots" asp-action="Index" asp-route-stationId="@station.Id" class="btn btn-sm btn-info text-white">Manage Slots</a>
+                            
+                            @if (User.IsInRole("Backoffice"))
+                            {
+                                <form asp-action="ToggleStatus" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@station.Id" />
+                                    <input type="hidden" name="currentStatus" value="@station.IsActive.ToString().ToLower()" />
+                                    <button type="submit" class="btn btn-sm @(station.IsActive ? "btn-outline-danger" : "btn-outline-success")">
+                                        @(station.IsActive ? "Deactivate" : "Activate")
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">No stations found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

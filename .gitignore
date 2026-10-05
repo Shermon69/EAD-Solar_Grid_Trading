@@ -7,14 +7,11 @@ obj/
 *.rsuser
 publish/
 appsettings.Development.json
+appsettings.Production.json
 
-# ===== Node / React =====
-node_modules/
-dist/
+# ===== Misc =====
 .env
 .env.local
-.env.*.local
-npm-debug.log*
 
 # ===== Android =====
 .gradle/
@@ -27,6 +24,9 @@ captures/
 *.aab
 *.keystore
 *.jks
+# Java crash logs (written when the JVM runs out of memory/disk)
+hs_err_pid*.log
+replay_pid*.log
 
 # ===== IDEs =====
 .idea/

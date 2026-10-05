@@ -1,0 +1,20 @@
+/*
+ * File:        JwtSettings.cs
+ * Author:      Shermon H (IT22177964)
+ * Description: Holds the JWT (login token) settings read from appsettings.json.
+ */
+
+namespace SolarGrid.Api.Helpers
+{
+    /// <summary>
+    /// Maps to the "JwtSettings" section of appsettings.json.
+    /// </summary>
+    public class JwtSettings
+    {
+        // Secret key used to sign tokens (at least 32 characters)
+        public string Key { get; set; } = string.Empty;
+        public string Issuer { get; set; } = string.Empty;
+        public string Audience { get; set; } = string.Empty;
+        public int ExpiryHours { get; set; } = 8;
+    }
+}

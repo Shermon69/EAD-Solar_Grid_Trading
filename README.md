@@ -7,9 +7,9 @@ web application, solar prosumers and grid operators use a native Android app, an
 central C# Web API (hosted on IIS) backed by MongoDB.
 
 ```
-  Android app (Java + SQLite)  ──┐
-                                 ├──►  C# Web API on IIS  ──►  MongoDB
-  Web app (React + Bootstrap 5) ─┘
+  Android app (Java + SQLite)          ──┐
+                                         ├──►  C# Web API on IIS  ──►  MongoDB
+  Web app (ASP.NET MVC + Bootstrap 5)  ──┘
 ```
 
 ## Repository
@@ -22,21 +22,53 @@ central C# Web API (hosted on IIS) backed by MongoDB.
 | Folder | Description |
 |--------|-------------|
 | [backend/](backend/) | ASP.NET Core Web API (.NET 8), MongoDB, JWT authentication. All business logic lives here |
-| [web/](web/) | React + Bootstrap 5 web application for Backoffice and Grid Operator users |
+| [web/](web/) | ASP.NET Core MVC + Bootstrap 5 web application for Backoffice and Grid Operator users |
 | [mobile/](mobile/) | Pure native Android app (Java) with SQLite, Google Maps and QR code scanning |
-| [docs/](docs/) | Team plan, diagrams and screenshots |
+| [docs/](docs/) | Diagrams and screenshots |
 
 ## Tech stack
 
 - **Web service:** C# ASP.NET Core Web API, MongoDB.Driver, JWT, hosted on Windows IIS
 - **Database:** MongoDB (collections: `Users`, `SolarStationInfo`, `EnergyBookingSlots`, `EnergyReservations`)
-- **Web app:** React (Vite), Bootstrap 5, Axios
+- **Web app:** ASP.NET Core MVC (.NET 8), Bootstrap 5
 - **Mobile app:** Android (Java), SQLite, Retrofit, Google Maps SDK, ZXing
 
 ## Getting started
 
-Setup steps for each part will be added to that part's folder as the project grows.
-See [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md) for the team plan, database design, API contract and coding standards.
+**Web API**
+1. Install the .NET 8 SDK.
+2. Copy `backend/SolarGrid.Api/appsettings.Development.example.json` to `appsettings.Development.json` in the same folder,
+   then fill in the MongoDB connection string and a JWT key.
+3. Run:
+   ```
+   cd backend/SolarGrid.Api
+   dotnet run
+   ```
+4. Open http://localhost:5080/swagger. Sample data is added automatically the first time the API runs on an empty database.
+
+Sample logins (password `Password@123`):
+
+| Role | NIC |
+|------|-----|
+| Backoffice | `199012345678` |
+| Grid Operator | `199234567891` |
+| Prosumer | `200045678912` |
+| Prosumer (pending activation) | `200167891234` |
+
+**Web app** (the API must be running)
+```
+cd web/SolarGrid.Web
+dotnet run
+```
+Open http://localhost:5090 and log in with a Backoffice or Grid Operator account. The API address is set in
+`web/SolarGrid.Web/appsettings.json` (`ApiSettings:BaseUrl`).
+
+**Mobile app** (the API must be running)
+1. Open the `mobile` folder in Android Studio and wait for Gradle sync.
+2. Optional: add `MAPS_API_KEY=...` to `mobile/local.properties` (created by Android Studio, not committed).
+3. Run the app on an emulator. It connects to the API at `http://10.0.2.2:5080/api/`, which is the emulator's
+   address for your PC. For a real phone, add `API_BASE_URL=http://<your-PC-IP>:5080/api/` to `local.properties`.
+4. Log in as a Prosumer (`200045678912`) or Grid Operator (`199234567891`).
 
 ## Team and individual contributions
 
