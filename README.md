@@ -12,10 +12,19 @@ central C# Web API (hosted on IIS) backed by MongoDB.
   Web app (ASP.NET MVC + Bootstrap 5)  ──┘
 ```
 
-## Repository
+## Links
 
 - **Git repository:** https://github.com/Shermon69/EAD-Solar_Grid_Trading
 - **Demo video:** _link to be added_
+
+## Team
+
+| Member | Name | IT Number | Feature area |
+|--------|------|-----------|--------------|
+| Member 1 (Team Lead) | Shermon H | IT22177964 | Project setup, login and roles, staff users, IIS deployment |
+| Member 2 | Premaratne R.A.N.C | IT22050908 | Prosumer accounts, pending activations, dashboards and booking views |
+| Member 3 | Wahundeniya W.M.V.S.B | IT22292872 | Microgrid nodes and slots, Google Maps, QR verification |
+| Member 4 | Dissanayake D.M.S.N | IT22210692 | Energy reservations, booking rules, booking QR codes |
 
 ## Project structure
 
@@ -24,7 +33,7 @@ central C# Web API (hosted on IIS) backed by MongoDB.
 | [backend/](backend/) | ASP.NET Core Web API (.NET 8), MongoDB, JWT authentication. All business logic lives here |
 | [web/](web/) | ASP.NET Core MVC + Bootstrap 5 web application for Backoffice and Grid Operator users |
 | [mobile/](mobile/) | Pure native Android app (Java) with SQLite, Google Maps and QR code scanning |
-| [docs/](docs/) | Diagrams and screenshots |
+| [deploy/](deploy/) | PowerShell script for hosting the Web API on IIS |
 
 ## Tech stack
 
@@ -33,48 +42,46 @@ central C# Web API (hosted on IIS) backed by MongoDB.
 - **Web app:** ASP.NET Core MVC (.NET 8), Bootstrap 5
 - **Mobile app:** Android (Java), SQLite, Retrofit, Google Maps SDK, ZXing
 
-## Getting started
+## Running the system
 
 **Web API**
 1. Install the .NET 8 SDK.
-2. Copy `backend/SolarGrid.Api/appsettings.Development.example.json` to `appsettings.Development.json` in the same folder,
-   then fill in the MongoDB connection string and a JWT key.
+2. Copy `backend/SolarGrid.Api/appsettings.Development.example.json` to `appsettings.Development.json` in the same folder.
+   Fill in the MongoDB connection string and a JWT key of **at least 32 characters**.
 3. Run:
    ```
    cd backend/SolarGrid.Api
-   dotnet run
+   dotnet run --urls http://0.0.0.0:5080
    ```
 4. Open http://localhost:5080/swagger. Sample data is added automatically the first time the API runs on an empty database.
-
-Sample logins (password `Password@123`):
-
-| Role | NIC |
-|------|-----|
-| Backoffice | `199012345678` |
-| Grid Operator | `199234567891` |
-| Prosumer | `200045678912` |
-| Prosumer (pending activation) | `200167891234` |
 
 **Web app** (the API must be running)
 ```
 cd web/SolarGrid.Web
 dotnet run
 ```
-Open http://localhost:5090 and log in with a Backoffice or Grid Operator account. The API address is set in
-`web/SolarGrid.Web/appsettings.json` (`ApiSettings:BaseUrl`).
+Open http://localhost:5090. The API address is set in `web/SolarGrid.Web/appsettings.json` (`ApiSettings:BaseUrl`).
 
 **Mobile app** (the API must be running)
 1. Open the `mobile` folder in Android Studio and wait for Gradle sync.
-2. Optional: add `MAPS_API_KEY=...` to `mobile/local.properties` (created by Android Studio, not committed).
-3. Run the app on an emulator. It connects to the API at `http://10.0.2.2:5080/api/`, which is the emulator's
-   address for your PC. For a real phone, add `API_BASE_URL=http://<your-PC-IP>:5080/api/` to `local.properties`.
-4. Log in as a Prosumer (`200045678912`) or Grid Operator (`199234567891`).
+2. Add your Google Maps key to `mobile/local.properties` as `MAPS_API_KEY=...` (this file is not committed).
+3. On an emulator, the app connects to `http://10.0.2.2:5080/api/` by default. For a real phone on the same Wi-Fi,
+   add `API_BASE_URL=http://<your-PC-IP>:5080/api/` to `local.properties` (keep the `/` at the end), then rebuild.
 
-## Team and individual contributions
+**Hosting on IIS**
+1. Publish the API: `dotnet publish backend/SolarGrid.Api -c Release -o D:\inetpub\SolarGridApi`
+2. In that folder, create `appsettings.Production.json` with the same MongoDB and JWT settings (IIS runs in Production mode).
+3. From an administrator PowerShell, run `deploy/setup-iis.ps1`. It installs the hosting bundle, creates the app pool
+   and website on port 8080, and opens the firewall port.
+4. Point the clients at `http://<server>:8080/api/`.
 
-| Member | IT Number | Contribution |
-|--------|-----------|--------------|
-| Member 1 (Team Lead) | ITXXXXXXXX | Project setup, login and role-based access, staff user management, IIS deployment |
-| Member 2 | ITXXXXXXXX | Prosumer accounts, pending activations, booking views and dashboards |
-| Member 3 | ITXXXXXXXX | Microgrid node and slot management, Google Maps, operator QR verification |
-| Member 4 | ITXXXXXXXX | Energy reservation workflow and business rules, booking QR codes |
+## Sample logins
+
+Password for all sample users: `Password@123`
+
+| Role | NIC | Used on |
+|------|-----|---------|
+| Backoffice | `199012345678` | Web |
+| Grid Operator | `199234567891` | Web and mobile |
+| Prosumer | `200045678912` | Mobile |
+| Prosumer (pending activation) | `200167891234` | Activate it from the web first |
