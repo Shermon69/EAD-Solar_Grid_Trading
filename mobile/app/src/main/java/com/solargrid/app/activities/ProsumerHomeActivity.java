@@ -4,7 +4,6 @@
  * Description: Home screen for solar prosumers. Shows the user's name and a
  *              menu of prosumer features. Each member connects their own
  *              screen to the matching card below.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.activities;

@@ -2,7 +2,6 @@
  * File:        StationsController.cs
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: API endpoints for managing Solar Stations (nodes) and querying nearby stations.
- * Created:     29/09/2026
  */
 
 using Microsoft.AspNetCore.Authorization;

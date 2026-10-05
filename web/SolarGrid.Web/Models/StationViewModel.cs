@@ -2,7 +2,6 @@
  * File:        StationViewModel.cs
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: View models for Solar Stations in the Web app.
- * Created:     29/09/2026
  */
 
 using System.ComponentModel.DataAnnotations;

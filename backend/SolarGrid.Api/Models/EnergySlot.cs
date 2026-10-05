@@ -4,7 +4,6 @@
  * Description: MongoDB document for the "EnergyBookingSlots" collection.
  *              A time block at a station with a number of battery slots
  *              that prosumers can reserve.
- * Created:     28/09/2026
  */
 
 using MongoDB.Bson;

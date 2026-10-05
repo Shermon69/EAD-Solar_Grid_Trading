@@ -4,7 +4,6 @@
  * Description: Business logic for managing staff users (Backoffice and Grid
  *              Operator accounts): list, view, create, update, activate and
  *              deactivate. Prosumers are managed separately by ProsumerService.
- * Created:     29/09/2026
  */
 
 using MongoDB.Driver;

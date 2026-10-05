@@ -2,7 +2,6 @@
  * File:        Reservation.java
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Model representing an energy reservation returned by the Web API.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.models;

@@ -4,7 +4,6 @@
  * Description: The app's opening screen. Logs the user in through the Web API,
  *              saves the session in SQLite and opens the home screen for the
  *              user's role (Prosumer home or Operator home).
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.activities;

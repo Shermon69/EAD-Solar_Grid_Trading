@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: The public landing page and the home pages shown after login
  *              (one for Backoffice users and one for Grid Operators).
- * Created:     28/09/2026
  */
 
 using System.Diagnostics;

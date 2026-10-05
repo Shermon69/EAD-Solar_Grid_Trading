@@ -3,7 +3,6 @@
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: Business logic for managing solar microgrid nodes (stations),
  *              including deactivation validation (R8) and location queries.
- * Created:     29/09/2026
  */
 
 using MongoDB.Driver;

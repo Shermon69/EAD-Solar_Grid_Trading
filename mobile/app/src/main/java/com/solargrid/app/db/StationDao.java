@@ -2,7 +2,6 @@
  * File:        StationDao.java
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: DAO for caching stations in SQLite.
- * Created:     29/09/2026
  */
 package com.solargrid.app.db;
 

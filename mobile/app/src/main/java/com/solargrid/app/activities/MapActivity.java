@@ -3,7 +3,6 @@
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: Displays nearby solar stations on a Google Map using markers.
  *              Tapping a marker can navigate to the StationDetailsActivity.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.activities;

@@ -3,7 +3,6 @@
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Screen used by a prosumer to edit an existing energy
  *              reservation through the central Web API.
- * Created:     30/09/2026
  */
 
 package com.solargrid.app.activities;

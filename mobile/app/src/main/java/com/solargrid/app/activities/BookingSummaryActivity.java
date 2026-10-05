@@ -4,7 +4,6 @@
  * Description: Summary page shown after a booking is created, updated or
  *              cancelled. It displays the booking exactly as the Web API
  *              returned it, so the prosumer can confirm what was saved.
- * Created:     05/10/2026
  */
 
 package com.solargrid.app.activities;

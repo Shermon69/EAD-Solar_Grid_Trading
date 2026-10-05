@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Creates the Retrofit client used to call the Web API. It adds
  *              the saved JWT token to every request automatically.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.api;

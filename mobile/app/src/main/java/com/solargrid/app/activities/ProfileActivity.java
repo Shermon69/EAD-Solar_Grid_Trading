@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: Edit Profile and Request Deactivation screen for the
  *              logged-in prosumer.
- * Created:     29/09/2026
  */
 package com.solargrid.app.activities;
 

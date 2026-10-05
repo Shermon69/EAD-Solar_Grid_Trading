@@ -329,7 +329,6 @@ Base URL: `http://<server>/api`. All endpoints except login/register need the he
  * Author:      Jane Perera (IT21XXXXXX)
  * Description: Business logic for energy reservations, including the
  *              7-day booking window and 12-hour change/cancel rule.
- * Created:     29/09/2026
  */
 ```
 

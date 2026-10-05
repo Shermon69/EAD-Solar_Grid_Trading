@@ -4,7 +4,6 @@
  * Description: Connects to MongoDB and gives access to the four collections
  *              used by the system. Services get this class through
  *              dependency injection instead of creating their own connection.
- * Created:     28/09/2026
  */
 
 using Microsoft.Extensions.Options;

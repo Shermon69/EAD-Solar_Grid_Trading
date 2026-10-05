@@ -4,7 +4,6 @@
  * Description: Entry point of the web app. Sets up MVC, cookie login and the
  *              ApiClient used to call the Web API. The web app is a UI layer
  *              only: all data and business logic come from the Web API.
- * Created:     28/09/2026
  */
 
 using Microsoft.AspNetCore.Authentication.Cookies;

@@ -2,7 +2,6 @@
  * File:        ReservationsController.cs
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: API endpoints for energy reservation management.
- * Created:     29/09/2026
  */
 
 using System.Security.Claims;

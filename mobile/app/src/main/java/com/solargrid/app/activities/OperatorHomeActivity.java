@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Home screen for grid operators (Operator mode). From here the
  *              operator scans prosumer QR codes and views solar stations.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.activities;

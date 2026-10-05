@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: Request body for prosumer registration. Matches the
  *              RegisterRequest DTO on the server side.
- * Created:     29/09/2026
  */
 package com.solargrid.app.models;
 

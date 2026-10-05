@@ -4,7 +4,6 @@
     File:        activity_edit_reservation.xml
     Author:      Dissanayake D.M.S.N (IT22210692)
     Description: UI layout for editing an existing energy reservation.
-    Created:     30/09/2026
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"

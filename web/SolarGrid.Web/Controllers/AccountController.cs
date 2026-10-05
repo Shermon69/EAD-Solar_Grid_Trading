@@ -5,7 +5,6 @@
  *              by the Web API. If they are correct, the web app saves the user's
  *              role and API token in a secure cookie and sends the user to the
  *              home page for their role.
- * Created:     28/09/2026
  */
 
 using System.Security.Claims;

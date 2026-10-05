@@ -2,7 +2,6 @@
  * File:        LoginResponse.cs
  * Author:      Shermon H (IT22177964)
  * Description: Matches the JSON returned by POST /api/auth/login.
- * Created:     28/09/2026
  */
 
 namespace SolarGrid.Web.Models

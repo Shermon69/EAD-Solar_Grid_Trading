@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Retrofit interface for communicating with the central
  *              Solar Grid Web API.
- * Created:     30/09/2026
  */
 
 package com.solargrid.app.api;

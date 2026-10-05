@@ -4,7 +4,6 @@
  * Description: Request and response objects for staff user management
  *              (Backoffice and Grid Operator accounts). The password hash is
  *              never sent back to clients.
- * Created:     29/09/2026
  */
 
 using System.ComponentModel.DataAnnotations;

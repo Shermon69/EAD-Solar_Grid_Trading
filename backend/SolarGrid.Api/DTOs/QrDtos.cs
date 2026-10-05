@@ -2,7 +2,6 @@
  * File:        QrDtos.cs
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: DTO for verifying QR code.
- * Created:     29/09/2026
  */
 using System.ComponentModel.DataAnnotations;
 

@@ -4,7 +4,6 @@
  * Description: Entry point of the Web API. Registers the database, services,
  *              JWT authentication and Swagger, then starts the server.
  *              When adding a new service, register it in the "Services" section.
- * Created:     28/09/2026
  */
 
 using System.Text;

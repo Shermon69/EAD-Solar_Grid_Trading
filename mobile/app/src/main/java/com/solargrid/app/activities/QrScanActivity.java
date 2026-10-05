@@ -3,7 +3,6 @@
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: Scans a QR code and verifies it with the backend. 
  *              Allows grid operators to mark a reservation as complete.
- * Created:     29/09/2026
  */
 package com.solargrid.app.activities;
 

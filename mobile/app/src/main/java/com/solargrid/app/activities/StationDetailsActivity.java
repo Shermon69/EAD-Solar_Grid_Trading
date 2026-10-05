@@ -2,7 +2,6 @@
  * File:        StationDetailsActivity.java
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: Displays details of a specific Solar Station when a map marker is tapped.
- * Created:     29/09/2026
  */
 package com.solargrid.app.activities;
 

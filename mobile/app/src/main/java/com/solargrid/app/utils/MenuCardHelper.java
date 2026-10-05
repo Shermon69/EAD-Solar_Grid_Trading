@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Fills in a menu card (item_menu_card.xml) on the home screens
  *              with an icon, title, description and click action.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.utils;

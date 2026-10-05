@@ -4,7 +4,6 @@
  * Description: Creates the local SQLite database on the phone. It stores the
  *              logged-in user (session) and cached reference data (stations).
  *              SQLite is only local storage: the Web API is the source of truth.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.db;

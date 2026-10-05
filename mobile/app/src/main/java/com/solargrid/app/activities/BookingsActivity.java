@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: Shows Current/Pending bookings or Booking History, with a
  *              search box. The mode is chosen by the caller via an Intent extra.
- * Created:     29/09/2026
  */
 package com.solargrid.app.activities;
 
