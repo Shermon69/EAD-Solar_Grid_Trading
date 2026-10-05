@@ -87,11 +87,20 @@ public class ReservationDetailsActivity extends AppCompatActivity {
             ).show();
 
             finish();
-
-            return;
         }
+    }
 
-        loadReservation();
+    /**
+     * Loads the reservation each time the screen is shown, so the details are
+     * up to date after coming back from the edit or summary screen.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (reservationId != null && !reservationId.isEmpty()) {
+            loadReservation();
+        }
     }
 
     /**
@@ -459,11 +468,12 @@ public class ReservationDetailsActivity extends AppCompatActivity {
                             updatedReservation.getQrToken()
                     );
 
-                    Toast.makeText(
+                    // Show the summary page for the cancelled booking
+                    BookingSummaryActivity.open(
                             ReservationDetailsActivity.this,
-                            "Reservation cancelled successfully.",
-                            Toast.LENGTH_LONG
-                    ).show();
+                            BookingSummaryActivity.ACTION_CANCELLED,
+                            updatedReservation
+                    );
 
                 } else {
 
