@@ -71,6 +71,11 @@
             android:name=".activities.EditReservationActivity"
             android:exported="false" />
 
+        <!-- Summary page after creating, updating or cancelling a booking -->
+        <activity
+            android:name=".activities.BookingSummaryActivity"
+            android:exported="false" />
+
         <!-- M3 Station, Map and QR activities -->
         <activity
             android:name=".activities.MapActivity"

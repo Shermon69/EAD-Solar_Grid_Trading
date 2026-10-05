@@ -945,11 +945,12 @@ public class EditReservationActivity extends AppCompatActivity {
                         if (response.isSuccessful()
                                 && response.body() != null) {
 
-                            Toast.makeText(
+                            // Show the summary page for the updated booking
+                            BookingSummaryActivity.open(
                                     EditReservationActivity.this,
-                                    "Reservation updated successfully.",
-                                    Toast.LENGTH_LONG
-                            ).show();
+                                    BookingSummaryActivity.ACTION_UPDATED,
+                                    response.body()
+                            );
 
                             finish();
 

@@ -740,11 +740,12 @@ public class CreateBookingActivity extends AppCompatActivity {
                                 if (response.isSuccessful()
                                         && response.body() != null) {
 
-                                    Toast.makeText(
+                                    // Show the summary page for the new booking
+                                    BookingSummaryActivity.open(
                                             CreateBookingActivity.this,
-                                            "Reservation created successfully.",
-                                            Toast.LENGTH_LONG
-                                    ).show();
+                                            BookingSummaryActivity.ACTION_CREATED,
+                                            response.body()
+                                    );
 
                                     finish();
 
