@@ -44,6 +44,11 @@ public class ProsumerService
     /// </summary>
     public async Task<bool> RegisterAsync(RegisterRequest r)
     {
+        // Store the NIC in upper case (e.g. 991234567V) because login upper-cases
+        // the NIC it searches for. Updating the request also lets the caller
+        // look up the new prosumer with the same value.
+        r.Nic = r.Nic.Trim().ToUpper();
+
         // Reject if the NIC is already used.
         if (await _users.Find(u => u.Nic == r.Nic).AnyAsync())
             return false;
