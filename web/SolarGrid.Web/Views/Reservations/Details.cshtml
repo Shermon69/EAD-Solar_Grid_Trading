@@ -201,14 +201,20 @@
                     {
                         <div class="mb-3">
 
-                            <div class="border rounded p-4 bg-light">
-                                <i class="bi bi-qr-code display-1 text-dark"></i>
+                            @* Real QR code drawn by the script at the bottom of this page.
+                               Content "reservationId|qrToken" is the same as the mobile app's QR,
+                               so the Grid Operator scanner can read it from this screen
+                               (added by WMVSB Wahundeniya). White padding keeps the quiet zone
+                               scanners need around the code. *@
+                            <div class="border rounded p-3 bg-white d-inline-block">
+                                <div id="reservationQr"
+                                     data-qr-content="@(Model.Id)|@(Model.QrToken)"></div>
                             </div>
 
                         </div>
 
                         <p class="text-muted small mb-2">
-                            QR token generated after approval.
+                            Scan with the SolarGrid app in Operator mode (Scan QR Code).
                         </p>
 
                         <div class="alert alert-light border text-start">
@@ -315,3 +321,26 @@
     </div>
 
 </div>
+@section Scripts {
+    @* Draws the reservation QR code in the browser.
+       Library: qrcodejs 1.0.0 by davidshimjs (MIT, https://github.com/davidshimjs/qrcodejs),
+       loaded from cdnjs (added by WMVSB Wahundeniya). *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Builds the QR from the data-qr-content attribute, if this reservation has one
+        (function () {
+            var box = document.getElementById("reservationQr");
+            if (!box || typeof QRCode === "undefined") {
+                return;
+            }
+            new QRCode(box, {
+                text: box.getAttribute("data-qr-content"),
+                width: 240,
+                height: 240,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        })();
+    </script>
+}
