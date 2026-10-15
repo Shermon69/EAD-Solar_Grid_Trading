@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Data returned by POST /api/auth/login: the JWT token and the
  *              user's details. Field names match the API's JSON.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.models;

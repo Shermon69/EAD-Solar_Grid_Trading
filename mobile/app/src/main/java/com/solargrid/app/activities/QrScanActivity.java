@@ -5,7 +5,6 @@
  *              reads the "reservationId|qrToken" QR code from the prosumer's
  *              booking screen, verifies it with the Web API (rule R9) and lets
  *              the grid operator mark the energy transfer as Completed.
- * Created:     29/09/2026
  */
 package com.solargrid.app.activities;
 
@@ -58,7 +57,8 @@ import retrofit2.Response;
  */
 public class QrScanActivity extends AppCompatActivity {
 
-    // Screen states, so the camera, result card and buttons always match what is happening
+    // Screen states, so the camera, result card and buttons always match what is
+    // happening
     private static final int STATE_SCANNING = 0;
     private static final int STATE_VERIFYING = 1;
     private static final int STATE_VERIFIED = 2;
@@ -88,8 +88,8 @@ public class QrScanActivity extends AppCompatActivity {
     private String scannedReservationId;
 
     // Asks Android for camera permission and starts scanning if it is granted
-    private final ActivityResultLauncher<String> cameraPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+    private final ActivityResultLauncher<String> cameraPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(), granted -> {
                 if (granted) {
                     showState(STATE_SCANNING);
                 } else {
@@ -98,7 +98,8 @@ public class QrScanActivity extends AppCompatActivity {
             });
 
     /**
-     * Links the views, sets up the scanner and asks for camera permission if needed.
+     * Links the views, sets up the scanner and asks for camera permission if
+     * needed.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +178,8 @@ public class QrScanActivity extends AppCompatActivity {
     }
 
     /**
-     * Restarts the camera when the operator comes back to this screen while scanning.
+     * Restarts the camera when the operator comes back to this screen while
+     * scanning.
      */
     @Override
     protected void onResume() {
@@ -205,8 +207,7 @@ public class QrScanActivity extends AppCompatActivity {
      * Returns true if the app is allowed to use the camera.
      */
     private boolean hasCameraPermission() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
 
     /**
@@ -320,7 +321,7 @@ public class QrScanActivity extends AppCompatActivity {
         ApiClient.getService(this).verifyQr(request).enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(@NonNull Call<Reservation> call,
-                                   @NonNull Response<Reservation> response) {
+                    @NonNull Response<Reservation> response) {
                 if (isFinishing()) {
                     return;
                 }
@@ -351,7 +352,8 @@ public class QrScanActivity extends AppCompatActivity {
     }
 
     /**
-     * Shows why the QR code could not be verified, with a "Scan another code" button.
+     * Shows why the QR code could not be verified, with a "Scan another code"
+     * button.
      */
     private void showFailure(String message) {
         showState(STATE_FAILED);
@@ -388,7 +390,7 @@ public class QrScanActivity extends AppCompatActivity {
                 .enqueue(new Callback<Reservation>() {
                     @Override
                     public void onResponse(@NonNull Call<Reservation> call,
-                                           @NonNull Response<Reservation> response) {
+                            @NonNull Response<Reservation> response) {
                         if (isFinishing()) {
                             return;
                         }
@@ -432,7 +434,7 @@ public class QrScanActivity extends AppCompatActivity {
      * Sets the icon, colours, title and message at the top of the result card.
      */
     private void setResultHeader(int iconRes, int colorRes, int backgroundRes,
-                                 String title, String message) {
+            String title, String message) {
         ivResultIcon.setImageResource(iconRes);
         ivResultIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(this, colorRes)));
         ivResultIcon.setBackgroundTintList(

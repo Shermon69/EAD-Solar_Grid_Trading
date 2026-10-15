@@ -4,7 +4,6 @@
  * Description: MongoDB document for the "EnergyReservations" collection.
  *              A prosumer's booking of an energy slot at a station, including
  *              its status and the QR token used by grid operators to verify it.
- * Created:     28/09/2026
  */
 
 using MongoDB.Bson;

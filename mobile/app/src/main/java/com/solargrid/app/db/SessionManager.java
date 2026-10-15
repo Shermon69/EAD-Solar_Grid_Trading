@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Saves, reads and clears the logged-in user in the SQLite
  *              "session" table, so the user stays logged in after closing the app.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.db;

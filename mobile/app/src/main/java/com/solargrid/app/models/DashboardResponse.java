@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: Dashboard counts returned by the API. Matches the
  *              DashboardResponse DTO on the server side.
- * Created:     29/09/2026
  */
 package com.solargrid.app.models;
 

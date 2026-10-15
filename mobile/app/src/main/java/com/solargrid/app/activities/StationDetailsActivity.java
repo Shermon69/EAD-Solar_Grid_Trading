@@ -5,7 +5,6 @@
  *              status, capacity, battery slots, a small map with directions,
  *              weekly opening hours (GET /api/stations/{id}) and the live slot
  *              availability for the next 7 days (GET /api/stations/{id}/slots).
- * Created:     29/09/2026
  */
 package com.solargrid.app.activities;
 
@@ -55,7 +54,8 @@ public class StationDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_STATION = "station";
     public static final String EXTRA_DISTANCE_METRES = "distance_metres";
 
-    // Prosumers can book up to 7 days ahead, so availability is shown for the same range
+    // Prosumers can book up to 7 days ahead, so availability is shown for the same
+    // range
     private static final int DAYS_TO_SHOW = 7;
 
     private Station station;
@@ -276,7 +276,8 @@ public class StationDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<Station> call, @NonNull Throwable t) {
-                // Offline: keep showing the cached station; the schedule card explains why it is empty
+                // Offline: keep showing the cached station; the schedule card explains why it
+                // is empty
             }
         });
     }
@@ -297,7 +298,7 @@ public class StationDetailsActivity extends AppCompatActivity {
                 .enqueue(new Callback<List<Slot>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<Slot>> call,
-                                           @NonNull Response<List<Slot>> response) {
+                            @NonNull Response<List<Slot>> response) {
                         // Ignore answers for a day the user has already moved away from
                         if (isFinishing() || !requestedDate.equals(selectedDate)) {
                             return;

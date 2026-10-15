@@ -4,7 +4,6 @@
  * Description: MongoDB document for the "Users" collection. Stores all three
  *              user types (Backoffice, GridOperator, Prosumer). The NIC is the
  *              primary key (_id).
- * Created:     28/09/2026
  */
 
 using MongoDB.Bson.Serialization.Attributes;

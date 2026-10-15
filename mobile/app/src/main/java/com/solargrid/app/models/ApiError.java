@@ -2,7 +2,6 @@
  * File:        ApiError.java
  * Author:      Shermon H (IT22177964)
  * Description: Shape of every error returned by the Web API: { "message": "..." }
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.models;

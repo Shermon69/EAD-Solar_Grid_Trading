@@ -4,7 +4,6 @@
  * Description: Creates a signed JWT token after a successful login. The token
  *              contains the user's NIC, name and role, so the API knows who is
  *              calling and what they are allowed to do.
- * Created:     28/09/2026
  */
 
 using System.IdentityModel.Tokens.Jwt;

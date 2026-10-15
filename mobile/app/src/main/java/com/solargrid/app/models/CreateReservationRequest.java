@@ -3,7 +3,6 @@
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Request model used to create an energy reservation
  *              through the Web API.
- * Created:     30/09/2026
  */
 
 package com.solargrid.app.models;

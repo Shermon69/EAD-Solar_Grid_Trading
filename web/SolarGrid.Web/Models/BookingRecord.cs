@@ -3,7 +3,6 @@
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: View model used to display and edit energy booking records
  *              in the web application.
- * Created:     29/09/2026
  */
 
 using System.Text.Json.Serialization;

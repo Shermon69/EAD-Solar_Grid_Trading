@@ -2,7 +2,6 @@
  * File:        LoginViewModel.cs
  * Author:      Shermon H (IT22177964)
  * Description: Form data for the web login page.
- * Created:     28/09/2026
  */
 
 using System.ComponentModel.DataAnnotations;

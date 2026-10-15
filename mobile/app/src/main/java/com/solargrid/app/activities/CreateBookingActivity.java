@@ -3,7 +3,6 @@
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Screen used by a prosumer to create an energy reservation.
  *              Station and slot data are loaded from the central Web API.
- * Created:     30/09/2026
  */
 
 package com.solargrid.app.activities;

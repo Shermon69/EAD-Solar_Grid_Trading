@@ -4,7 +4,6 @@
  * Description: MongoDB document for the "SolarStationInfo" collection.
  *              Represents a solar microgrid node (hub) with its GPS location,
  *              capacity, battery slots and weekly operating schedule.
- * Created:     28/09/2026
  */
 
 using MongoDB.Bson;

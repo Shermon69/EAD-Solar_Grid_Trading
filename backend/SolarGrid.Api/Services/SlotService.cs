@@ -3,7 +3,6 @@
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: Business logic for managing energy booking slots,
  *              such as adding or modifying available time blocks.
- * Created:     29/09/2026
  */
 
 using MongoDB.Driver;

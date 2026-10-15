@@ -4,8 +4,7 @@
 #              ADMINISTRATOR PowerShell. It enables IIS, installs the ASP.NET
 #              Core 8 Hosting Bundle, creates the app pool and website on port
 #              8080, grants folder permissions and opens the firewall port.
-#              Publish the API to $SitePath first (see docs/INTEGRATION_PLAN.md).
-# Created:     02/10/2026
+#              Publish the API to $SitePath first with dotnet publish.
 
 $SiteName = 'SolarGridApi'
 $SitePath = 'D:\inetpub\SolarGridApi'

@@ -4,7 +4,6 @@
  * Description: Fixed values used across the system for user roles,
  *              account statuses, reservation statuses and reservation types.
  *              Using constants avoids spelling mistakes in strings.
- * Created:     28/09/2026
  */
 
 namespace SolarGrid.Api.Models

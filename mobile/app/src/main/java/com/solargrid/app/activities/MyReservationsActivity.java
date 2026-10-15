@@ -3,7 +3,6 @@
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Displays the prosumer's energy reservations retrieved
  *              from the central Web API.
- * Created:     30/09/2026
  */
 
 package com.solargrid.app.activities;

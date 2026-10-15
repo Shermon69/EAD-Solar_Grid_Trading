@@ -2,7 +2,6 @@
  * File:        ErrorViewModel.cs
  * Author:      Shermon H (IT22177964)
  * Description: Data for the general error page (from the MVC project template).
- * Created:     28/09/2026
  */
 
 namespace SolarGrid.Web.Models

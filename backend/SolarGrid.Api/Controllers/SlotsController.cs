@@ -2,7 +2,6 @@
  * File:        SlotsController.cs
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: API endpoints for managing energy booking slots.
- * Created:     29/09/2026
  */
 
 using Microsoft.AspNetCore.Authorization;

@@ -4,7 +4,6 @@
  * Description: Data access object for the "stations" SQLite table. Stations
  *              downloaded from the Web API are saved here so the map can
  *              still show them when the phone is offline.
- * Created:     29/09/2026
  */
 package com.solargrid.app.db;
 

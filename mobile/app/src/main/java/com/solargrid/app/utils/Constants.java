@@ -2,7 +2,6 @@
  * File:        Constants.java
  * Author:      Shermon H (IT22177964)
  * Description: Fixed values used in the app. Role names must match the Web API.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.utils;

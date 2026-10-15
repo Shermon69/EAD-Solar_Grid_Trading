@@ -5,7 +5,6 @@
  *              users of every role, solar stations around Colombo, booking
  *              slots and a few reservations in different statuses.
  *              It only runs when the Users collection is empty.
- * Created:     28/09/2026
  */
 
 using MongoDB.Driver;

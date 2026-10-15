@@ -3,7 +3,6 @@
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Web controller for viewing and managing energy reservations,
  *              including creating, editing, approving and cancelling reservations.
- * Created:     29/09/2026
  */
 
 using Microsoft.AspNetCore.Authorization;

@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: Backoffice dashboard page showing pending prosumer count and
  *              approved future reservations count. Reads data from the Web API.
- * Created:     29/09/2026
  */
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

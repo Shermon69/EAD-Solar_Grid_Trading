@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Small helper methods to read the logged-in user's NIC and role
  *              from the JWT token inside a controller (e.g. User.GetNic()).
- * Created:     28/09/2026
  */
 
 using System.Security.Claims;

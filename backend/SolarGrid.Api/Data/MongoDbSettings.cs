@@ -2,7 +2,6 @@
  * File:        MongoDbSettings.cs
  * Author:      Shermon H (IT22177964)
  * Description: Holds the MongoDB connection settings read from appsettings.json.
- * Created:     28/09/2026
  */
 
 namespace SolarGrid.Api.Data

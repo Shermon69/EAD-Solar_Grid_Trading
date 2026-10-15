@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: API endpoints for staff user management. Only Backoffice users
  *              can call these endpoints. All rules are in UserService.
- * Created:     29/09/2026
  */
 
 using Microsoft.AspNetCore.Authorization;

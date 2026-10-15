@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Form model for the Edit Station page: station details plus a
  *              weekly operating schedule with one row per day.
- * Created:     01/10/2026
  */
 
 using System.ComponentModel.DataAnnotations;

@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: View models used by the Prosumer Management, Pending
  *              Activations and Dashboard pages.
- * Created:     29/09/2026
  */
 using System.ComponentModel.DataAnnotations;
 

@@ -4,7 +4,6 @@
  * Description: Request/response objects for the prosumer endpoints, with
  *              validation rules. The API validates these DTOs before the
  *              service is called.
- * Created:     29/09/2026
  */
 
 using System.ComponentModel.DataAnnotations;

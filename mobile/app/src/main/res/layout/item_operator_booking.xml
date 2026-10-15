@@ -4,7 +4,6 @@
     Author:      Shermon H (IT22177964)
     Description: One booking card in the operator bookings list (station, time,
                  prosumer, type, status and the Approve / Cancel buttons).
-    Created:     02/10/2026
 -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

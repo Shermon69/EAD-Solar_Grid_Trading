@@ -2,7 +2,6 @@
  * File:        ReservationResponse.cs
  * Author:      Dissanayake D.M.S.N (IT22210692)
  * Description: Response model returned to clients for energy reservations.
- * Created:     29/09/2026
  */
 
 namespace SolarGrid.Api.DTOs

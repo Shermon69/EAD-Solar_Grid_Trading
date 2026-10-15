@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Fixed values used in the web app: user role names (must match
  *              the API) and the custom claim that stores the API token.
- * Created:     28/09/2026
  */
 
 namespace SolarGrid.Web.Helpers

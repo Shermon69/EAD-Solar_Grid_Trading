@@ -3,7 +3,6 @@
  * Author:      WMVSB Wahundeniya (IT22292872)
  * Description: API endpoints used by the Grid Operator mobile app to verify a
  *              prosumer's reservation QR code and complete the energy transfer.
- * Created:     29/09/2026
  */
 
 using Microsoft.AspNetCore.Authorization;

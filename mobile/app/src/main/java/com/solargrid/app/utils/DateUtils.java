@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: Date helpers. The Web API sends all times in UTC; this turns
  *              them into the phone's local time for display.
- * Created:     02/10/2026
  */
 
 package com.solargrid.app.utils;

@@ -4,7 +4,6 @@
     Author:      Shermon H (IT22177964)
     Description: Operator mode screen that lists prosumer bookings with a status
                  filter and an NIC search, so a grid operator can approve or cancel them.
-    Created:     02/10/2026
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

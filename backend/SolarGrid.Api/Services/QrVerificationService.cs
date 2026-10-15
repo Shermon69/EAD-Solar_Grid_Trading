@@ -5,7 +5,6 @@
  *              of energy reservations (R9). The QR code on the prosumer's phone
  *              holds "reservationId|qrToken"; the token is compared with the one
  *              saved when the booking was approved.
- * Created:     29/09/2026
  */
 
 using MongoDB.Driver;

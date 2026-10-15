@@ -3,7 +3,6 @@
  * Author:      Shermon H (IT22177964)
  * Description: API endpoints for authentication. The controller only receives
  *              the request and calls AuthService, which holds the logic.
- * Created:     28/09/2026
  */
 
 using Microsoft.AspNetCore.Mvc;

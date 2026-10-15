@@ -5,7 +5,6 @@
  *              touches MongoDB. Assumes Member 1 stores the JWT in session
  *              under the key "JWT" and that an HttpClient named "Api" is
  *              registered (see Program.cs).
- * Created:     29/09/2026
  */
 using System.Net.Http.Headers;
 using System.Net.Http.Json;

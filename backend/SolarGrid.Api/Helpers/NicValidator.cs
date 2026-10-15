@@ -4,7 +4,6 @@
  * Description: Checks that a Sri Lankan NIC number has a valid format.
  *              Old format: 9 digits + V or X (e.g. 991234567V).
  *              New format: 12 digits (e.g. 199912345678).
- * Created:     29/09/2026
  */
 
 using System.Text.RegularExpressions;

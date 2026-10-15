@@ -4,7 +4,6 @@
  * Description: Creates the local SQLite database on the phone. It stores the
  *              logged-in user (session) and cached reference data (stations).
  *              SQLite is only local storage: the Web API is the source of truth.
- * Created:     29/09/2026
  */
 
 package com.solargrid.app.db;
@@ -22,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "solargrid.db";
     private static final int DATABASE_VERSION = 1;
 
-    // ---------- Session table: the logged-in user (only one row) ----------
+    // Session table: the logged-in user (only one row)
     public static final String TABLE_SESSION = "session";
     public static final String COL_NIC = "nic";
     public static final String COL_FULL_NAME = "full_name";
@@ -30,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_TOKEN = "token";
     public static final String COL_LOGGED_IN_AT = "logged_in_at";
 
-    // ---------- Stations table: cached list of solar stations (Member 3) ----------
+    // Stations table: cached list of solar stations (Member 3)
     public static final String TABLE_STATIONS = "stations";
     public static final String COL_STATION_ID = "id";
     public static final String COL_STATION_NAME = "name";

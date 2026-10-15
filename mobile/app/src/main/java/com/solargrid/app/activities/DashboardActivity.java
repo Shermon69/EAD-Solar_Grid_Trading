@@ -3,7 +3,6 @@
  * Author:      Premaratne R.A.N.C (IT22050908)
  * Description: Prosumer dashboard: pending bookings count, approved future
  *              bookings count and shortcuts to bookings and profile.
- * Created:     29/09/2026
  */
 package com.solargrid.app.activities;
 

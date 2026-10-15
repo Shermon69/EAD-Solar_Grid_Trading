@@ -4,7 +4,6 @@
  * Description: Staff User Management pages (Backoffice only). Lists, creates,
  *              edits, activates and deactivates Backoffice and Grid Operator
  *              accounts. Every action calls the Web API; the rules are checked there.
- * Created:     29/09/2026
  */
 
 using Microsoft.AspNetCore.Authorization;

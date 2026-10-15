@@ -1,14 +1,6 @@
 /*
  * File:        MapActivity.java
  * Author:      WMVSB Wahundeniya (IT22292872)
- * Description: Shows nearby solar stations on a map. The phone's location is
- *              sent to GET /api/stations/nearby, which returns the active
- *              stations inside the chosen radius. Each station is plotted from its
- *              stored latitude and longitude; tapping one shows a summary card with
- *              Directions and View details. The map is Google Maps when a Maps key
- *              is available, or the free OpenStreetMap fallback otherwise, and can
- *              be switched with the layers button. Stations are cached in SQLite so
- *              the map still works offline.
  * Created:     29/09/2026
  */
 
@@ -66,10 +58,11 @@ import retrofit2.Response;
 public class MapActivity extends AppCompatActivity implements StationMap.Listener {
 
     // Search radius options in km. 0 means "All" active stations
-    private static final double[] RADIUS_OPTIONS_KM = {5, 10, 25, 50, 0};
+    private static final double[] RADIUS_OPTIONS_KM = { 5, 10, 25, 50, 0 };
     private static final int DEFAULT_RADIUS_INDEX = 2;
 
-    // Camera position used before the phone's location or any station is known (centre of Sri Lanka)
+    // Camera position used before the phone's location or any station is known
+    // (centre of Sri Lanka)
     private static final double DEFAULT_LATITUDE = 7.8731;
     private static final double DEFAULT_LONGITUDE = 80.7718;
 
@@ -95,9 +88,10 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
     private TextView tvCardCapacity;
     private TextView tvCardSlots;
 
-    // Asks for location permission. Whatever the answer, the stations are then loaded
-    private final ActivityResultLauncher<String[]> locationPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+    // Asks for location permission. Whatever the answer, the stations are then
+    // loaded
+    private final ActivityResultLauncher<String[]> locationPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestMultiplePermissions(), result -> {
                 if (hasLocationPermission()) {
                     stationMap.setMyLocationEnabled(true);
                     locateUserThenLoad();
@@ -152,7 +146,8 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
         mapReady = true;
         stationMap.moveTo(DEFAULT_LATITUDE, DEFAULT_LONGITUDE, 7, false);
 
-        // Keep map controls and camera moves clear of the floating top bar and bottom card
+        // Keep map controls and camera moves clear of the floating top bar and bottom
+        // card
         layoutTopOverlay.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> updateMapPadding());
         layoutBottomOverlay.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> updateMapPadding());
         updateMapPadding();
@@ -161,14 +156,15 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
             stationMap.setMyLocationEnabled(true);
             locateUserThenLoad();
         } else {
-            locationPermissionLauncher.launch(new String[]{
+            locationPermissionLauncher.launch(new String[] {
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION});
+                    Manifest.permission.ACCESS_COARSE_LOCATION });
         }
     }
 
     /**
-     * Forwards onResume to the map (OpenStreetMap needs it to load tiles and track GPS).
+     * Forwards onResume to the map (OpenStreetMap needs it to load tiles and track
+     * GPS).
      */
     @Override
     protected void onResume() {
@@ -223,8 +219,8 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
      * recreated so the new map replaces the old one.
      */
     private void chooseMapType() {
-        String[] labels = {getString(R.string.map_type_google), getString(R.string.map_type_osm)};
-        String[] values = {StationMaps.PROVIDER_GOOGLE, StationMaps.PROVIDER_OSM};
+        String[] labels = { getString(R.string.map_type_google), getString(R.string.map_type_osm) };
+        String[] values = { StationMaps.PROVIDER_GOOGLE, StationMaps.PROVIDER_OSM };
         int current = StationMaps.PROVIDER_GOOGLE.equals(StationMaps.getProvider(this)) ? 0 : 1;
 
         new AlertDialog.Builder(this)
@@ -290,10 +286,10 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
      * Returns true if fine or coarse location permission has been granted.
      */
     private boolean hasLocationPermission() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     /**
@@ -308,7 +304,7 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
         }
         showLoading(true);
         locationClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY,
-                        new CancellationTokenSource().getToken())
+                new CancellationTokenSource().getToken())
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
                         userLocation = location;
@@ -352,18 +348,19 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
         final boolean nearbySearch = userLocation != null && radiusKm > 0;
         Call<List<Station>> call = nearbySearch
                 ? ApiClient.getService(this).getNearbyStations(
-                userLocation.getLatitude(), userLocation.getLongitude(), radiusKm)
+                        userLocation.getLatitude(), userLocation.getLongitude(), radiusKm)
                 : ApiClient.getService(this).getStations(true);
 
         call.enqueue(new Callback<List<Station>>() {
             @Override
             public void onResponse(@NonNull Call<List<Station>> call,
-                                   @NonNull Response<List<Station>> response) {
+                    @NonNull Response<List<Station>> response) {
                 if (isFinishing() || isDestroyed()) {
                     return;
                 }
                 if (response.isSuccessful() && response.body() != null) {
-                    // Save for offline use. A nearby result is only part of the list, so it is merged
+                    // Save for offline use. A nearby result is only part of the list, so it is
+                    // merged
                     if (nearbySearch) {
                         stationDao.upsertStations(response.body());
                     } else {
@@ -442,7 +439,8 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
     }
 
     /**
-     * Writes a short summary under the title, e.g. "3 stations within 25 km · nearest 1.2 km".
+     * Writes a short summary under the title, e.g. "3 stations within 25 km ·
+     * nearest 1.2 km".
      */
     private void updateSubtitle() {
         int count = stations.size();
@@ -482,10 +480,10 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
 
         List<double[]> points = new ArrayList<>();
         for (Station s : stations) {
-            points.add(new double[]{s.latitude, s.longitude});
+            points.add(new double[] { s.latitude, s.longitude });
         }
         if (userLocation != null) {
-            points.add(new double[]{userLocation.getLatitude(), userLocation.getLongitude()});
+            points.add(new double[] { userLocation.getLatitude(), userLocation.getLongitude() });
         }
         stationMap.fitTo(points, (int) (56 * getResources().getDisplayMetrics().density));
     }
@@ -563,9 +561,9 @@ public class MapActivity extends AppCompatActivity implements StationMap.Listene
      */
     private void onMyLocationClicked() {
         if (!hasLocationPermission()) {
-            locationPermissionLauncher.launch(new String[]{
+            locationPermissionLauncher.launch(new String[] {
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION});
+                    Manifest.permission.ACCESS_COARSE_LOCATION });
             return;
         }
         if (userLocation != null && mapReady) {
