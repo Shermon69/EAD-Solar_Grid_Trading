@@ -137,4 +137,28 @@ public class Reservation {
     public String getQrToken() {
         return qrToken;
     }
+
+    // Filled in by the API when a grid operator completes the transfer
+    // (added by WMVSB Wahundeniya for the QR scanner screen)
+    private String completedBy;
+
+    private String completedAt;
+
+    /**
+     * Returns the NIC of the grid operator who completed the transfer.
+     *
+     * @return operator NIC, or null when not completed
+     */
+    public String getCompletedBy() {
+        return completedBy;
+    }
+
+    /**
+     * Returns when the energy transfer was completed (UTC).
+     *
+     * @return completion time, or null when not completed
+     */
+    public String getCompletedAt() {
+        return completedAt;
+    }
 }

@@ -26,6 +26,11 @@ android {
 
         // Google Maps key is inserted into AndroidManifest.xml
         manifestPlaceholders = [MAPS_API_KEY: localProps.getProperty('MAPS_API_KEY', '')]
+
+        // Which map to show: "google" (needs a billing-enabled Maps key) or "osm"
+        // (free OpenStreetMap, no key). Google falls back to OSM when no key is set.
+        buildConfigField 'String', 'MAP_PROVIDER',
+                "\"${localProps.getProperty('MAP_PROVIDER', 'google')}\""
     }
 
     buildFeatures {
@@ -59,6 +64,9 @@ dependencies {
     // Google Maps + location (Member 3)
     implementation 'com.google.android.gms:play-services-maps:19.0.0'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
+
+    // Free OpenStreetMap fallback when the Google Maps key cannot be used (Member 3)
+    implementation 'org.osmdroid:osmdroid-android:6.1.18'
 
     // QR code generate + scan (Member 3 and Member 4)
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'

@@ -25,6 +25,7 @@ import com.solargrid.app.db.SessionManager;
 import com.solargrid.app.models.CreateReservationRequest;
 import com.solargrid.app.models.Slot;
 import com.solargrid.app.models.Station;
+import com.solargrid.app.utils.Constants;
 import com.solargrid.app.utils.DateUtils;
 
 import java.util.ArrayList;
@@ -184,6 +185,21 @@ public class CreateBookingActivity extends AppCompatActivity {
                         );
 
                         spinnerStation.setAdapter(adapter);
+
+                        // Preselect the station when opened from the station details
+                        // screen (added by WMVSB Wahundeniya)
+                        String preselectedId = getIntent()
+                                .getStringExtra(Constants.EXTRA_STATION_ID);
+
+                        for (int i = 0; i < stationList.size(); i++) {
+
+                            if (stationList.get(i).getId() != null
+                                    && stationList.get(i).getId().equals(preselectedId)) {
+
+                                spinnerStation.setSelection(i + 1);
+                                break;
+                            }
+                        }
                     }
 
                     @Override

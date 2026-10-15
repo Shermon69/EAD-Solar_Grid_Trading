@@ -14,4 +14,12 @@
     <color name="danger">#DC3545</color>
     <color name="info">#0D6EFD</color>
     <color name="purple">#6F42C1</color>
+
+    <!-- Light tints for status pills and icon backgrounds (Member 3 screens) -->
+    <color name="success_light">#E3F4EA</color>
+    <color name="danger_light">#FBE5E7</color>
+    <color name="info_light">#E3EEFF</color>
+    <color name="navy_light">#E8EBF2</color>
+    <color name="divider">#E9ECEF</color>
+    <color name="scanner_background">#0D1628</color>
 </resources>

@@ -76,8 +76,10 @@ public final class ApiClient {
                     .readTimeout(20, TimeUnit.SECONDS)
                     .build();
 
+            String baseUrl = sanitizeBaseUrl(BuildConfig.API_BASE_URL);
+
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BuildConfig.API_BASE_URL)
+                    .baseUrl(baseUrl)
                     .client(httpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
@@ -85,6 +87,27 @@ public final class ApiClient {
             service = retrofit.create(ApiService.class);
         }
         return service;
+    }
+
+    /**
+     * Ensures base URL has a valid scheme and ends with a slash.
+     */
+    private static String sanitizeBaseUrl(String rawUrl) {
+        if (rawUrl == null || rawUrl.trim().isEmpty()) {
+            return "http://10.0.2.2:5080/api/";
+        }
+        String trimmed = rawUrl.trim();
+        String formatted;
+        if (trimmed.startsWith("http//")) {
+            formatted = "http://" + trimmed.substring(6);
+        } else if (trimmed.startsWith("https//")) {
+            formatted = "https://" + trimmed.substring(7);
+        } else if (!trimmed.startsWith("http://") && !trimmed.startsWith("https://")) {
+            formatted = "http://" + trimmed;
+        } else {
+            formatted = trimmed;
+        }
+        return formatted.endsWith("/") ? formatted : formatted + "/";
     }
 
     /**

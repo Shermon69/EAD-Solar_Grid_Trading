@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Radius filter chip on the map: solar orange when selected, white otherwise (Member 3) -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/solar" android:state_checked="true" />
+    <item android:color="@color/white" />
+</selector>

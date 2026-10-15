@@ -11,6 +11,7 @@ package com.solargrid.app.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a solar microgrid station.
@@ -32,7 +33,21 @@ public class Station implements Serializable {
     public int batterySlots;
     public boolean isActive;
 
+    // Weekly opening hours, shown on the station details screen.
+    // Not stored in SQLite, so it is null for stations loaded from the offline cache
+    // (added by WMVSB Wahundeniya)
+    public List<OperatingHours> schedule;
+
     public Station() {
+    }
+
+    /**
+     * Returns the weekly opening hours.
+     *
+     * @return list of opening hours, or null when not loaded
+     */
+    public List<OperatingHours> getSchedule() {
+        return schedule;
     }
 
     /**

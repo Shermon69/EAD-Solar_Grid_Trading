@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    File:        view_qr_scanner.xml
+    Author:      WMVSB Wahundeniya (IT22292872)
+    Description: Custom layout for the embedded ZXing scanner (DecoratedBarcodeView).
+                 Same view IDs as the library's default zxing_barcode_scanner.xml, but
+                 with a square QR frame, the app's solar colour for the laser line and a
+                 TextureView so the camera preview follows the card's rounded corners.
+                 Based on the zxing-android-embedded custom layout sample (Apache 2.0,
+                 https://github.com/journeyapps/zxing-android-embedded).
+    Created:     15/10/2026
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.journeyapps.barcodescanner.BarcodeView
+        android:id="@+id/zxing_barcode_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:zxing_framing_rect_height="220dp"
+        app:zxing_framing_rect_width="220dp"
+        app:zxing_use_texture_view="true" />
+
+    <com.journeyapps.barcodescanner.ViewfinderView
+        android:id="@+id/zxing_viewfinder_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:zxing_possible_result_points="@color/solar"
+        app:zxing_result_view="#B30D1628"
+        app:zxing_viewfinder_laser="@color/solar"
+        app:zxing_viewfinder_mask="#8C0D1628" />
+
+    <!-- The library needs this view; the screen shows its own hint text instead -->
+    <TextView
+        android:id="@+id/zxing_status_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+</merge>

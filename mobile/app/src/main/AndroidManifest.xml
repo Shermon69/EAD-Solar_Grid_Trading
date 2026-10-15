@@ -85,9 +85,12 @@
             android:name=".activities.StationDetailsActivity"
             android:exported="false" />
 
+        <!-- Portrait only: the camera preview is embedded in the screen, so the
+             library's landscape CaptureActivity is no longer used -->
         <activity
             android:name=".activities.QrScanActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <!-- Prosumer activities -->
         <activity

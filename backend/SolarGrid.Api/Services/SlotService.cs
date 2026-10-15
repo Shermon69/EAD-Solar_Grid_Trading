@@ -14,6 +14,9 @@ using SolarGrid.Api.Models;
 
 namespace SolarGrid.Api.Services
 {
+    /// <summary>
+    /// Slot business logic: listing, adding, editing and removing time blocks.
+    /// </summary>
     public class SlotService
     {
         private readonly IMongoCollection<EnergySlot> _slots;
@@ -21,7 +24,7 @@ namespace SolarGrid.Api.Services
         private readonly IMongoCollection<SolarStation> _stations;
 
         /// <summary>
-        /// Initializes a new instance of SlotService.
+        /// Gets the slot, reservation and station collections from the database context.
         /// </summary>
         public SlotService(MongoDbContext context)
         {
@@ -31,7 +34,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the GetSlotsForStationAsync operation.
+        /// Returns a station's time blocks sorted by start time, optionally only for one day.
         /// </summary>
         public async Task<List<EnergySlot>> GetSlotsForStationAsync(string stationId, DateTime? date = null)
         {
@@ -49,7 +52,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the CreateAsync operation.
+        /// Validates and adds a new time block. All of its slots start as available.
         /// </summary>
         public async Task<EnergySlot> CreateAsync(CreateSlotRequest dto)
         {
@@ -71,7 +74,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the UpdateAsync operation.
+        /// Changes the slot count or availability of a block. The count cannot go below the slots already booked.
         /// </summary>
         public async Task<EnergySlot> UpdateAsync(string id, UpdateSlotRequest dto)
         {
@@ -96,7 +99,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the DeleteAsync operation.
+        /// Deletes a time block, but only if no reservation uses it.
         /// </summary>
         public async Task DeleteAsync(string id)
         {

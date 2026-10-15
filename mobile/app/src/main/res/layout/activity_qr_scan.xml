@@ -1,69 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    File:        activity_qr_scan.xml
+    Author:      WMVSB Wahundeniya (IT22292872)
+    Description: Operator mode QR scanner. A live portrait camera preview sits inside
+                 a rounded card; below it a result card shows the reservation verified
+                 by the Web API and the button that completes the energy transfer.
+    Created:     29/09/2026
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA">
+    android:background="@color/background"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <include
+        android:id="@+id/header"
+        layout="@layout/layout_screen_header" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="@android:color/white"
-            android:layout_marginBottom="32dp">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <LinearLayout
+            <!-- Camera preview card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardScanner"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:cardBackgroundColor="@color/scanner_background"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+                        android:id="@+id/barcodeScanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:zxing_scanner_layout="@layout/view_qr_scanner" />
+
+                    <!-- Shown instead of the camera while paused or without permission -->
+                    <LinearLayout
+                        android:id="@+id/layoutScannerPaused"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/scanner_background"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="24dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/ivScannerPaused"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_qr_scan"
+                            app:tint="@color/solar" />
+
+                        <TextView
+                            android:id="@+id/tvScannerPaused"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="15sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnGrantPermission"
+                            style="@style/Widget.SolarGrid.Button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:paddingHorizontal="24dp"
+                            android:text="@string/qr_grant_permission"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <!-- Flashlight toggle -->
+                    <ImageButton
+                        android:id="@+id/btnTorch"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_gravity="top|end"
+                        android:layout_margin="12dp"
+                        android:background="@drawable/bg_pill"
+                        android:backgroundTint="#66000000"
+                        android:contentDescription="@string/qr_torch"
+                        android:padding="10dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_flash_off"
+                        app:tint="@color/white" />
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tvScanHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="32dp"
-                android:gravity="center">
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:text="@string/qr_hint"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
 
-                <ImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:src="@android:drawable/ic_menu_camera"
-                    android:layout_marginBottom="16dp"
-                    app:tint="#4CAF50" />
+            <!-- Verification result -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardResult"
+                style="@style/Widget.SolarGrid.MenuCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/tvScanResult"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:gravity="center"
-                    android:textColor="#333333"
-                    android:text="Tap below to scan a prosumer's QR code." />
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnScan"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="SCAN QR CODE"
-            android:textSize="16sp"
-            app:cornerRadius="8dp" />
+                        <ImageView
+                            android:id="@+id/ivResultIcon"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_icon_circle"
+                            android:contentDescription="@null"
+                            android:padding="10dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnComplete"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="MARK AS COMPLETED"
-            android:textSize="16sp"
-            app:cornerRadius="8dp"
-            app:backgroundTint="#4CAF50"
-            android:visibility="gone"
-            android:layout_marginTop="16dp" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-    </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                            <TextView
+                                android:id="@+id/tvResultTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_primary"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvResultMessage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/progressVerify"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:indeterminate="true"
+                        android:visibility="gone"
+                        app:indicatorColor="@color/solar"
+                        app:trackCornerRadius="4dp" />
+
+                    <!-- Label / value rows are added here in code -->
+                    <LinearLayout
+                        android:id="@+id/layoutDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="vertical" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnComplete"
+                        style="@style/Widget.SolarGrid.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/qr_complete"
+                        android:textColor="@color/white"
+                        android:visibility="gone"
+                        app:backgroundTint="@color/success"
+                        app:icon="@drawable/ic_check_circle"
+                        app:iconGravity="textStart"
+                        app:iconTint="@color/white" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnScanAgain"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:minHeight="56dp"
+                        android:text="@string/qr_scan_again"
+                        android:textColor="@color/navy"
+                        android:visibility="gone"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_qr_scan"
+                        app:iconGravity="textStart"
+                        app:iconTint="@color/navy"
+                        app:strokeColor="@color/navy" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

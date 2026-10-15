@@ -26,4 +26,22 @@
         <item name="cardElevation">2dp</item>
         <item name="cardBackgroundColor">@color/white</item>
     </style>
+
+    <!-- Small rounded info tag with an icon, e.g. "2.4 km" or "120 kW/h" (Member 3 screens).
+         Set backgroundTint, drawableStart, drawableTint and textColor on each use. -->
+    <style name="Widget.SolarGrid.InfoPill" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:background">@drawable/bg_pill</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

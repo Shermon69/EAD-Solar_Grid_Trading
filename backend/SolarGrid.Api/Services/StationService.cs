@@ -14,13 +14,16 @@ using SolarGrid.Api.Models;
 
 namespace SolarGrid.Api.Services
 {
+    /// <summary>
+    /// Station business logic: CRUD, deactivation rule R8 and the nearby search.
+    /// </summary>
     public class StationService
     {
         private readonly IMongoCollection<SolarStation> _stations;
         private readonly IMongoCollection<EnergyReservation> _reservations;
 
         /// <summary>
-        /// Initializes a new instance of StationService.
+        /// Gets the station and reservation collections from the database context.
         /// </summary>
         public StationService(MongoDbContext context)
         {
@@ -29,7 +32,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the GetAllAsync operation.
+        /// Returns all stations, or only the active ones when activeOnly is true.
         /// </summary>
         public async Task<List<SolarStation>> GetAllAsync(bool activeOnly = false)
         {
@@ -41,7 +44,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the GetByIdAsync operation.
+        /// Returns one station, or throws 404 if it does not exist.
         /// </summary>
         public async Task<SolarStation> GetByIdAsync(string id)
         {
@@ -51,7 +54,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the CreateAsync operation.
+        /// Validates and saves a new station. New stations are active straight away.
         /// </summary>
         public async Task<SolarStation> CreateAsync(CreateStationRequest dto)
         {
@@ -77,7 +80,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the UpdateAsync operation.
+        /// Validates and saves changes to an existing station's details and schedule.
         /// </summary>
         public async Task<SolarStation> UpdateAsync(string id, UpdateStationRequest dto)
         {
@@ -122,7 +125,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the ActivateAsync operation.
+        /// Makes a deactivated station active again.
         /// </summary>
         public async Task ActivateAsync(string id)
         {
@@ -133,28 +136,34 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Basic Haversine distance-based search could be done in memory for small datasets,
-        /// but since this is MongoDB we can just pull all and filter or use geospatial if 2dsphere index exists.
-        /// To keep it simple, we will fetch all active and filter in-memory.
+        /// Returns the active stations within radiusKm of the given point, nearest first.
+        /// The number of stations is small, so all active stations are loaded and the
+        /// Haversine distance is checked in memory instead of using a 2dsphere index.
         /// </summary>
         public async Task<List<SolarStation>> GetNearbyAsync(double lat, double lng, double radiusKm)
         {
+            if (lat < -90 || lat > 90 || lng < -180 || lng > 180)
+            {
+                throw new BusinessRuleException("Latitude must be between -90 and 90 and longitude between -180 and 180.");
+            }
+            if (radiusKm <= 0 || radiusKm > 500)
+            {
+                throw new BusinessRuleException("Search radius must be between 0 and 500 km.");
+            }
+
             var activeStations = await _stations.Find(s => s.IsActive).ToListAsync();
 
-            var nearby = new List<SolarStation>();
-            foreach (var s in activeStations)
-            {
-                var distance = CalculateDistance(lat, lng, s.Latitude, s.Longitude);
-                if (distance <= radiusKm)
-                {
-                    nearby.Add(s);
-                }
-            }
-            return nearby;
+            return activeStations
+                .Select(s => new { Station = s, Distance = CalculateDistance(lat, lng, s.Latitude, s.Longitude) })
+                .Where(x => x.Distance <= radiusKm)
+                .OrderBy(x => x.Distance)
+                .Select(x => x.Station)
+                .ToList();
         }
 
         /// <summary>
-        /// Executes the CalculateDistance operation.
+        /// Haversine formula: great-circle distance in km between two GPS points.
+        /// Source: https://www.movable-type.co.uk/scripts/latlong.html
         /// </summary>
         private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
         {
@@ -169,7 +178,7 @@ namespace SolarGrid.Api.Services
         }
 
         /// <summary>
-        /// Executes the ToRadians operation.
+        /// Converts an angle from degrees to radians.
         /// </summary>
         private double ToRadians(double angle)
         {

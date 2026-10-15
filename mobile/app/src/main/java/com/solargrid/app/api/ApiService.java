@@ -130,6 +130,34 @@ public interface ApiService {
     );
 
     /**
+     * GET /api/stations/nearby - gets active stations within a radius
+     * of the phone's location. The distance check is done by the API.
+     *
+     * @param latitude phone latitude
+     * @param longitude phone longitude
+     * @param radiusKm search radius in kilometres
+     * @return list of nearby solar stations
+     */
+    @GET("stations/nearby")
+    Call<List<Station>> getNearbyStations(
+            @Query("lat") double latitude,
+            @Query("lng") double longitude,
+            @Query("radiusKm") double radiusKm
+    );
+
+    /**
+     * GET /api/stations/{id} - gets one station with its latest status
+     * and weekly opening hours.
+     *
+     * @param id station ID
+     * @return the solar station
+     */
+    @GET("stations/{id}")
+    Call<Station> getStation(
+            @Path("id") String id
+    );
+
+    /**
      * GET /api/stations/{stationId}/slots - gets booking slots
      * for a selected station and date.
      *
@@ -158,10 +186,10 @@ public interface ApiService {
      * PATCH /api/reservations/{id}/complete - completes a reservation.
      *
      * @param id reservation ID
-     * @return completion response
+     * @return the completed reservation
      */
     @PATCH("reservations/{id}/complete")
-    Call<Object> completeReservation(
+    Call<Reservation> completeReservation(
             @Path("id") String id
     );
 
